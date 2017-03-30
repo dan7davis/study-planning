@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
+    <style type="text/css">
+
+    .main {
+        width: 740px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        font-family: 'Abel', sans-serif;
+        font-size: 150%;
+        line-height: 200%;
+    }
+    p.left {
+        width: 70px;
+        float: left;
+		font-size: 500%;
+		font-family: Times;
+		opacity: 0.5;
+		margin-bottom: 0px;
+    }
+    p.midd {
+        width: 500px;
+        float: left;
+		margin-bottom: 0px;
+    }
+	p.attr {
+        width: 400px;
+        float: left;
+		text-align: right;
+    }
+    p.rite {
+        width: 70px;
+        float: left;
+		text-align: right;
+		font-size: 500%;
+		font-family: Times;
+		opacity: 0.5;
+		margin-bottom: 0px;
+
+    }
+    p.subm {
+        clear: both;
+        margin: auto;
+        clear: both;
+        text-align: center;
+    }
+    input.txtenter{
+        padding:5px;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 100%;
+        line-height: 100%;   
+        padding: 0px;
+        border: none;
+        border-bottom: solid 2px #c9c9c9;
+    }
+    p.header {
+        font-style: italic;
+        font-weight: bold;
+        display: flex;
+        justify-content: left;
+        size: 60px;
+    }
+    </style>
+    <script type="text/javascript">
+          setTimeout(function(){
+            var secretid = analytics.user()._getId();
+            var otherid = analytics.user().anonymousId();
+            var email = analytics._user._getTraits()['email'];
+            var username = analytics._user._getTraits()['username'];
+
+            $('#dx-id').text(secretid);
+            $('#dx-another').text(otherid);
+            $('#dx-email').text(email);
+            $('#dx-username').text(username);
+
+          }, 1);
+    </script>
+</head>
+<body>
+<main class="main">
+    <p class="header">WHAT DRIVES YOU:</p>
+  <p class="left">&ldquo;</p>
+  <p class="midd">I want to be able to build interactive web interfaces in the edX platform using JavaScript.<br>
+  </p>
+  <p class="rite">&rdquo;</p>
+  <p class="left"></p>
+  <p class="attr"> - <span id="dx-username"></span></p>
+  <p class="subm"> <input type="image" alt="Submit" src="http://www.wis.ewi.tudelft.nl/fileadmin/wis/homepages/davis/images/button.png"> </p>
+
+<p id="woke"></p>
+<footer>
+</footer>
+</main>
+</body>
+</html>

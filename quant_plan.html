@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
+    <style type="text/css">
+    
+	
+    .main {
+        width: 740px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        font-family: 'Abel', sans-serif;
+        font-size: 150%;
+        line-height: 200%;
+    }
+	#three {
+		display: flex;
+		justify-content: space-around;
+	}
+    p.vid {
+      display: block;
+		  width: 200px;
+		  text-align: center;
+      margin: 20px;
+    }
+    p.quiz {
+      display: block;
+		  width: 200px;
+		  text-align: center;
+      margin: 20px;
+    }
+    p.time {
+      display: block;
+		  width: 200px;
+		  text-align: center;
+      margin: 20px;
+    }
+    p.subm {
+        display: flex;
+		justify-content: center;
+    }
+    input.txtenter{
+        padding:5px;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 100%;
+        line-height: 100%;   
+        padding: 0px;
+        border: none;
+        border-bottom: solid 2px #c9c9c9;
+    }
+    p.header {
+        font-style: italic;
+        font-weight: bold;
+        display: flex;
+		    justify-content: center;
+        size: 60px;
+    }
+    </style>
+    <script>
+        function submitting() {
+            var vids = document.getElementById("vids").value;
+            var quizs = document.getElementById("quizs").value;
+            var times = document.getElementById("times").value;
+            var input = vids + " " + quizs + " " + times;
+            if (typeof(Storage) !== "undefined") {
+                // Store
+                localStorage.setItem("numbers", input);
+                // Retrieve
+                document.getElementById("woke").innerHTML = localStorage.getItem("numbers");
+            } else {
+                document.getElementById("woke").innerHTML = "Sorry, your browser does not support Web Storage...";
+            }
+        }
+    </script>
+</head>
+<body>
+<main class="main">  
+  <div id="three">
+  <p class="header">THIS WEEK...</p>
+  <p class="quiz"></p>
+  <p class="time"></p>
+  </div>
+
+<form onsubmit="submitting();">
+  <div id="three">
+  <p class="vid">I plan to <i>watch</i>...<br>
+  <br>
+  <input class="txtenter" id= "vids" type="text" name="pin" maxlength="4" size="2" input style="font-size:120%"> / 12 <br>
+  <br> 
+  Lecture Videos. </p>
+
+  <p class="quiz">I plan to <i>answer</i>...<br>
+  <br>
+  <input class="txtenter" id= "quizs" type="text" name="pin" maxlength="4" size="2" input style="font-size:120%"> / 27 <br>
+  <br> 
+  Quiz Questions. </p>
+
+  <p class="time">I plan to <i>devote</i>...<br>
+  <br>
+  <input class="txtenter" id= "times" type="text" name="pin" maxlength="4" size="2" input style="font-size:120%"> / 4 <br>
+  <br> 
+  hours to the course. </p>
+
+  </div>
+
+  <p class="subm"> <input type="image" alt="Submit" src="http://www.wis.ewi.tudelft.nl/fileadmin/wis/homepages/davis/images/button.png"> </p>
+</form>
+<p id=woke></p>
+<footer>
+</footer>
+</main>
+</body>
+</html>

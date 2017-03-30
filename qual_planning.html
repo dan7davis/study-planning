@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
+
+<style type="text/css">
+    .main {
+        width: 740px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        font-family: 'Abel', sans-serif;
+        font-size: 150%;
+        line-height: 200%;
+    }
+	.style-2 input[type="text"] {
+		padding: 10px;
+  		border: solid 5px #c9c9c9;
+  		transition: border 0.3s;
+		width: 520px;
+		height: 200px;
+		
+	}
+	.style-2 input[type="text"]:focus,
+	.style-2 input[type="text"].focus {
+ 		 border: solid 5px #969696;
+	}
+	#three {
+		display: flex;
+		justify-content: center;
+	}
+	h2 {
+		display: flex;
+		justify-content: flex-start;
+	}
+	input {
+    padding: 12px 20px;
+    margin: 8px 0;
+	vertical-align: text-top;
+    color: black;
+	font-size: 15px;
+	font-family: 'Abel', sans-serif;
+	vertical-align: top;
+		text-align:top;
+	}
+    p.header0 {
+        font-style: italic;
+        font-weight: bold;
+        display: flex;
+        justify-content: left;
+        size: 60px;
+    }
+    p.header1 {
+        display: flex;
+        justify-content: left;
+        size: 40px;
+    }    
+	textarea#styled {
+		width: 620px;
+		height: 200px;
+		border: 5px solid #cccccc;
+		padding: 5px;
+		font-family: 'Abel', sans-serif;
+		background-image: url(bg.gif);
+		background-position: bottom right;
+		background-repeat: no-repeat;
+		font-size: 25px;
+		line-height: 150%;
+	}
+	p.subm {
+        display: flex;
+		justify-content: center;
+    }
+</style>
+<meta charset="UTF-8">
+<title>Untitled Document</title>
+</head>
+
+<body>
+
+<p class="header0">WHAT DRIVES YOU?</p>
+	<p class="header1">Please share what's motivating you to be a part of this course community.</p>
+
+  <form id="usrform" onsubmit="submitting();">
+  <div id="three">
+           <textarea form="usrform" name="styled-textarea" id="styled" onfocus="this.value=''; setbg('#e5fff3');" onblur="setbg('white')">Enter your story here...</textarea>
+        </div>
+	</form>
+ <p class="subm"> <input type="image" alt="Submit" src="http://www.wis.ewi.tudelft.nl/fileadmin/wis/homepages/davis/images/button.png"> </p>
+</body>
+</html>
