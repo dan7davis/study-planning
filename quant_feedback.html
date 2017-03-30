@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
+
+<style type="text/css">
+
+#container {
+  margin: 20px;
+  width: 200px;
+  height: 100px;
+}
+
+</style>
+<script src="https://rawgit.com/kimmobrunfeldt/progressbar.js/1.0.0/dist/progressbar.js"></script>
+
+
+</head>
+<body>
+	<div id="container"></div>
+</body>
+
+<script type="text/javascript">
+	
+// progressbar.js@1.0.0 version is used
+// Docs: http://progressbarjs.readthedocs.org/en/1.0.0/
+
+var actual = 26;
+var intended = 34;
+
+var scaled = actual/intended;
+
+var bar = new ProgressBar.SemiCircle(container, {
+  strokeWidth: 8,
+  color: '#FFEA82',
+  trailColor: '#eee',
+  trailWidth: 8,
+  easing: 'easeInOut',
+  duration: 1400,
+  svgStyle: null,
+  text: {
+    value: '1',
+    alignToBottom: false
+  },
+  from: {color: '#ffb366'},
+  to: {color: '#00e600'},
+  // Set default step function for all animate calls
+  step: (state, bar) => {
+    bar.path.setAttribute('stroke', state.color);
+    var value = Math.round(bar.value() * intended);
+    if (value === 0) {
+      bar.setText('');
+    } else {
+      bar.setText(value);
+    }
+
+    bar.text.style.color = state.color;
+  }
+});
+bar.text.style.fontFamily = '"Abel", Helvetica, sans-serif';
+bar.text.style.fontSize = '2rem';
+
+bar.animate(scaled);  // Number from 0.0 to 1.0
+
+</script>
+</html>
