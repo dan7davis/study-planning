@@ -1,23 +1,112 @@
-<!doctype html>
-<html>
 <head>
     <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
 
 <style type="text/css">
 
-#container {
-  margin: 20px;
-  width: 200px;
-  height: 100px;
-}
+	#videobar {
+	 	 margin: 20px;
+	 	 width: 200px;
+	  	 height: 100px;
+	}
+
+	#questionbar {
+	  	margin: 20px;
+	  	width: 200px;
+	  	height: 100px;
+	}
+
+	#timebar {
+	  	margin: 20px;
+	  	width: 200px;
+	  	height: 100px;
+	}
+
+	#videotex {
+	 	 margin: 20px;
+	 	 width: 200px;
+	  	 height: 200px;
+	  	 font-size: 140%;
+	}
+
+	#questiontex {
+	  	margin: 20px;
+	  	width: 200px;
+	  	height: 200px;
+	  	font-size: 140%;
+	}
+
+	#timetex {
+	  	margin: 20px;
+	  	width: 200px;
+	  	height: 200px;
+	  	font-size: 140%;
+	}
+	#three {
+		display: flex;
+		justify-content: space-around;
+	}
+
+	#header {
+        font-style: italic;
+        font-weight: bold;
+        display: flex;
+        font-size: 240%;
+    }
 
 </style>
-<script src="https://rawgit.com/kimmobrunfeldt/progressbar.js/1.0.0/dist/progressbar.js"></script>
+<script src="/static/pbref.js"></script>
+<script>
+	
+         //////////////////////////////////////////////
+        //               Logging Data               //
+        //////////////////////////////////////////////
+
+        var chap;
+        var seq;
+        var vert;
+        var origin;
+        var username;
+        var userid;
+        var myId;
+        var course;
+
+
+        function get_data(callback) {
+          username = analytics._user._getTraits().username;
+          userid = analytics.user()._getId();
+          var url = window.location.href;
+          var split = url.split("/");
+          chap = split[6];
+          seq = split[7];
+          var block = $('#sequence-list .nav-item.active').data('id');
+          vert = block.split("@").pop();
+          course = split[4].split(":")[1];
+          origin = chap+"/"+seq+"/"+vert;
+          console.log("user: " + userid);
+          console.log("course: " + course);
+          console.log("origin: " + origin);
+          console.log("week: " + chap);
+          $('#dx-username').text(username);
+          callback();
+        }
+          
+          get_data();
+
+
+        //////////////////////////////////////////////
+	
+</script>
 
 
 </head>
 <body>
-	<div id="container"></div>
+<p id="header">Progress towards your goals this week:</p>
+	<div id="three">
+		<div id="videobar"></div>
+		<div id="questionbar"></div>
+		<div id="timebar"></div>
+	</div>
+
 </body>
 
 <script type="text/javascript">
@@ -25,12 +114,25 @@
 // progressbar.js@1.0.0 version is used
 // Docs: http://progressbarjs.readthedocs.org/en/1.0.0/
 
-var actual = 26;
-var intended = 34;
+var vidActual = 26;
+var vidIntended = 34;
+var vidScaled = vidActual/vidIntended;
 
-var scaled = actual/intended;
+var questionActual = 12;
+var questionIntended = 17;
+var questionScaled = questionActual/questionIntended;
 
-var bar = new ProgressBar.SemiCircle(container, {
+
+var timeActual = 2;
+var timeIntended = 5;
+var timeScaled = timeActual/timeIntended;
+
+
+///////////////////////////////////////////////////////////
+//						Video Viz						 //
+///////////////////////////////////////////////////////////
+
+var bar = new ProgressBar.SemiCircle(videobar, {
   strokeWidth: 8,
   color: '#FFEA82',
   trailColor: '#eee',
@@ -47,7 +149,7 @@ var bar = new ProgressBar.SemiCircle(container, {
   // Set default step function for all animate calls
   step: (state, bar) => {
     bar.path.setAttribute('stroke', state.color);
-    var value = Math.round(bar.value() * intended);
+    var value = Math.round(bar.value() * vidIntended);
     if (value === 0) {
       bar.setText('');
     } else {
@@ -60,7 +162,107 @@ var bar = new ProgressBar.SemiCircle(container, {
 bar.text.style.fontFamily = '"Abel", Helvetica, sans-serif';
 bar.text.style.fontSize = '2rem';
 
-bar.animate(scaled);  // Number from 0.0 to 1.0
+bar.animate(vidScaled);  // Number from 0.0 to 1.0
+
+///////////////////////////////////////////////////////////
+//						Question Viz					 //
+///////////////////////////////////////////////////////////
+
+var bar2 = new ProgressBar.SemiCircle(questionbar, {
+  strokeWidth: 8,
+  color: '#FFEA82',
+  trailColor: '#eee',
+  trailWidth: 8,
+  easing: 'easeInOut',
+  duration: 1400,
+  svgStyle: null,
+  text: {
+    value: '1',
+    alignToBottom: false
+  },
+  from: {color: '#ffb366'},
+  to: {color: '#00e600'},
+  // Set default step function for all animate calls
+  step: (state, bar2) => {
+    bar2.path.setAttribute('stroke', state.color);
+    var value = Math.round(bar2.value() * questionIntended);
+    if (value === 0) {
+      bar2.setText('');
+    } else {
+      bar2.setText(value);
+    }
+
+    bar2.text.style.color = state.color;
+  }
+});
+bar2.text.style.fontFamily = '"Abel", Helvetica, sans-serif';
+bar2.text.style.fontSize = '2rem';
+
+bar2.animate(questionScaled);  // Number from 0.0 to 1.0
+
+
+///////////////////////////////////////////////////////////
+//						Time Viz						 //
+///////////////////////////////////////////////////////////
+
+var bar3 = new ProgressBar.SemiCircle(timebar, {
+  strokeWidth: 8,
+  color: '#FFEA82',
+  trailColor: '#eee',
+  trailWidth: 8,
+  easing: 'easeInOut',
+  duration: 1400,
+  svgStyle: null,
+  text: {
+    value: '1',
+    alignToBottom: false
+  },
+  from: {color: '#ffb366'},
+  to: {color: '#00e600'},
+  // Set default step function for all animate calls
+  step: (state, bar3) => {
+    bar3.path.setAttribute('stroke', state.color);
+    var value = Math.round(bar3.value() * timeIntended);
+    if (value === 0) {
+      bar3.setText('');
+    } else {
+      bar3.setText(value);
+    }
+
+    bar3.text.style.color = state.color;
+  }
+});
+bar3.text.style.fontFamily = '"Abel", Helvetica, sans-serif';
+bar3.text.style.fontSize = '2rem';
+
+bar3.animate(timeScaled);  // Number from 0.0 to 1.0
+
+
 
 </script>
-</html>
+
+<body>
+
+<div id="three">
+		<div id="videotex">You planed for:<span id="vidIntended"></span></div>
+		<div id="questiontex">You planed for:<span id="questionIntended"></span></div>
+		<div id="timetex">You planed for:<span id="timeIntended"></span></div>
+	</div>
+
+<script>
+
+
+function textgen() {
+   		document.getElementById("vidIntended").innerHTML=vidIntended;
+   		document.getElementById("questionIntended").innerHTML=questionIntended;
+   		document.getElementById("timeIntended").innerHTML=timeIntended;
+	};
+ 
+ 
+ textgen();
+
+
+</script>
+
+</body>
+

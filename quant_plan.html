@@ -49,15 +49,53 @@
         border: none;
         border-bottom: solid 2px #c9c9c9;
     }
-    p.header {
+  #header {
         font-style: italic;
         font-weight: bold;
         display: flex;
-		    justify-content: center;
-        size: 60px;
+        font-size: 240%;
     }
     </style>
     <script>
+
+         //////////////////////////////////////////////
+        //               Logging Data               //
+        //////////////////////////////////////////////
+
+        var chap;
+        var seq;
+        var vert;
+        var origin;
+        var username;
+        var userid;
+        var myId;
+        var course;
+
+
+        function get_data(callback) {
+          username = analytics._user._getTraits().username;
+          userid = analytics.user()._getId();
+          var url = window.location.href;
+          var split = url.split("/");
+          chap = split[6];
+          seq = split[7];
+          var block = $('#sequence-list .nav-item.active').data('id');
+          vert = block.split("@").pop();
+          course = split[4].split(":")[1];
+          origin = chap+"/"+seq+"/"+vert;
+          console.log("user: " + userid);
+          console.log("course: " + course);
+          console.log("origin: " + origin);
+          console.log("week: " + chap);
+          $('#dx-username').text(username);
+          callback();
+        }
+          
+          get_data();
+
+
+        //////////////////////////////////////////////
+
         function submitting() {
             var vids = document.getElementById("vids").value;
             var quizs = document.getElementById("quizs").value;
@@ -76,11 +114,9 @@
 </head>
 <body>
 <main class="main">  
-  <div id="three">
-  <p class="header">THIS WEEK...</p>
-  <p class="quiz"></p>
-  <p class="time"></p>
-  </div>
+  <p id="header">THIS WEEK...</p>
+
+
 
 <form onsubmit="submitting();">
   <div id="three">

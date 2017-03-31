@@ -43,12 +43,11 @@
 	vertical-align: top;
 		text-align:top;
 	}
-    p.header0 {
+  #header {
         font-style: italic;
         font-weight: bold;
         display: flex;
-        justify-content: left;
-        size: 60px;
+        font-size: 240%;
     }
     p.header1 {
         display: flex;
@@ -72,13 +71,51 @@
 		justify-content: center;
     }
 </style>
-<meta charset="UTF-8">
-<title>Untitled Document</title>
-</head>
+<script>
+	
+         //////////////////////////////////////////////
+        //               Logging Data               //
+        //////////////////////////////////////////////
+
+        var chap;
+        var seq;
+        var vert;
+        var origin;
+        var username;
+        var userid;
+        var myId;
+        var course;
+
+
+        function get_data(callback) {
+          username = analytics._user._getTraits().username;
+          userid = analytics.user()._getId();
+          var url = window.location.href;
+          var split = url.split("/");
+          chap = split[6];
+          seq = split[7];
+          var block = $('#sequence-list .nav-item.active').data('id');
+          vert = block.split("@").pop();
+          course = split[4].split(":")[1];
+          origin = chap+"/"+seq+"/"+vert;
+          console.log("user: " + userid);
+          console.log("course: " + course);
+          console.log("origin: " + origin);
+          console.log("week: " + chap);
+          $('#dx-username').text(username);
+          callback();
+        }
+          
+          get_data();
+
+
+        //////////////////////////////////////////////
+
+</script>
 
 <body>
 
-<p class="header0">WHAT DRIVES YOU?</p>
+<p id="header">WHAT DRIVES YOU?</p>
 	<p class="header1">Please share what's motivating you to be a part of this course community.</p>
 
   <form id="usrform" onsubmit="submitting();">

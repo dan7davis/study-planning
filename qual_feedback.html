@@ -56,32 +56,58 @@
         border: none;
         border-bottom: solid 2px #c9c9c9;
     }
-    p.header {
+  #header {
         font-style: italic;
         font-weight: bold;
         display: flex;
-        justify-content: left;
-        size: 60px;
+        font-size: 240%;
     }
     </style>
     <script type="text/javascript">
-          setTimeout(function(){
-            var secretid = analytics.user()._getId();
-            var otherid = analytics.user().anonymousId();
-            var email = analytics._user._getTraits()['email'];
-            var username = analytics._user._getTraits()['username'];
 
-            $('#dx-id').text(secretid);
-            $('#dx-another').text(otherid);
-            $('#dx-email').text(email);
-            $('#dx-username').text(username);
+         //////////////////////////////////////////////
+        //               Logging Data               //
+        //////////////////////////////////////////////
 
-          }, 1);
+        var chap;
+        var seq;
+        var vert;
+        var origin;
+        var username;
+        var userid;
+        var myId;
+        var course;
+
+
+        function get_data(callback) {
+          username = analytics._user._getTraits().username;
+          userid = analytics.user()._getId();
+          var url = window.location.href;
+          var split = url.split("/");
+          chap = split[6];
+          seq = split[7];
+          var block = $('#sequence-list .nav-item.active').data('id');
+          vert = block.split("@").pop();
+          course = split[4].split(":")[1];
+          origin = chap+"/"+seq+"/"+vert;
+          console.log("user: " + userid);
+          console.log("course: " + course);
+          console.log("origin: " + origin);
+          console.log("week: " + chap);
+          $('#dx-username').text(username);
+          callback();
+        }
+          
+          get_data();
+
+
+        //////////////////////////////////////////////
+
     </script>
 </head>
 <body>
 <main class="main">
-    <p class="header">WHAT DRIVES YOU:</p>
+    <p id="header">WHAT DRIVES YOU:</p>
   <p class="left">&ldquo;</p>
   <p class="midd">I want to be able to build interactive web interfaces in the edX platform using JavaScript.<br>
   </p>
