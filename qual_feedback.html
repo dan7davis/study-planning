@@ -121,28 +121,92 @@
 
     <script>
 
+                  //////////////////////////////////////////////
+        //          Logging User Video Activity       //
+        //////////////////////////////////////////////
+var datas = {};
+//Holds a reference to the YouTube player
+var ik_player;
+
+//this function is called by the API
+window.onload = function onYouTubeIframeAPIReady() {
+  //creates the player object
+  var playerId = $('iframe').attr('id');
+  ik_player = new YT.Player(playerId);
+       
+  console.log('Video API is loaded');
+       
+  //subscribe to events
+  ik_player.addEventListener("onStateChange", "onYouTubePlayerStateChange");
+}
+var k = [];
+function onYouTubePlayerStateChange(event) {
+  var d = new Date();
+  var n = d.getTime();
+  k.push(n/1000);
+
+  
+function diff(ary) {
+    var newA = [];
+    for (var i = 1; i < ary.length; i++)  newA.push(ary[i] - ary[i - 1])
+    return newA;
+};
+
+
+//console.log(diff(k));
+var diffy = diff(k);
+var ar =[];
+for (var i = 0; i < diffy.length; i++) {
+    if(i % 2 === 0) { 
+        ar.push(diffy[i]);
+    }
+  //console.log(ar);
+  var sum = ar.reduce(add, 0);
+
+function add(a, b) {
+    return a + b;
+}
+var playerId = $('iframe').attr('id');
+datas.vidID = playerId;
+datas.duration = sum;
+console.log(datas);
+}
+;
+  
+}
+ 
+         //////////////////////////////////////////////
+         ////////////////////////////////////////////// 
+
+
+
+
          //////////////////////////////////////////////
         //          Logging User Quiz Activity       //
         //////////////////////////////////////////////
-
+var datas = {};
 var subs = [];
 var uniqueSubs =[];
 
-window.onload = function(){
+setTimeout(function(){
   for (i=0; i<100; i++) {
     document.getElementsByClassName("submit btn-brand")[i].addEventListener("click", myFunction);
   }
-};
+}, 3000);
 
   
 function myFunction() {
   subs.push(this.parentNode.parentNode.parentNode.parentNode.id);
   console.log(subs);
+  datas.submits = subs;
   $.each(subs, function(i, el){
     if($.inArray(el, uniqueSubs) === -1) uniqueSubs.push(el);
 });
   console.log(uniqueSubs.length);
+  datas.uniqueSubmits = uniqueSubs;
+  console.log(datas);
 };
+
 
 
 
