@@ -241,8 +241,9 @@ function myFunction() {
            timeSite=new Date()-time;
            var datas = {};
            datas.time = timeSite;
-           console.log(timeSite);
-           return datas;
+           datas.id = userid;
+           datas.course = course;
+           console.log(datas);
           }
 
 
@@ -258,13 +259,12 @@ function myFunction() {
 <p id="header">WHAT DRIVES YOU?</p>
 	<p class="header1">Please share what's motivating you to be a part of this course community.</p>
 
-  <form id="usrform" onsubmit="submitting();">
+  <form id="usrform">
   <div id="three">
            <textarea form="usrform" name="styled-textarea" id="styled" onfocus="this.value=''; setbg('#e5fff3');" onblur="setbg('white')">Enter your story here...</textarea>
         </div>
-	</form>
  <p class="subm"> <input type="image" alt="Submit" src="http://www.wis.ewi.tudelft.nl/fileadmin/wis/homepages/davis/images/button.png"> </p>
-
+  </form>
 
 <script>
 
@@ -272,12 +272,29 @@ function myFunction() {
          //////////////////////////////////////////////
         //          Logging Qual Planning            //
         //////////////////////////////////////////////
-
-
-            function submitting() {
               var textArea = $( "textarea" ).text();
-              console.log(textArea);
-            };
+
+
+            $("form").submit(function(e){
+              e.preventDefault();
+              var textArea = $( "textarea" ).text();
+              x = $( "textarea" ).val() == "Enter your story here..."
+              if (x.toString() == "false") {
+                var textArea = $( "textarea" ).text();
+                var datas = {};
+                datas.id = userid;
+                datas.course = course;
+                datas.qualPlan = $( "textarea" ).val();
+                e.preventDefault();
+              } else {
+                datas.id = userid;
+                datas.course = course;
+                datas.qualPlan = "No plan yet";
+                e.preventDefault();
+              };
+            });
+
+
 
          //////////////////////////////////////////////
          //////////////////////////////////////////////
