@@ -1,6 +1,18 @@
-<script>
+    <script>
 
-         //////////////////////////////////////////////
+
+    
+// ***************************************************************
+                    // ACTIVITY DATA KEYS
+
+                    // TIME: timeSite
+                    // Videos: datas.watched
+                    // Quiz: uniqueSubs.length
+// ***************************************************************  
+
+
+
+        //////////////////////////////////////////////
         //          Logging User Video Activity       //
         //////////////////////////////////////////////
 var datas = {};
@@ -48,6 +60,11 @@ function add(a, b) {
 var playerId = $('iframe').attr('id');
 datas.vidID = playerId;
 datas.duration = sum;
+if (sum > 30) {
+  datas.watched = 1;
+} else {
+  datas.watched = 0
+};
 console.log(datas);
 }
 ;
@@ -56,8 +73,6 @@ console.log(datas);
  
          //////////////////////////////////////////////
          ////////////////////////////////////////////// 
-
-
 
 
          //////////////////////////////////////////////
@@ -97,5 +112,24 @@ function myFunction() {
          //////////////////////////////////////////////
          //////////////////////////////////////////////
 
+
+         //////////////////////////////////////////////
+        //          Logging User Time Spent        //
+        //////////////////////////////////////////////
+
+          var time,timeSite;
+          window.onload=function(){
+           time=new Date();
+          }
+
+
+          window.onbeforeunload=function(){
+           timeSite=new Date()-time;
+           console.log(timeSite);
+          }
+
+
+         //////////////////////////////////////////////
+         //////////////////////////////////////////////
 
 </script>

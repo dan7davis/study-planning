@@ -78,7 +78,7 @@
         var course;
 
 
-        function get_data(callback) {
+        function get_data() {
           username = analytics._user._getTraits().username;
           userid = analytics.user()._getId();
           var url = window.location.href;
@@ -94,7 +94,6 @@
           console.log("origin: " + origin);
           console.log("week: " + chap);
           $('#dx-username').text(username);
-          callback();
         };
 
           
@@ -121,7 +120,19 @@
 
     <script>
 
-                  //////////////////////////////////////////////
+
+    
+// ***************************************************************
+                    // ACTIVITY DATA KEYS
+
+                    // TIME: timeSite
+                    // Videos: datas.watched
+                    // Quiz: uniqueSubs.length
+// ***************************************************************  
+
+
+
+        //////////////////////////////////////////////
         //          Logging User Video Activity       //
         //////////////////////////////////////////////
 var datas = {};
@@ -169,6 +180,11 @@ function add(a, b) {
 var playerId = $('iframe').attr('id');
 datas.vidID = playerId;
 datas.duration = sum;
+if (sum > 30) {
+  datas.watched = 1;
+} else {
+  datas.watched = 0
+};
 console.log(datas);
 }
 ;
@@ -177,8 +193,6 @@ console.log(datas);
  
          //////////////////////////////////////////////
          ////////////////////////////////////////////// 
-
-
 
 
          //////////////////////////////////////////////
@@ -218,6 +232,25 @@ function myFunction() {
          //////////////////////////////////////////////
          //////////////////////////////////////////////
 
+
+         //////////////////////////////////////////////
+        //          Logging User Time Spent        //
+        //////////////////////////////////////////////
+
+          var time,timeSite;
+          window.onload=function(){
+           time=new Date();
+          }
+
+
+          window.onbeforeunload=function(){
+           timeSite=new Date()-time;
+           console.log(timeSite);
+          }
+
+
+         //////////////////////////////////////////////
+         //////////////////////////////////////////////
 
 </script>
 </head>
