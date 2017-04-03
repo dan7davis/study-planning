@@ -73,7 +73,7 @@
 <script>
 	
          //////////////////////////////////////////////
-        //               Logging Data               //
+        //               Logging User Data           //
         //////////////////////////////////////////////
 
         var chap;
@@ -109,6 +109,46 @@
 
 
         //////////////////////////////////////////////
+        //////////////////////////////////////////////
+
+
+</script>
+
+<script>
+
+         //////////////////////////////////////////////
+        //          Logging User Quiz Activity       //
+        //////////////////////////////////////////////
+
+var subs = [];
+var uniqueSubs =[];
+
+window.onload = function(){
+  for (i=0; i<100; i++) {
+    document.getElementsByClassName("submit btn-brand")[i].addEventListener("click", myFunction);
+  }
+};
+
+  
+function myFunction() {
+  subs.push(this.parentNode.parentNode.parentNode.parentNode.id);
+  console.log(subs);
+  $.each(subs, function(i, el){
+    if($.inArray(el, uniqueSubs) === -1) uniqueSubs.push(el);
+});
+  console.log(uniqueSubs.length);
+};
+
+
+
+// window.onbeforeunload = function() {
+//  sendData();
+// };
+
+
+         //////////////////////////////////////////////
+         //////////////////////////////////////////////
+
 
 </script>
 
