@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html>
+
 <head>
     <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
     <style type="text/css">
@@ -63,21 +62,6 @@
         font-size: 240%;
     }
     </style>
-
-</head>
-<body>
-<main class="main">
-    <p id="header">WHAT DRIVES YOU:</p>
-  <p class="left">&ldquo;</p>
-  <p class="midd">I want to be able to build interactive web interfaces in the edX platform using JavaScript.<br>
-  </p>
-  <p class="rite">&rdquo;</p>
-  <p class="left"></p>
-  <p class="attr"> - <span id="dx-username"></span></p>
-  <p class="subm"> <input type="image" alt="Submit" src="http://www.wis.ewi.tudelft.nl/fileadmin/wis/homepages/davis/images/button.png"> </p>
-
-<p id="woke"></p>
-
     <script type="text/javascript">
 
          //////////////////////////////////////////////
@@ -111,16 +95,49 @@
           console.log("week: " + chap);
           $('#dx-username').text(username);
           callback();
-        }
-          
-          get_data();
+        };
 
+          
+          
+
+
+
+        setTimeout(function(){
+          var secretid = analytics.user()._getId();
+          var otherid = analytics.user().anonymousId();
+          var email = analytics._user._getTraits()['email'];
+          var username = analytics._user._getTraits()['username'];
+
+          $('#dx-id').text(secretid);
+          $('#dx-another').text(otherid);
+          $('#dx-email').text(email);
+          
+
+        }, 2000);
 
         //////////////////////////////////////////////
 
     </script>
+</head>
+<body>
+<main class="main">
+    <p id="header">WHAT DRIVES YOU:</p>
+  <p class="left">&ldquo;</p>
+  <p class="midd">I want to be able to build interactive web interfaces in the edX platform using JavaScript.<br>
+  </p>
+  <p class="rite">&rdquo;</p>
+  <p class="left"></p>
+  <p class="attr"> - <span id="dx-username"></span></p>
+  <p class="subm"> <input type="image" alt="Submit" src="http://www.wis.ewi.tudelft.nl/fileadmin/wis/homepages/davis/images/button.png"> </p>
+
+<p id="woke"></p>
+
+<script>$(document).ready(function(){
+get_data();
+});</script>
+
+
 <footer>
 </footer>
 </main>
 </body>
-</html>
