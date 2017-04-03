@@ -114,15 +114,19 @@
 </script>
 
 <script>
+
+
 // ***************************************************************
                     // ACTIVITY DATA KEYS
 
-                    // TIME: timeSite
+                    // TIME: datas.time
                     // Videos: datas.watched
-                    // Quiz: uniqueSubs.length
-// ***************************************************************                    
+                    // Quiz: datas.uniqueSubmits
+// ***************************************************************  
 
-          //////////////////////////////////////////////
+
+
+        //////////////////////////////////////////////
         //          Logging User Video Activity       //
         //////////////////////////////////////////////
 var datas = {};
@@ -169,7 +173,7 @@ function add(a, b) {
 }
 var playerId = $('iframe').attr('id');
 datas.vidID = playerId;
-datas.duration = sum;
+datas.vidDuration = sum;
 if (sum > 30) {
   datas.watched = 1;
 } else {
@@ -183,6 +187,7 @@ console.log(datas);
  
          //////////////////////////////////////////////
          ////////////////////////////////////////////// 
+
 
          //////////////////////////////////////////////
         //          Logging User Quiz Activity       //
@@ -206,7 +211,7 @@ function myFunction() {
     if($.inArray(el, uniqueSubs) === -1) uniqueSubs.push(el);
 });
   console.log(uniqueSubs.length);
-  datas.uniqueSubmits = uniqueSubs;
+  datas.uniqueSubmits = uniqueSubs.length;
   console.log(datas);
 };
 
@@ -227,14 +232,17 @@ function myFunction() {
         //////////////////////////////////////////////
 
           var time,timeSite;
-          window.onload=function(){
+          setTimeout(function(){
            time=new Date();
-          }
+          }, 1000);
 
 
           window.onbeforeunload=function(){
            timeSite=new Date()-time;
+           var datas = {};
+           datas.time = timeSite;
            console.log(timeSite);
+           return datas;
           }
 
 
@@ -256,4 +264,26 @@ function myFunction() {
         </div>
 	</form>
  <p class="subm"> <input type="image" alt="Submit" src="http://www.wis.ewi.tudelft.nl/fileadmin/wis/homepages/davis/images/button.png"> </p>
+
+
+<script>
+
+
+         //////////////////////////////////////////////
+        //          Logging Qual Planning            //
+        //////////////////////////////////////////////
+
+
+            function submitting() {
+              var textArea = $( "textarea" ).text();
+              console.log(textArea);
+            };
+
+         //////////////////////////////////////////////
+         //////////////////////////////////////////////
+
+</script>
+
+
+
 </body>

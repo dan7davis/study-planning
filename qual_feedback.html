@@ -76,6 +76,7 @@
         var userid;
         var myId;
         var course;
+        var datas = {};
 
 
         function get_data() {
@@ -94,6 +95,8 @@
           console.log("origin: " + origin);
           console.log("week: " + chap);
           $('#dx-username').text(username);
+          datas.id = analytics.user()._getId();
+          datas.course = course;
         };
 
           
@@ -121,13 +124,13 @@
     <script>
 
 
-    
+
 // ***************************************************************
                     // ACTIVITY DATA KEYS
 
-                    // TIME: timeSite
+                    // TIME: datas.time
                     // Videos: datas.watched
-                    // Quiz: uniqueSubs.length
+                    // Quiz: datas.uniqueSubmits
 // ***************************************************************  
 
 
@@ -179,7 +182,7 @@ function add(a, b) {
 }
 var playerId = $('iframe').attr('id');
 datas.vidID = playerId;
-datas.duration = sum;
+datas.vidDuration = sum;
 if (sum > 30) {
   datas.watched = 1;
 } else {
@@ -217,7 +220,7 @@ function myFunction() {
     if($.inArray(el, uniqueSubs) === -1) uniqueSubs.push(el);
 });
   console.log(uniqueSubs.length);
-  datas.uniqueSubmits = uniqueSubs;
+  datas.uniqueSubmits = uniqueSubs.length;
   console.log(datas);
 };
 
@@ -238,14 +241,17 @@ function myFunction() {
         //////////////////////////////////////////////
 
           var time,timeSite;
-          window.onload=function(){
+          setTimeout(function(){
            time=new Date();
-          }
+          }, 1000);
 
 
           window.onbeforeunload=function(){
            timeSite=new Date()-time;
+           var datas = {};
+           datas.time = timeSite;
            console.log(timeSite);
+           return datas;
           }
 
 
