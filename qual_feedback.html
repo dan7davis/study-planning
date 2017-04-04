@@ -62,6 +62,25 @@
         font-size: 240%;
     }
     </style>
+
+<main class="main">
+    <p id="header">WHAT DRIVES YOU:</p>
+  <p class="left">&ldquo;</p>
+  <p class="midd">I want to be able to build interactive web interfaces in the edX platform using JavaScript.<br>
+  </p>
+  <p class="rite">&rdquo;</p>
+  <p class="left"></p>
+  <p class="attr"> - <span id="dx-username"></span></p>
+  <p class="subm"> <input type="image" alt="Submit" src="http://www.wis.ewi.tudelft.nl/fileadmin/wis/homepages/davis/images/button.png"> </p>
+
+
+
+
+<footer>
+</footer>
+</main>
+
+
     <script type="text/javascript">
 
          //////////////////////////////////////////////
@@ -76,47 +95,39 @@
         var userid;
         var myId;
         var course;
+        var time;
         var datas = {};
+
 
 
         function get_data() {
           username = analytics._user._getTraits().username;
-          userid = analytics.user()._getId();
           var url = window.location.href;
           var split = url.split("/");
           chap = split[6];
+          datas.week = chap;
           seq = split[7];
           var block = $('#sequence-list .nav-item.active').data('id');
           vert = block.split("@").pop();
           course = split[4].split(":")[1];
           origin = chap+"/"+seq+"/"+vert;
+          userid = analytics.user()._getId();
+          datas.id = userid;
+          datas.course = course;
+          datas.time = new Date();
+          datas.index = datas.id + "_" + datas.time.getTime();
+          datas.vert = vert;
           console.log("user: " + userid);
           console.log("course: " + course);
           console.log("origin: " + origin);
           console.log("week: " + chap);
           $('#dx-username').text(username);
-          datas.id = analytics.user()._getId();
-          datas.course = course;
-        };
-
+        }
           
-          
+          get_data();
 
 
-
-        setTimeout(function(){
-          var secretid = analytics.user()._getId();
-          var otherid = analytics.user().anonymousId();
-          var email = analytics._user._getTraits()['email'];
-          var username = analytics._user._getTraits()['username'];
-
-          $('#dx-id').text(secretid);
-          $('#dx-another').text(otherid);
-          $('#dx-email').text(email);
-          
-
-        }, 2000);
-
+        //////////////////////////////////////////////
         //////////////////////////////////////////////
 
     </script>
@@ -138,7 +149,6 @@
         //////////////////////////////////////////////
         //          Logging User Video Activity       //
         //////////////////////////////////////////////
-var datas = {};
 //Holds a reference to the YouTube player
 var ik_player;
 
@@ -201,7 +211,6 @@ console.log(datas);
          //////////////////////////////////////////////
         //          Logging User Quiz Activity       //
         //////////////////////////////////////////////
-var datas = {};
 var subs = [];
 var uniqueSubs =[];
 
@@ -248,7 +257,6 @@ function myFunction() {
 
           window.onbeforeunload=function(){
            timeSite=new Date()-time;
-           var datas = {};
            datas.time = timeSite;
            console.log(timeSite);
            return datas;
@@ -260,25 +268,4 @@ function myFunction() {
 
 </script>
 </head>
-<body>
-<main class="main">
-    <p id="header">WHAT DRIVES YOU:</p>
-  <p class="left">&ldquo;</p>
-  <p class="midd">I want to be able to build interactive web interfaces in the edX platform using JavaScript.<br>
-  </p>
-  <p class="rite">&rdquo;</p>
-  <p class="left"></p>
-  <p class="attr"> - <span id="dx-username"></span></p>
-  <p class="subm"> <input type="image" alt="Submit" src="http://www.wis.ewi.tudelft.nl/fileadmin/wis/homepages/davis/images/button.png"> </p>
 
-<p id="woke"></p>
-
-<script>$(document).ready(function(){
-get_data();
-});</script>
-
-
-<footer>
-</footer>
-</main>
-</body>

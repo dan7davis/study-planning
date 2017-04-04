@@ -69,19 +69,28 @@
         var userid;
         var myId;
         var course;
+        var time;
+        var datas = {};
+
 
 
         function get_data() {
           username = analytics._user._getTraits().username;
-          userid = analytics.user()._getId();
           var url = window.location.href;
           var split = url.split("/");
           chap = split[6];
+          datas.week = chap;
           seq = split[7];
           var block = $('#sequence-list .nav-item.active').data('id');
           vert = block.split("@").pop();
           course = split[4].split(":")[1];
           origin = chap+"/"+seq+"/"+vert;
+          userid = analytics.user()._getId();
+          datas.id = userid;
+          datas.course = course;
+          datas.time = new Date();
+          datas.index = datas.id + "_" + datas.time.getTime();
+          datas.vert = vert;
           console.log("user: " + userid);
           console.log("course: " + course);
           console.log("origin: " + origin);
@@ -93,11 +102,11 @@
 
 
         //////////////////////////////////////////////
+        //////////////////////////////////////////////
 	
 </script>
 
-<script>
-
+    <script>
 
 
 // ***************************************************************
@@ -113,7 +122,6 @@
         //////////////////////////////////////////////
         //          Logging User Video Activity       //
         //////////////////////////////////////////////
-var datas = {};
 //Holds a reference to the YouTube player
 var ik_player;
 
@@ -176,7 +184,6 @@ console.log(datas);
          //////////////////////////////////////////////
         //          Logging User Quiz Activity       //
         //////////////////////////////////////////////
-var datas = {};
 var subs = [];
 var uniqueSubs =[];
 
@@ -223,7 +230,6 @@ function myFunction() {
 
           window.onbeforeunload=function(){
            timeSite=new Date()-time;
-           var datas = {};
            datas.time = timeSite;
            console.log(timeSite);
            return datas;
@@ -232,8 +238,8 @@ function myFunction() {
 
          //////////////////////////////////////////////
          //////////////////////////////////////////////
-</script>
 
+</script>
 
 </head>
 <body>
