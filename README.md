@@ -12,4 +12,4 @@
 9. In edX Studio click **Content > Files & Uploads**
 10. Click the green " + Upload New File" button
 11. Select and upload **mapped.js**
-12. Add `<script src="/static/mapped.js"></script>` within the `<header>` tag in **quant_plan.html**
+12. Add `<script src="/static/mapped.js"></script>` after `</style>` in **quant_plan.html**
