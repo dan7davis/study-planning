@@ -14,7 +14,6 @@
         //////////////////////////////////////////////
         //          Logging User Video Activity       //
         //////////////////////////////////////////////
-var datas = {};
 //Holds a reference to the YouTube player
 var ik_player;
 
@@ -77,7 +76,6 @@ console.log(datas);
          //////////////////////////////////////////////
         //          Logging User Quiz Activity       //
         //////////////////////////////////////////////
-var datas = {};
 var subs = [];
 var uniqueSubs =[];
 
@@ -124,7 +122,6 @@ function myFunction() {
 
           window.onbeforeunload=function(){
            timeSite=new Date()-time;
-           var datas = {};
            datas.time = timeSite;
            console.log(timeSite);
            return datas;
