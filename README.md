@@ -2,7 +2,7 @@
 
 # To Gather Course Design Information
 1. Go to `https://insights.edx.org/courses/course-v1:[insert course id here]/engagement/videos/`
-2. In the JavaScript console, run the video_scrape.js file
+2. In the JavaScript console, run the **video_scrape.js** file
 3. Open the **scraping.js** file
 4. Paste the current content of your clipboard into the `vidMap` variable and save the file
 5. Go to `https://courses.edx.org/courses/course-v1:[insert course id here]/progress`
