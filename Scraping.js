@@ -1,5 +1,5 @@
 
-var vidmap = ;
+var vidMap = ;
 
 
 
@@ -79,5 +79,6 @@ var mapped = [];
 for (i=0; i < uniqueWeek.length; i++) {
   mapped[i] = [uniqueWeek[i], vidArray[i], quizArray[i]]
 };
+copy(mapped);
 
 
