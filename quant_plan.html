@@ -51,32 +51,16 @@
     }
   #header {
         font-style: italic;
+        font-family: 'Abel';
         font-weight: bold;
         display: flex;
         font-size: 240%;
+        margin-bottom: 0;
     }
     </style>
     <script src="/static/mapped.js"></script>
 
-<script>
-  
-//////////////////////////////////////////////
-// Retrieve Current Weeks Vid and Quiz Info //
-//////////////////////////////////////////////
 
-  for (i=0; i <= mapped.length; i++) {
-  if (mapped[i][0] !== chap) {
-    var corrVid = mapped[i][1];
-    var corrQuiz = mapped[i][2];
-  } else {
-    console.log("Data not found.")
-  };
-};
-
-//////////////////////////////////////////////
-
-
-</script>
 
 
     <script>
@@ -125,26 +109,33 @@
           get_data();
 
 
+
+
+
         //////////////////////////////////////////////
         //////////////////////////////////////////////
 
-        function submitting() {
-            var vids = document.getElementById("vids").value;
-            var quizs = document.getElementById("quizs").value;
-            var times = document.getElementById("times").value;
-            var input = vids + " " + quizs + " " + times;
-            if (typeof(Storage) !== "undefined") {
-                // Store
-                localStorage.setItem("numbers", input);
-                // Retrieve
-                document.getElementById("woke").innerHTML = localStorage.getItem("numbers");
-            } else {
-                document.getElementById("woke").innerHTML = "Sorry, your browser does not support Web Storage...";
-            }
-        }
-    </script>
 
-        <script>
+  
+//////////////////////////////////////////////
+// Retrieve Current Weeks Vid and Quiz Info //
+//////////////////////////////////////////////
+
+  for (i=0; i < mapped.length; i++) {
+  if (mapped[i][0] !== chap) {
+    var corrVid = mapped[i][1];
+    var corrQuiz = mapped[i][2];
+  } else {
+    console.log("Data not found.")
+  };
+};
+
+//////////////////////////////////////////////
+
+
+</script>
+
+<script>
 
 
 // ***************************************************************
@@ -256,26 +247,29 @@ function myFunction() {
          //////////////////////////////////////////////
 
 
-         //////////////////////////////////////////////
-        //          Logging User Time Spent        //
+
+
         //////////////////////////////////////////////
+        //          Logging Qual Planning            //
+        //////////////////////////////////////////////
+            var quantGoals = [];
 
-          var time,timeSite;
-          setTimeout(function(){
-           time=new Date();
-          }, 1000);
+            var subby = $("form").submit(function(e){
+              e.preventDefault();
+              quantGoals[0] = $( "#vids").val();
+              quantGoals[1] = $( "#quizs").val();
+              quantGoals[2] = $( "#times").val();   
+              datas.quantGoals = quantGoals;
+              alert("Great! Stick to your goals and you'll succeed!"); 
+              e.preventDefault();          
+            });
 
 
-          window.onbeforeunload=function(){
-           timeSite=new Date()-time;
-           datas.time = timeSite;
-           console.log(timeSite);
-           return datas;
-          }
 
 
          //////////////////////////////////////////////
          //////////////////////////////////////////////
+
 
 </script>
 
@@ -286,17 +280,17 @@ function myFunction() {
 
 
 
-<form onsubmit="submitting();">
+<form id="qtPlan" onsubmit="return false">
   <div id="three">
   <p class="vid">I plan to <i>watch</i>...<br>
   <br>
-  <input class="txtenter" id= "vids" type="text" name="pin" maxlength="4" size="2" input style="font-size:120%"> / 12 <br>
+  <input class="txtenter" id= "vids" type="text" name="pin" maxlength="4" size="2" input style="font-size:120%"> / <span id="vidzn"></span> <br>
   <br> 
   Lecture Videos. </p>
 
   <p class="quiz">I plan to <i>answer</i>...<br>
   <br>
-  <input class="txtenter" id= "quizs" type="text" name="pin" maxlength="4" size="2" input style="font-size:120%"> / 27 <br>
+  <input class="txtenter" id= "quizs" type="text" name="pin" maxlength="4" size="2" input style="font-size:120%"> / <span id="quizdzn"></span> <br>
   <br> 
   Quiz Questions. </p>
 
@@ -308,11 +302,52 @@ function myFunction() {
 
   </div>
 
-  <p class="subm"> <input type="image" alt="Submit" src="http://www.wis.ewi.tudelft.nl/fileadmin/wis/homepages/davis/images/button.png"> </p>
+  <p class="subm"> <input type="image" onclick="subby" alt="Submit" src="http://www.wis.ewi.tudelft.nl/fileadmin/wis/homepages/davis/images/button.png"> </p>
 </form>
 <p id=woke></p>
 <footer>
 </footer>
 </main>
 </body>
+
+<script>
+
+          // Populate Dzn Fields
+
+          function populate() {
+            document.getElementById("vidzn").innerHTML=corrVid;
+            document.getElementById("quizdzn").innerHTML=corrQuiz;
+          };
+
+          populate();
+  
+
+           //////////////////////////////////////////////
+        //          Logging User Time Spent        //
+        //////////////////////////////////////////////
+
+          var time,timeSite;
+          setTimeout(function(){
+           time=new Date();
+          }, 1000);
+
+
+          window.onbeforeunload=function(){
+           timeSite=new Date()-time;
+           datas.timeSite = timeSite;
+           console.log(timeSite);
+           return datas;
+          }
+
+
+         //////////////////////////////////////////////
+         //////////////////////////////////////////////
+
+
+</script>
+
+
+
+
+
 </html>
