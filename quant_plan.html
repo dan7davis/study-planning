@@ -1,75 +1,71 @@
-<!DOCTYPE html>
-<html>
 <head>
     <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
-    <style type="text/css">
-    
-	
-    .main {
-        width: 740px;
-        margin: auto;
-        background: white;
-        padding: 20px;
-        font-family: 'Abel', sans-serif;
-        font-size: 150%;
-        line-height: 200%;
-    }
-	#three {
-		display: flex;
-		justify-content: space-around;
-	}
-    p.vid {
-      display: block;
-		  width: 200px;
-		  text-align: center;
+    <script src="/static/mapped.js"></script>
+
+<style type="text/css">
+
+  #videobar {
+     margin: 20px;
+     width: 200px;
+       height: 100px;
+  }
+
+  #questionbar {
       margin: 20px;
-    }
-    p.quiz {
-      display: block;
-		  width: 200px;
-		  text-align: center;
+      width: 200px;
+      height: 100px;
+  }
+
+  #timebar {
       margin: 20px;
-    }
-    p.time {
-      display: block;
-		  width: 200px;
-		  text-align: center;
+      width: 200px;
+      height: 100px;
+  }
+
+  #videotex {
+     margin: 20px;
+     width: 200px;
+       height: 50px;
+       font-size: 140%;
+  }
+
+  #questiontex {
       margin: 20px;
-    }
-    p.subm {
-        display: flex;
-		justify-content: center;
-    }
-    input.txtenter{
-        padding:5px;
-        font-family: 'Open Sans', sans-serif;
-        font-size: 100%;
-        line-height: 100%;   
-        padding: 0px;
-        border: none;
-        border-bottom: solid 2px #c9c9c9;
-    }
+      width: 200px;
+      height: 50px;
+      font-size: 140%;
+  }
+
+  #timetex {
+      margin: 20px;
+      width: 200px;
+      height: 50px;
+      font-size: 140%;
+  }
+  #three {
+    display: flex;
+    justify-content: space-around;
+  }
+
   #header {
         font-style: italic;
         font-family: 'Abel';
         font-weight: bold;
         display: flex;
         font-size: 240%;
-        margin-bottom: 0;
     }
-.emerald-flat-button {
+.emerald-flat-button-small {
   position: relative !important;
   display: block !important;
   vertical-align: top !important;
-  width: 30% !important;
-  margin: auto;
-  height: 60px !important;
+  width: 15% !important;
+  clear: both;
+  height: 30px !important;
   opacity: 1 !important;
   font-family: 'Abel', sans-serif !important;
   padding: 0 !important;
-  font-size: 25px !important;
+  font-size: 15px !important;
   color: white !important;
-  text-align: center !important;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25) !important;
   background: #2ecc71 !important;
   border: 0 !important;
@@ -79,23 +75,28 @@
   box-shadow: inset 0 -2px #28be68 !important;
   transition: all 0.3s ease 0s !important;
 }
-.emerald-flat-button:hover {
+.emerald-flat-button-small:hover {
   opacity: 0.75 !important;
 }
-.emerald-flat-button:active {
+.emerald-flat-button-small:active {
   top: 1px !important;
   outline: none !important;
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
 }
-    </style>
-    <script src="/static/mapped.js"></script>
+#replace {
+  display: block;
 
+}
+#startPlan {
+  display: none;
+}
 
-
-
-    <script>
-
+</style>
+<script src="/static/pbref.js"></script>
+<div id="startPlan">
+<script>
+  
          //////////////////////////////////////////////
         //               Logging User Data           //
         //////////////////////////////////////////////
@@ -139,16 +140,7 @@
           
           get_data();
 
-
-
-
-
-        //////////////////////////////////////////////
-        //////////////////////////////////////////////
-
-
-  
-//////////////////////////////////////////////
+          //////////////////////////////////////////////
 // Retrieve Current Weeks Vid and Quiz Info //
 //////////////////////////////////////////////
 
@@ -157,16 +149,21 @@
     var corrVid = mapped[i][1];
     var corrQuiz = mapped[i][2];
   } else {
-    console.log("Data not found.")
+    var corrVid = "";
+    var corrQuiz = "";
+    console.log("Data not found!");
   };
 };
 
 //////////////////////////////////////////////
 
 
+        //////////////////////////////////////////////
+        //////////////////////////////////////////////
+  
 </script>
 
-<script>
+    <script>
 
 
 // ***************************************************************
@@ -278,9 +275,300 @@ function myFunction() {
          //////////////////////////////////////////////
 
 
-
-
+         //////////////////////////////////////////////
+        //          Logging User Time Spent        //
         //////////////////////////////////////////////
+
+          var time,timeSite;
+          setTimeout(function(){
+           time=new Date();
+          }, 1000);
+
+
+          window.onbeforeunload=function(){
+           timeSite=new Date()-time;
+           datas.time = timeSite;
+           console.log(timeSite);
+           return datas;
+          }
+
+
+         //////////////////////////////////////////////
+         //////////////////////////////////////////////
+
+</script>
+
+</head>
+<body>
+<p id="header">Progress towards your goals this week:</p>
+  <div id="three">
+    <div id="videobar"></div>
+    <div id="questionbar"></div>
+    <div id="timebar"></div>
+  </div>
+
+</body>
+
+
+
+<script type="text/javascript">
+  
+// progressbar.js@1.0.0 version is used
+// Docs: http://progressbarjs.readthedocs.org/en/1.0.0/
+
+var vidActual = 26;
+var vidIntended = 34;
+var vidScaled = vidActual/vidIntended;
+
+var questionActual = 12;
+var questionIntended = 17;
+var questionScaled = questionActual/questionIntended;
+
+
+var timeActual = 2;
+var timeIntended = 5;
+var timeScaled = timeActual/timeIntended;
+
+
+///////////////////////////////////////////////////////////
+//            Video Viz                                   //
+///////////////////////////////////////////////////////////
+
+var bar = new ProgressBar.SemiCircle(videobar, {
+  strokeWidth: 8,
+  color: '#FFEA82',
+  trailColor: '#eee',
+  trailWidth: 8,
+  easing: 'easeInOut',
+  duration: 1400,
+  svgStyle: null,
+  text: {
+    value: '1',
+    alignToBottom: false
+  },
+  from: {color: '#ffb366'},
+  to: {color: '#00e600'},
+  // Set default step function for all animate calls
+  step: (state, bar) => {
+    bar.path.setAttribute('stroke', state.color);
+    var value = Math.round(bar.value() * vidIntended);
+    if (value === 0) {
+      bar.setText('');
+    } else {
+      bar.setText(value);
+    }
+
+    bar.text.style.color = state.color;
+  }
+});
+bar.text.style.fontFamily = '"Abel", Helvetica, sans-serif';
+bar.text.style.fontSize = '2rem';
+
+bar.animate(vidScaled);  // Number from 0.0 to 1.0
+
+///////////////////////////////////////////////////////////
+//            Question Viz           //
+///////////////////////////////////////////////////////////
+
+var bar2 = new ProgressBar.SemiCircle(questionbar, {
+  strokeWidth: 8,
+  color: '#FFEA82',
+  trailColor: '#eee',
+  trailWidth: 8,
+  easing: 'easeInOut',
+  duration: 1400,
+  svgStyle: null,
+  text: {
+    value: '1',
+    alignToBottom: false
+  },
+  from: {color: '#ffb366'},
+  to: {color: '#00e600'},
+  // Set default step function for all animate calls
+  step: (state, bar2) => {
+    bar2.path.setAttribute('stroke', state.color);
+    var value = Math.round(bar2.value() * questionIntended);
+    if (value === 0) {
+      bar2.setText('');
+    } else {
+      bar2.setText(value);
+    }
+
+    bar2.text.style.color = state.color;
+  }
+});
+bar2.text.style.fontFamily = '"Abel", Helvetica, sans-serif';
+bar2.text.style.fontSize = '2rem';
+
+bar2.animate(questionScaled);  // Number from 0.0 to 1.0
+
+
+///////////////////////////////////////////////////////////
+//            Time Viz             //
+///////////////////////////////////////////////////////////
+
+var bar3 = new ProgressBar.SemiCircle(timebar, {
+  strokeWidth: 8,
+  color: '#FFEA82',
+  trailColor: '#eee',
+  trailWidth: 8,
+  easing: 'easeInOut',
+  duration: 1400,
+  svgStyle: null,
+  text: {
+    value: '1',
+    alignToBottom: false
+  },
+  from: {color: '#ffb366'},
+  to: {color: '#00e600'},
+  // Set default step function for all animate calls
+  step: (state, bar3) => {
+    bar3.path.setAttribute('stroke', state.color);
+    var value = Math.round(bar3.value() * timeIntended);
+    if (value === 0) {
+      bar3.setText('');
+    } else {
+      bar3.setText(value);
+    }
+
+    bar3.text.style.color = state.color;
+  }
+});
+bar3.text.style.fontFamily = '"Abel", Helvetica, sans-serif';
+bar3.text.style.fontSize = '2rem';
+
+bar3.animate(timeScaled);  // Number from 0.0 to 1.0
+
+
+
+</script>
+
+<body>
+
+<div id="three">
+    <div id="videotex">You planed for: <span id="vidIntended"></span></div>
+    <div id="questiontex">You planed for: <span id="questionIntended"></span></div>
+    <div id="timetex">You planed for: <span id="timeIntended"></span></div>
+  </div>
+
+<script>
+
+
+function textgen() {
+      document.getElementById("vidIntended").innerHTML=vidIntended;
+      document.getElementById("questionIntended").innerHTML=questionIntended;
+      document.getElementById("timeIntended").innerHTML=timeIntended;
+  };
+ 
+ 
+ textgen();
+
+
+</script>
+
+<p><input type="submit" onclick="reveal();edited();" value="Edit Goals" class="emerald-flat-button-small"></p>
+
+</body>
+</div>
+<!-- ################################################################## -->
+<div id="replace">
+
+<style>
+
+  .main {
+        width: 740px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        font-family: 'Abel', sans-serif !important;
+        font-size: 150%;
+        line-height: 200%;
+    }
+  #three {
+    display: flex;
+    justify-content: space-around;
+    font-family: 'Abel', sans-serif !important;
+  }
+    p.vid {
+      display: block;
+      width: 200px;
+      font-family: 'Abel', sans-serif !important;
+      text-align: center;
+      margin: 20px;
+    }
+    p.quiz {
+      display: block;
+      width: 200px;
+      text-align: center;
+      font-family: 'Abel', sans-serif !important;
+      margin: 20px;
+    }
+    p.time {
+      display: block;
+      font-family: 'Abel', sans-serif !important;
+      width: 200px;
+      text-align: center;
+      margin: 20px;
+    }
+    p.subm {
+        display: flex;
+    justify-content: center;
+    }
+    input.txtenter{
+        padding:5px;
+        font-family: 'Abel', sans-serif !important;
+        font-size: 100%;
+        line-height: 100%;
+        text-align: center;   
+        padding: 0px;
+        border: none;
+        border-bottom: solid 3px #c9c9c9;
+    }
+ .emerald-flat-button {
+  position: relative !important;
+  display: block !important;
+  vertical-align: top !important;
+  width: 30% !important;
+  margin: auto;
+  height: 60px !important;
+  clear: both !important;
+  opacity: 1 !important;
+  font-family: 'Abel', sans-serif !important;
+  padding: 0 !important;
+  font-size: 25px !important;
+  color: white !important;
+  text-align: center !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25) !important;
+  background: #2ecc71 !important;
+  border: 0 !important;
+  border-bottom: 2px solid #28be68 !important;
+  cursor: pointer !important;
+  -webkit-box-shadow: inset 0 -2px #28be68 !important;
+  box-shadow: inset 0 -2px #28be68 !important;
+  transition: all 0.3s ease 0s !important;
+}
+.emerald-flat-button:hover {
+  opacity: 0.75 !important;
+}
+.emerald-flat-button:active {
+  top: 1px !important;
+  outline: none !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+  #header {
+        font-style: italic;
+        font-family: 'Abel';
+        font-weight: bold;
+        display: flex;
+        font-size: 240%;
+        margin-bottom: 0;
+    }
+</style>  
+
+
+<script>
+       //////////////////////////////////////////////
         //          Logging Qual Planning            //
         //////////////////////////////////////////////
             var quantGoals = [];
@@ -334,13 +622,14 @@ function myFunction() {
 
   </div>
 
-<p id="buts">
+
  <input type="submit" onclick="subby" value="Submit" class="emerald-flat-button"> 
+ <br>
+ <p id="buts">
+ <input type="submit" onclick="reveal()" value="View Progress" class="emerald-flat-button-small"> 
 </p>
 </form>
 
-<footer>
-</footer>
 </main>
 </body>
 
@@ -354,34 +643,28 @@ function myFunction() {
           };
 
           populate();
-  
-
-           //////////////////////////////////////////////
-        //          Logging User Time Spent        //
-        //////////////////////////////////////////////
-
-          var time,timeSite;
-          setTimeout(function(){
-           time=new Date();
-          }, 1000);
-
-
-          window.onbeforeunload=function(){
-           timeSite=new Date()-time;
-           datas.timeSite = timeSite;
-           console.log(timeSite);
-           return datas;
-          }
-
-
-         //////////////////////////////////////////////
-         //////////////////////////////////////////////
-
 
 </script>
 
 
 
+</div>
 
 
-</html>
+
+<script>
+  
+  function edited() {
+  datas.edited = 1;
+  datas.time = new Date();
+  datas.index = datas.id + "_" + datas.time.getTime();
+};
+
+  function reveal() {
+      $("#replace").toggle();
+      $("#startPlan").toggle();
+  };
+
+
+</script>
+

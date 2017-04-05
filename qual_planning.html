@@ -1,10 +1,8 @@
 
 <head>
     <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
+    <style type="text/css">
 
-
-
-<style type="text/css">
     .main {
         width: 740px;
         margin: auto;
@@ -14,36 +12,48 @@
         font-size: 150%;
         line-height: 200%;
     }
-	.style-2 input[type="text"] {
-		padding: 10px;
-  		border: solid 5px #c9c9c9;
-  		transition: border 0.3s;
-		width: 520px;
-		height: 200px;
-		
-	}
-	.style-2 input[type="text"]:focus,
-	.style-2 input[type="text"].focus {
- 		 border: solid 5px #969696;
-	}
-	#three {
-		display: flex;
-		justify-content: center;
-	}
-	h2 {
-		display: flex;
-		justify-content: flex-start;
-	}
-	input {
-    padding: 12px 20px;
-    margin: 8px 0;
-	vertical-align: text-top;
-    color: black;
-	font-size: 15px;
-	font-family: 'Abel', sans-serif;
-	vertical-align: top;
-		text-align:top;
-	}
+    p.left {
+        width: 70px;
+        float: left;
+    font-size: 500%;
+    font-family: Times;
+    opacity: 0.5;
+    margin-bottom: 0px;
+    }
+    p.midd {
+        width: 500px;
+        float: left;
+    margin-bottom: 0px;
+    }
+  p.attr {
+        width: 400px;
+        float: left;
+    text-align: right;
+    }
+    p.rite {
+        width: 70px;
+        float: left;
+    text-align: right;
+    font-size: 500%;
+    font-family: Times;
+    opacity: 0.5;
+    margin-bottom: 0px;
+
+    }
+    p.subm {
+        margin: auto;
+        clear: both;
+        text-align: center;
+    }
+    input.txtenter{
+        padding:5px;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 100%;
+        line-height: 100%;   
+        padding: 0px;
+        border: none;
+        border-bottom: solid 2px #c9c9c9;
+    }
   #header {
         font-style: italic;
         font-weight: bold;
@@ -52,49 +62,35 @@
         font-size: 240%;
         margin-bottom: 0;
     }
-    p.header1 {
-        display: flex;
-        justify-content: left;
-        size: 40px;
-    }    
-	textarea#styled {
-		width: 620px;
-		height: 200px;
-		border: 5px solid #cccccc;
-		padding: 5px;
-		font-family: 'Abel', sans-serif;
-		background-image: url(bg.gif);
-		background-position: bottom right;
-		background-repeat: no-repeat;
-		font-size: 25px;
-		line-height: 150%;
-	}
-	p.subm {
-        display: flex;
-		justify-content: center;
+    #quote {
+      font-size: 240%;
+      margin-bottom: 0;
     }
-  #buts {
-    display: flex;
-    justify-content: space-around;
-  }
-  #checked {
-    font-size: 25px;
-    font-family: 'Abel', sans-serif !important;
+    .midd {
+      font-family: 'Abel', sans-serif !important;
+      font-size: 180%;
+      margin-bottom: 0;
+    }
+    .attr {
+      font-family: 'Abel', sans-serif !important;
+      font-size: 180%
+    }
+  #replace {
+    display: block;
   }
 
-
-.emerald-flat-button {
+.emerald-flat-button-small {
   position: relative !important;
   display: block !important;
   vertical-align: top !important;
-  width: 30% !important;
-  height: 60px !important;
+  width: 15% !important;
+  clear: both;
+  height: 30px !important;
   opacity: 1 !important;
   font-family: 'Abel', sans-serif !important;
   padding: 0 !important;
-  font-size: 25px !important;
+  font-size: 15px !important;
   color: white !important;
-  text-align: center !important;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25) !important;
   background: #2ecc71 !important;
   border: 0 !important;
@@ -104,20 +100,31 @@
   box-shadow: inset 0 -2px #28be68 !important;
   transition: all 0.3s ease 0s !important;
 }
-.emerald-flat-button:hover {
+.emerald-flat-button-small:hover {
   opacity: 0.75 !important;
 }
-.emerald-flat-button:active {
+.emerald-flat-button-small:active {
   top: 1px !important;
   outline: none !important;
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
 }
+#replace {
+  display: block;
+
+}
+#startPlan {
+  display: none;
+}
 
 
-</style>
-<script>
-	
+    </style>
+
+<div id="startPlan">
+
+
+    <script type="text/javascript">
+
          //////////////////////////////////////////////
         //               Logging User Data           //
         //////////////////////////////////////////////
@@ -165,11 +172,34 @@
         //////////////////////////////////////////////
         //////////////////////////////////////////////
 
+    </script>
 
-</script>
+    <main class="main">
+    <p id="header">WHAT DRIVES YOU:</p>
+  <p class="left" id="quote">&ldquo;</p>
+  <p class="midd" id="planningText">I want to be able to build interactive web interfaces in the edX platform using JavaScript.
+  </p>
+  <p class="rite" id="quote">&rdquo;</p>
+  <p class="left"></p>
+  <p class="attr"> - <span id="dx-username"></span></p>
+  <br>
+  <br>
+ <p><input type="submit" onclick="reveal();edited();" value="Edit" class="emerald-flat-button-small"><p>
+
+
+
+<footer>
+</footer>
+</main>
+
 
     <script>
 
+function edited() {
+  datas.edited = 1;
+  datas.time = new Date();
+  datas.index = datas.id + "_" + datas.time.getTime();
+};
 
 // ***************************************************************
                     // ACTIVITY DATA KEYS
@@ -233,6 +263,8 @@ if (sum > 30) {
 } else {
   datas.watched = 0
 };
+datas.time = new Date();
+datas.index = datas.id + "_" + datas.time.getTime();
 console.log(datas);
 }
 ;
@@ -265,6 +297,8 @@ function myFunction() {
 });
   console.log(uniqueSubs.length);
   datas.uniqueSubmits = uniqueSubs.length;
+  datas.time = new Date();
+  datas.index = datas.id + "_" + datas.time.getTime();
   console.log(datas);
 };
 
@@ -294,6 +328,8 @@ function myFunction() {
            timeSite=new Date()-time;
            datas.time = timeSite;
            console.log(timeSite);
+           datas.time = new Date();
+           datas.index = datas.id + "_" + datas.time.getTime();
            return datas;
           }
 
@@ -303,10 +339,127 @@ function myFunction() {
 
 </script>
 
-<body>
+</head>
+<!-- END OF ORIGINAL -->
+</div>
 
+<!-- WHAT TO REPLACE WITH -->
+
+
+<div id="replace">
+<style>
+    .main {
+        width: 740px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        font-family: 'Abel', sans-serif;
+        font-size: 150%;
+        line-height: 200%;
+    }
+  .style-2 input[type="text"] {
+    padding: 10px;
+      border: solid 5px #c9c9c9;
+      transition: border 0.3s;
+    width: 520px;
+    height: 200px;
+    
+  }
+  .style-2 input[type="text"]:focus,
+  .style-2 input[type="text"].focus {
+     border: solid 5px #969696;
+  }
+  #three {
+    display: flex;
+    justify-content: center;
+  }
+  h2 {
+    display: flex;
+    justify-content: flex-start;
+  }
+  input {
+    padding: 12px 20px;
+    margin: 8px 0;
+  vertical-align: text-top;
+    color: black;
+  font-size: 15px;
+  font-family: 'Abel', sans-serif;
+  vertical-align: top;
+    text-align:top;
+  }
+  #header {
+        font-style: italic;
+        font-weight: bold;
+        font-family: 'Abel';
+        display: flex;
+        font-size: 240%;
+        margin-bottom: 0;
+    }
+    p.header1 {
+        display: flex;
+        justify-content: left;
+        size: 40px;
+    }    
+  textarea#styled {
+    width: 620px;
+    height: 200px;
+    border: 5px solid #cccccc;
+    padding: 5px;
+    font-family: 'Abel', sans-serif;
+    background-image: url(bg.gif);
+    background-position: bottom right;
+    background-repeat: no-repeat;
+    font-size: 25px;
+    line-height: 150%;
+  }
+  p.subm {
+        display: flex;
+    justify-content: center;
+    }
+    #buts {
+    display: flex;
+    justify-content: space-around;
+  }
+  #checked {
+    font-size: 25px;
+    font-family: 'Abel', sans-serif !important;
+  }
+
+
+.emerald-flat-button {
+  position: relative !important;
+  display: block !important;
+  vertical-align: top !important;
+  width: 30% !important;
+  height: 60px !important;
+  clear: both !important;
+  opacity: 1 !important;
+  font-family: 'Abel', sans-serif !important;
+  padding: 0 !important;
+  font-size: 25px !important;
+  color: white !important;
+  text-align: center !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25) !important;
+  background: #2ecc71 !important;
+  border: 0 !important;
+  border-bottom: 2px solid #28be68 !important;
+  cursor: pointer !important;
+  -webkit-box-shadow: inset 0 -2px #28be68 !important;
+  box-shadow: inset 0 -2px #28be68 !important;
+  transition: all 0.3s ease 0s !important;
+}
+.emerald-flat-button:hover {
+  opacity: 0.75 !important;
+}
+.emerald-flat-button:active {
+  top: 1px !important;
+  outline: none !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+</style>
 <p id="header">WHAT DRIVES YOU?</p>
-	<p class="header1">Please share what's motivating you to be a part of this course community.</p>
+  <p class="header1">Please share what's motivating you to be a part of this course community.</p>
 
   <form id="usrform">
   <div id="three">
@@ -314,20 +467,15 @@ function myFunction() {
         </div>
 <br>
 <p id="buts">
- <input type="submit" onclick="check();" value="Check Existing Plan" class="emerald-flat-button"> 
+ <input type="submit" onclick="reveal();" value="Check Existing Plan" class="emerald-flat-button"> 
  <input type="submit" onclick="subby" value="Submit" class="emerald-flat-button"> 
 </p>
 </form>
-
 <p id="checked"></p>
-
-
-
 <script>
 function check() {
   document.getElementById("checked").innerHTML= "Your existing plan is: " + datas.qualPlan;
 };
-
 
          //////////////////////////////////////////////
         //          Logging Qual Planning            //
@@ -344,10 +492,15 @@ function check() {
                 datas.id = userid;
                 datas.course = course;
                 datas.qualPlan = $( "textarea" ).val();
+                document.getElementById("planningText").innerHTML = datas.qualPlan;
+                datas.time = new Date();
+                datas.index = datas.id + "_" + datas.time.getTime();
                 e.preventDefault();
               } else {
                 datas.id = userid;
                 datas.course = course;
+                datas.time = new Date();
+                datas.index = datas.id + "_" + datas.time.getTime();
                 datas.qualPlan = "No plan yet";
                 e.preventDefault();
               };
@@ -358,13 +511,25 @@ function check() {
 
          //////////////////////////////////////////////
          //////////////////////////////////////////////
-
-
-
-
-
 </script>
 
 
 
-</body>
+
+
+</div>
+
+
+
+
+
+<script>
+  
+
+  function reveal() {
+      $("#replace").toggle();
+      $("#startPlan").toggle();
+  };
+
+
+</script>
