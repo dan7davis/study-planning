@@ -94,7 +94,7 @@
 
 </style>
 <script src="/static/pbref.js"></script>
-<div id="startPlan">
+
 <script>
   
          //////////////////////////////////////////////
@@ -162,7 +162,7 @@
         //////////////////////////////////////////////
   
 </script>
-
+<div id="startPlan">
     <script>
 
 
@@ -184,10 +184,10 @@ var ik_player;
 
 //this function is called by the API
 window.onload = function onYouTubeIframeAPIReady() {
+    get_data();
   //creates the player object
   var playerId = $('iframe').attr('id');
   ik_player = new YT.Player(playerId);
-       
   console.log('Video API is loaded');
        
   //subscribe to events
@@ -228,6 +228,8 @@ if (sum > 30) {
 } else {
   datas.watched = 0
 };
+datas.time = new Date();
+datas.index = datas.id + "_" + datas.time.getTime();
 console.log(datas);
 }
 ;
@@ -260,6 +262,8 @@ function myFunction() {
 });
   console.log(uniqueSubs.length);
   datas.uniqueSubmits = uniqueSubs.length;
+  datas.time = new Date();
+  datas.index = datas.id + "_" + datas.time.getTime();
   console.log(datas);
 };
 
@@ -289,12 +293,15 @@ function myFunction() {
            timeSite=new Date()-time;
            datas.time = timeSite;
            console.log(timeSite);
+           datas.time = new Date();
+           datas.index = datas.id + "_" + datas.time.getTime();
            return datas;
           }
 
 
          //////////////////////////////////////////////
          //////////////////////////////////////////////
+
 
 </script>
 
@@ -664,6 +671,9 @@ function textgen() {
       $("#replace").toggle();
       $("#startPlan").toggle();
   };
+
+  $(".sequence-nav").click(function () {alert("Send datas to server!")})
+
 
 
 </script>
