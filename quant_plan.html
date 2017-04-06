@@ -136,9 +136,9 @@
           console.log("origin: " + origin);
           console.log("week: " + chap);
           $('#dx-username').text(username);
-        }     
+        }
           
-          get_data();
+          
 
           //////////////////////////////////////////////
 // Retrieve Current Weeks Vid and Quiz Info //
@@ -185,6 +185,7 @@ var ik_player;
 
 //this function is called by the API
 window.onload = function onYouTubeIframeAPIReady() {
+    get_data();
   //creates the player object
   var playerId = $('iframe').attr('id');
   ik_player = new YT.Player(playerId);
@@ -305,7 +306,6 @@ function myFunction() {
 
 
 </script>
-
 
 <body>
 <p id="header">Progress towards your goals this week:</p>
@@ -634,7 +634,7 @@ function textgen() {
  <input type="submit" onclick="subby" value="Submit" class="emerald-flat-button"> 
  <br>
  <p id="buts">
-<input type="submit" onclick="reveal()" value="View Progress" class="emerald-flat-button-small"> 
+ <input type="submit" onclick="reveal()" value="View Progress" class="emerald-flat-button-small"> 
 </p>
 </form>
 
@@ -662,6 +662,10 @@ function textgen() {
 
 <script>
   
+
+  get_data();
+
+
   function edited() {
   datas.edited = 1;
   datas.time = new Date();
@@ -678,9 +682,7 @@ function textgen() {
     datas = {};
     get_data();
   })
-
-
-
+s
 
 </script>
 

@@ -4,50 +4,50 @@
 
 <style type="text/css">
 
-	#videobar {
-	 	 margin: 20px;
-	 	 width: 200px;
-	  	 height: 100px;
-	}
+  #videobar {
+     margin: 20px;
+     width: 200px;
+       height: 100px;
+  }
 
-	#questionbar {
-	  	margin: 20px;
-	  	width: 200px;
-	  	height: 100px;
-	}
+  #questionbar {
+      margin: 20px;
+      width: 200px;
+      height: 100px;
+  }
 
-	#timebar {
-	  	margin: 20px;
-	  	width: 200px;
-	  	height: 100px;
-	}
+  #timebar {
+      margin: 20px;
+      width: 200px;
+      height: 100px;
+  }
 
-	#videotex {
-	 	 margin: 20px;
-	 	 width: 200px;
-	  	 height: 50px;
-	  	 font-size: 140%;
-	}
+  #videotex {
+     margin: 20px;
+     width: 200px;
+       height: 50px;
+       font-size: 140%;
+  }
 
-	#questiontex {
-	  	margin: 20px;
-	  	width: 200px;
-	  	height: 50px;
-	  	font-size: 140%;
-	}
+  #questiontex {
+      margin: 20px;
+      width: 200px;
+      height: 50px;
+      font-size: 140%;
+  }
 
-	#timetex {
-	  	margin: 20px;
-	  	width: 200px;
-	  	height: 50px;
-	  	font-size: 140%;
-	}
-	#three {
-		display: flex;
-		justify-content: space-around;
-	}
+  #timetex {
+      margin: 20px;
+      width: 200px;
+      height: 50px;
+      font-size: 140%;
+  }
+  #three {
+    display: flex;
+    justify-content: space-around;
+  }
 
-	#header {
+  #header {
         font-style: italic;
         font-family: 'Abel';
         font-weight: bold;
@@ -96,7 +96,7 @@
 <script src="/static/pbref.js"></script>
 
 <script>
-	
+  
          //////////////////////////////////////////////
         //               Logging User Data           //
         //////////////////////////////////////////////
@@ -138,7 +138,7 @@
           $('#dx-username').text(username);
         }
           
-          get_data();
+          
 
           //////////////////////////////////////////////
 // Retrieve Current Weeks Vid and Quiz Info //
@@ -160,7 +160,7 @@
 
         //////////////////////////////////////////////
         //////////////////////////////////////////////
-	
+  
 </script>
 </head>
 <div id="startPlan">
@@ -309,18 +309,18 @@ function myFunction() {
 
 <body>
 <p id="header">Progress towards your goals this week:</p>
-	<div id="three">
-		<div id="videobar"></div>
-		<div id="questionbar"></div>
-		<div id="timebar"></div>
-	</div>
+  <div id="three">
+    <div id="videobar"></div>
+    <div id="questionbar"></div>
+    <div id="timebar"></div>
+  </div>
 
 </body>
 
 
 
 <script type="text/javascript">
-	
+  
 // progressbar.js@1.0.0 version is used
 // Docs: http://progressbarjs.readthedocs.org/en/1.0.0/
 
@@ -339,7 +339,7 @@ var timeScaled = timeActual/timeIntended;
 
 
 ///////////////////////////////////////////////////////////
-//						Video Viz						                        //
+//            Video Viz                                   //
 ///////////////////////////////////////////////////////////
 
 var bar = new ProgressBar.SemiCircle(videobar, {
@@ -375,7 +375,7 @@ bar.text.style.fontSize = '2rem';
 bar.animate(vidScaled);  // Number from 0.0 to 1.0
 
 ///////////////////////////////////////////////////////////
-//						Question Viz					 //
+//            Question Viz           //
 ///////////////////////////////////////////////////////////
 
 var bar2 = new ProgressBar.SemiCircle(questionbar, {
@@ -412,7 +412,7 @@ bar2.animate(questionScaled);  // Number from 0.0 to 1.0
 
 
 ///////////////////////////////////////////////////////////
-//						Time Viz						 //
+//            Time Viz             //
 ///////////////////////////////////////////////////////////
 
 var bar3 = new ProgressBar.SemiCircle(timebar, {
@@ -454,19 +454,19 @@ bar3.animate(timeScaled);  // Number from 0.0 to 1.0
 <body>
 
 <div id="three">
-		<div id="videotex">You planed for: <span id="vidIntended"></span></div>
-		<div id="questiontex">You planed for: <span id="questionIntended"></span></div>
-		<div id="timetex">You planed for: <span id="timeIntended"></span></div>
-	</div>
+    <div id="videotex">You planed for: <span id="vidIntended"></span></div>
+    <div id="questiontex">You planed for: <span id="questionIntended"></span></div>
+    <div id="timetex">You planed for: <span id="timeIntended"></span></div>
+  </div>
 
 <script>
 
 
 function textgen() {
-   		document.getElementById("vidIntended").innerHTML=vidIntended;
-   		document.getElementById("questionIntended").innerHTML=questionIntended;
-   		document.getElementById("timeIntended").innerHTML=timeIntended;
-	};
+      document.getElementById("vidIntended").innerHTML=vidIntended;
+      document.getElementById("questionIntended").innerHTML=questionIntended;
+      document.getElementById("timeIntended").innerHTML=timeIntended;
+  };
  
  
  textgen();
@@ -662,6 +662,10 @@ function textgen() {
 
 <script>
   
+
+  get_data();
+
+
   function edited() {
   datas.edited = 1;
   datas.time = new Date();

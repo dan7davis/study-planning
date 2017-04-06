@@ -1,5 +1,6 @@
 
 <head>
+
     <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
     <style type="text/css">
 
@@ -75,9 +76,7 @@
       font-family: 'Abel', sans-serif !important;
       font-size: 180%
     }
-  #replace {
-    display: block;
-  }
+
 
 .emerald-flat-button-small {
   position: relative !important;
@@ -118,9 +117,10 @@
 }
 
 
+
     </style>
 
-<div id="startPlan">
+
 
 
     <script type="text/javascript">
@@ -129,20 +129,21 @@
         //               Logging User Data           //
         //////////////////////////////////////////////
 
-        var chap;
-        var seq;
-        var vert;
-        var origin;
-        var username;
-        var userid;
-        var myId;
-        var course;
-        var time;
-        var datas = {};
+
 
 
 
         function get_data() {
+          var chap;
+          var seq;
+          var vert;
+          var origin;
+          var username;
+          var userid;
+          var myId;
+          var course;
+          var time;
+          var datas = {};
           username = analytics._user._getTraits().username;
           var url = window.location.href;
           var split = url.split("/");
@@ -166,14 +167,13 @@
           $('#dx-username').text(username);
         }
           
-          get_data();
 
 
         //////////////////////////////////////////////
         //////////////////////////////////////////////
 
     </script>
-
+<div id="startPlan">
     <main class="main">
     <p id="header">WHAT DRIVES YOU:</p>
   <p class="left" id="quote">&ldquo;</p>
@@ -528,6 +528,8 @@ function check() {
 <script>
   
 
+  get_data();
+
   function reveal() {
       $("#replace").toggle();
       $("#startPlan").toggle();
@@ -538,6 +540,9 @@ function check() {
     datas = {};
     get_data();
   })
+
+
+
 
 
 </script>
