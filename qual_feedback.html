@@ -325,10 +325,11 @@ function myFunction() {
 
           window.onbeforeunload=function(){
            timeSite=new Date()-time;
-           datas.time = timeSite;
+           datas.timeSite = timeSite;
            console.log(timeSite);
            datas.time = new Date();
            datas.index = datas.id + "_" + datas.time.getTime();
+           console.log(datas);
            return datas;
           }
 
@@ -338,9 +339,10 @@ function myFunction() {
 
 </script>
 
-</head>
+
 <!-- END OF ORIGINAL -->
 </div>
+</head>
 
 <!-- WHAT TO REPLACE WITH -->
 
@@ -530,7 +532,14 @@ function check() {
       $("#startPlan").toggle();
   };
 
-  $(".sequence-nav").click(function () {alert("Send datas to server!")})
+  $(".sequence-nav").unbind('click').click(function () {
+    alert("Send datas to server!");
+    datas = {};
+    get_data();
+  })
+
+
+
 
 
 </script>

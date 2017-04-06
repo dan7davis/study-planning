@@ -136,7 +136,7 @@
           console.log("origin: " + origin);
           console.log("week: " + chap);
           $('#dx-username').text(username);
-        }
+        }     
           
           get_data();
 
@@ -162,6 +162,7 @@
         //////////////////////////////////////////////
   
 </script>
+</head>
 <div id="startPlan">
     <script>
 
@@ -184,7 +185,6 @@ var ik_player;
 
 //this function is called by the API
 window.onload = function onYouTubeIframeAPIReady() {
-    get_data();
   //creates the player object
   var playerId = $('iframe').attr('id');
   ik_player = new YT.Player(playerId);
@@ -291,10 +291,11 @@ function myFunction() {
 
           window.onbeforeunload=function(){
            timeSite=new Date()-time;
-           datas.time = timeSite;
+           datas.timeSite = timeSite;
            console.log(timeSite);
            datas.time = new Date();
            datas.index = datas.id + "_" + datas.time.getTime();
+           console.log(datas);
            return datas;
           }
 
@@ -305,7 +306,7 @@ function myFunction() {
 
 </script>
 
-</head>
+
 <body>
 <p id="header">Progress towards your goals this week:</p>
   <div id="three">
@@ -633,7 +634,7 @@ function textgen() {
  <input type="submit" onclick="subby" value="Submit" class="emerald-flat-button"> 
  <br>
  <p id="buts">
- <input type="submit" onclick="reveal()" value="View Progress" class="emerald-flat-button-small"> 
+<input type="submit" onclick="reveal()" value="View Progress" class="emerald-flat-button-small"> 
 </p>
 </form>
 
@@ -672,7 +673,12 @@ function textgen() {
       $("#startPlan").toggle();
   };
 
-  $(".sequence-nav").click(function () {alert("Send datas to server!")})
+  $(".sequence-nav").unbind('click').click(function () {
+    alert("Send datas to server!");
+    datas = {};
+    get_data();
+  })
+
 
 
 

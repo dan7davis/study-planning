@@ -162,6 +162,7 @@
         //////////////////////////////////////////////
 	
 </script>
+</head>
 <div id="startPlan">
     <script>
 
@@ -291,10 +292,11 @@ function myFunction() {
 
           window.onbeforeunload=function(){
            timeSite=new Date()-time;
-           datas.time = timeSite;
+           datas.timeSite = timeSite;
            console.log(timeSite);
            datas.time = new Date();
            datas.index = datas.id + "_" + datas.time.getTime();
+           console.log(datas);
            return datas;
           }
 
@@ -305,7 +307,6 @@ function myFunction() {
 
 </script>
 
-</head>
 <body>
 <p id="header">Progress towards your goals this week:</p>
 	<div id="three">
@@ -672,8 +673,12 @@ function textgen() {
       $("#startPlan").toggle();
   };
 
-  $(".sequence-nav").click(function () {alert("Send datas to server!")})
-
+  $(".sequence-nav").unbind('click').click(function () {
+    alert("Send datas to server!");
+    datas = {};
+    get_data();
+  })
+s
 
 </script>
 
