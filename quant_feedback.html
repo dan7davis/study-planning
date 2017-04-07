@@ -283,23 +283,24 @@ function myFunction() {
          //////////////////////////////////////////////
         //          Logging User Time Spent        //
         //////////////////////////////////////////////
+          
 
-          var time,timeSite;
+          var startTime,timeSite;
           setTimeout(function(){
-           time=new Date();
+           startTime=new Date();
           }, 1000);
 
 
           window.onbeforeunload=function(){
-           timeSite=new Date()-time;
+           timeSite=new Date()-startTime;
            datas.timeSite = timeSite;
            console.log(timeSite);
            datas.time = new Date();
            datas.index = datas.id + "_" + datas.time.getTime();
            console.log(datas);
+           alert("Send datas to server!");
            return datas;
           }
-
 
          //////////////////////////////////////////////
          //////////////////////////////////////////////
