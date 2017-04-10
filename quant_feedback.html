@@ -112,9 +112,8 @@
         var time;
         var datas = {};
 
-
-
         function get_data() {
+          datas = {};
           username = analytics._user._getTraits().username;
           var url = window.location.href;
           var split = url.split("/");
@@ -136,8 +135,9 @@
           console.log("origin: " + origin);
           console.log("week: " + chap);
           $('#dx-username').text(username);
+          return datas;
         }
-          
+                 
           
 
           //////////////////////////////////////////////
@@ -185,6 +185,7 @@ var ik_player;
 
 //this function is called by the API
 window.onload = function onYouTubeIframeAPIReady() {
+  initDansListeners();
     get_data();
   //creates the player object
   var playerId = $('iframe').attr('id');
@@ -299,8 +300,6 @@ function myFunction() {
            datas.index = datas.id + "_" + datas.time.getTime();
            console.log(datas);
            alert("Send datas to server!");
-           console.log(datas);
-           datas = {};
            get_data();
            return datas;
           }
@@ -579,34 +578,6 @@ function textgen() {
 </style>  
 
 
-<script>
-       //////////////////////////////////////////////
-        //          Logging Qual Planning            //
-        //////////////////////////////////////////////
-            var quantGoals = [];
-
-            var subby = $("form").submit(function(e){
-              e.preventDefault();
-              quantGoals[0] = Number($( "#vids").val());
-              quantGoals[1] = Number($( "#quizs").val());
-              quantGoals[2] = Number($( "#times").val());   
-              datas.quantGoals = quantGoals;
-              alert("Send datas to server!");
-              console.log(datas);
-              datas = {};
-              get_data(); 
-              e.preventDefault();          
-            });
-
-
-
-
-         //////////////////////////////////////////////
-         //////////////////////////////////////////////
-
-
-</script>
-
 </head>
 <body>
 <main class="main">  
@@ -614,35 +585,65 @@ function textgen() {
 
 
 
-<form id="qtPlan" onsubmit="return false">
+<form id="qtPlan">
   <div id="three">
   <p class="vid">I plan to <i>watch</i>...<br>
   <br>
-  <input class="txtenter" id= "vids" type="text" name="pin" maxlength="4" size="2" input style="font-size:120%"> / <span id="vidzn"></span> <br>
+  <input class="txtenter" id="vids" type="text" name="pin" maxlength="4" size="2" input style="font-size:120%"> / <span id="vidzn"></span> <br>
   <br> 
   Lecture Videos. </p>
 
   <p class="quiz">I plan to <i>answer</i>...<br>
   <br>
-  <input class="txtenter" id= "quizs" type="text" name="pin" maxlength="4" size="2" input style="font-size:120%"> / <span id="quizdzn"></span> <br>
+  <input class="txtenter" id="quizs" type="text" name="pin" maxlength="4" size="2" input style="font-size:120%"> / <span id="quizdzn"></span> <br>
   <br> 
   Quiz Questions. </p>
 
   <p class="time">I plan to <i>devote</i>...<br>
   <br>
-  <input class="txtenter" id= "times" type="text" name="pin" maxlength="4" size="2" input style="font-size:120%"> / 4 <br>
+  <input class="txtenter" id="times" type="text" name="pin" maxlength="4" size="2" input style="font-size:120%"> / 4 <br>
   <br> 
   hours to the course. </p>
 
   </div>
 
 
- <input type="submit" onclick="subby" value="Submit" class="emerald-flat-button"> 
+ <input type="submit" value="Submit" class="emerald-flat-button"> 
  <br>
  <p id="buts">
- <input type="submit" onclick="reveal()" value="View Progress" class="emerald-flat-button-small"> 
+ <input type="button" id="revealBtn" value="View Progress" class="emerald-flat-button-small"> 
 </p>
 </form>
+
+<script type="text/javascript">
+// The DOMContentLoaded is fired when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading. This means that all your initial DOM nodes have been parsed
+
+
+  function initDansListeners(event) {
+
+      // handle form submission
+      var myForm = document.getElementById('qtPlan');
+      myForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        var quantGoals = {};
+        quantGoals.plannedVideos = Number($( "#vids").val());
+        quantGoals.plannedQuiz= Number($( "#quizs").val());
+        quantGoals.plannedTimes = Number($( "#times").val());   
+        datas.quantGoals = quantGoals;
+        alert("Send datas to server!");
+        console.log(datas);
+        get_data(); 
+      });
+
+
+      // handle reveal btn
+      var revealBtn = document.getElementById('revealBtn');
+      revealBtn.addEventListener('click', function(e){
+        reveal();
+      })
+    };
+
+</script>
 
 </main>
 </body>
@@ -683,14 +684,12 @@ function textgen() {
       $("#startPlan").toggle();
       alert("Send datas to server!");
       console.log(datas);
-      datas = {};
       get_data();
   };
 
   $(".sequence-nav").unbind('click').click(function () {
     alert("Send datas to server!");
     console.log(datas);
-    datas = {};
     get_data();
   })
 

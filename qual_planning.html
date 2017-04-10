@@ -143,9 +143,8 @@
         var time;
         var datas = {};
 
-
-
         function get_data() {
+          datas = {};
           username = analytics._user._getTraits().username;
           var url = window.location.href;
           var split = url.split("/");
@@ -167,8 +166,9 @@
           console.log("origin: " + origin);
           console.log("week: " + chap);
           $('#dx-username').text(username);
+          return datas;
         }
-          
+                  
 
         //////////////////////////////////////////////
         //////////////////////////////////////////////
@@ -202,7 +202,6 @@ function edited() {
   datas.index = datas.id + "_" + datas.time.getTime();
   alert("Send datas to server!");
   console.log(datas);
-  datas = {};
   get_data();
 };
 
@@ -224,6 +223,8 @@ var ik_player;
 
 //this function is called by the API
 window.onload = function onYouTubeIframeAPIReady() {
+  initDansListeners();
+  get_data();
   //creates the player object
   var playerId = $('iframe').attr('id');
   ik_player = new YT.Player(playerId);
@@ -338,7 +339,6 @@ function myFunction() {
            console.log(datas);
            alert("Send datas to server!");
            console.log(datas);
-           datas = {};
            get_data();
            return datas;
           }
@@ -472,60 +472,59 @@ function myFunction() {
 <p id="header">WHAT DRIVES YOU?</p>
   <p class="header1">Please share what's motivating you to be a part of this course community.</p>
 
-  <form id="usrform">
+  <form id="qlPlan">
   <div id="three">
            <textarea form="usrform" name="styled-textarea" id="styled" onfocus="this.value=''; setbg('#e5fff3');" onblur="setbg('white')">Enter your story here...</textarea>
         </div>
 <br>
 <p id="buts">
- <input type="submit" onclick="reveal();" value="Check Existing Plan" class="emerald-flat-button"> 
- <input type="submit" onclick="subby" value="Submit" class="emerald-flat-button"> 
+ <input type="button" value="Check Existing Plan" id="revealBtn" class="emerald-flat-button"> 
+ <input type="submit" value="Submit" class="emerald-flat-button"> 
 </p>
 </form>
-<p id="checked"></p>
-<script>
-function check() {
-  document.getElementById("checked").innerHTML= "Your existing plan is: " + datas.qualPlan;
-};
-
-         //////////////////////////////////////////////
-        //          Logging Qual Planning            //
-        //////////////////////////////////////////////
-              var textArea = $( "textarea" ).text();
+<script type="text/javascript">
+// The DOMContentLoaded is fired when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading. This means that all your initial DOM nodes have been parsed
 
 
-            var subby = $("form").submit(function(e){
-              e.preventDefault();
-              var textArea = $( "textarea" ).text();
-              x = $( "textarea" ).val() == "Enter your story here..."
-              if (x.toString() == "false") {
-                var textArea = $( "textarea" ).text();
-                datas.id = userid;
-                datas.course = course;
-                datas.qualPlan = $( "textarea" ).val();
-                document.getElementById("planningText").innerHTML = datas.qualPlan;
-                datas.time = new Date();
-                datas.index = datas.id + "_" + datas.time.getTime();
-                e.preventDefault();
-              } else {
-                datas.id = userid;
-                datas.course = course;
-                datas.time = new Date();
-                datas.index = datas.id + "_" + datas.time.getTime();
-                datas.qualPlan = "No plan yet";
-                e.preventDefault();
-              };
-              alert("Send datas to server!");
-              console.log(datas);
-              datas = {};
-              get_data();
-              console.log(datas);
-            });
+  function initDansListeners(event) {
+
+      get_data();
+
+      // handle form submission
+      var myForm = document.getElementById('qlPlan');
+      myForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        var textArea = $( "textarea" ).text();
+        x = $( "textarea" ).val() == "Enter your story here..."
+        if (x.toString() == "false") {
+          var textArea = $( "textarea" ).text();
+          datas.id = userid;
+          datas.course = course;
+          datas.qualPlan = $( "textarea" ).val();
+          document.getElementById("planningText").innerHTML = datas.qualPlan;
+          datas.time = new Date();
+          datas.index = datas.id + "_" + datas.time.getTime();
+        } else {
+          datas.id = userid;
+          datas.course = course;
+          datas.time = new Date();
+          datas.index = datas.id + "_" + datas.time.getTime();
+          datas.qualPlan = "No plan yet";
+        };
+        alert("Send datas to server!");
+        console.log(datas);
+        get_data();
+        console.log(datas);
+      });
 
 
+      // handle reveal btn
+      var revealBtn = document.getElementById('revealBtn');
+      revealBtn.addEventListener('click', function(e){
+        reveal();
+      })
+    };
 
-         //////////////////////////////////////////////
-         //////////////////////////////////////////////
 </script>
 
 
@@ -547,14 +546,12 @@ get_data();
       $("#startPlan").toggle();
       alert("Send datas to server!");
       console.log(datas);
-      datas = {};
       get_data();
   };
 
   $(".sequence-nav").unbind('click').click(function () {
     alert("Send datas to server!");
     console.log(datas);
-    datas = {};
     get_data();
   })
 
