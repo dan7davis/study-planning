@@ -299,6 +299,9 @@ function myFunction() {
            datas.index = datas.id + "_" + datas.time.getTime();
            console.log(datas);
            alert("Send datas to server!");
+           console.log(datas);
+           datas = {};
+           get_data();
            return datas;
           }
 
@@ -588,8 +591,10 @@ function textgen() {
               quantGoals[1] = Number($( "#quizs").val());
               quantGoals[2] = Number($( "#times").val());   
               datas.quantGoals = quantGoals;
-              alert("Great! Stick to your goals and you'll succeed!"); 
+              alert("Send datas to server!");
               console.log(datas);
+              datas = {};
+              get_data(); 
               e.preventDefault();          
             });
 
@@ -676,14 +681,18 @@ function textgen() {
   function reveal() {
       $("#replace").toggle();
       $("#startPlan").toggle();
+      alert("Send datas to server!");
+      console.log(datas);
+      datas = {};
+      get_data();
   };
 
   $(".sequence-nav").unbind('click').click(function () {
     alert("Send datas to server!");
+    console.log(datas);
     datas = {};
     get_data();
   })
-s
 
 </script>
 

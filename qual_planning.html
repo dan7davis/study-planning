@@ -200,6 +200,10 @@ function edited() {
   datas.edited = 1;
   datas.time = new Date();
   datas.index = datas.id + "_" + datas.time.getTime();
+  alert("Send datas to server!");
+  console.log(datas);
+  datas = {};
+  get_data();
 };
 
 // ***************************************************************
@@ -333,6 +337,9 @@ function myFunction() {
            datas.index = datas.id + "_" + datas.time.getTime();
            console.log(datas);
            alert("Send datas to server!");
+           console.log(datas);
+           datas = {};
+           get_data();
            return datas;
           }
 
@@ -508,6 +515,10 @@ function check() {
                 datas.qualPlan = "No plan yet";
                 e.preventDefault();
               };
+              alert("Send datas to server!");
+              console.log(datas);
+              datas = {};
+              get_data();
               console.log(datas);
             });
 
@@ -534,6 +545,10 @@ get_data();
   function reveal() {
       $("#replace").toggle();
       $("#startPlan").toggle();
+      alert("Send datas to server!");
+      console.log(datas);
+      datas = {};
+      get_data();
   };
 
   $(".sequence-nav").unbind('click').click(function () {
