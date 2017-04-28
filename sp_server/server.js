@@ -5,16 +5,30 @@
 var express    = require('express');
 var bodyParser = require('body-parser');
 var app        = express();
+var https = require('https');
+var http = require('http');
+var fs = require('fs');
+var querystring = require('querystring');
 
-// configure body parser
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-var port     = process.env.PORT || 8080; // set our port
+var Event     = require('./app/models/event');
 
 var mongoose   = require('mongoose');
 mongoose.connect('mongodb://localhost'); // connect to our database
-var Event     = require('./app/models/event');
+
+// configure body parser, get data from a POST
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+// set our port
+var port     = process.env.PORT || 8080; // set our port
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Accept, X-CSRFToken, chap, seq, vert");
+  res.header("Access-Control-Allow-Methods", "PUT, GET, POST");
+  next();
+});
+
 
 // ROUTES FOR OUR API
 // =============================================================================
@@ -24,21 +38,17 @@ var router = express.Router();
 
 // middleware to use for all requests
 router.use(function(req, res, next) {
-	// do logging
 	console.log('Something is happening.');
 	next();
 });
 
-// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
-router.get('/', function(req, res) {
-	res.json({ message: 'hooray! welcome to our api!' });	
-});
+
 
 // on routes that end in /events
 // ----------------------------------------------------
 router.route('/events')
 
-	// create a event (accessed at POST http://localhost:8080/events)
+	// create an event (accessed at POST https://server:port/api/events)
 	.post(function(req, res) {
 		
 		var event = new Event();		// create a new instance of the event model
@@ -92,25 +102,7 @@ router.route('/events/:event_id')
 		});
 	})
 
-	// update the event with this id
-	.put(function(req, res) {
-		Event.findById(req.params.event_id, function(err, event) {
-
-			if (err)
-				res.send(err);
-
-			event.week = req.body.week;
-			event.save(function(err) {
-				if (err)
-					res.send(err);
-
-				res.json({ message: 'event updated!' });
-			});
-
-		});
-	})
-
-	// delete the event with this id
+    // delete the event with this id (accessed at DELETE https://server:port/api/events/:event_id)
 	.delete(function(req, res) {
 		Event.remove({
 			_id: req.params.event_id
@@ -124,9 +116,10 @@ router.route('/events/:event_id')
 
 
 // REGISTER OUR ROUTES -------------------------------
+// all of our routes will be prefixed with /api
 app.use('/api', router);
 
 // START THE SERVER
 // =============================================================================
 app.listen(port);
-console.log('Magic happens on port ' + port);
+console.log('Node server start on port: ' + port);
