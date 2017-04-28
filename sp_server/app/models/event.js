@@ -16,7 +16,9 @@ var EventSchema 		= new Schema({
 	uniqueSubmits: 	Number,
 	timeSite: 		Number,
 	qualPlan: 		String,
-	quantGoals: 	{},
+	vidGoal: 		Number,
+	quizGoal: 		Number,
+	timeGoal: 		Number,
 });
 
 module.exports = mongoose.model('Event', EventSchema);

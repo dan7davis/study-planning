@@ -39,6 +39,43 @@ var router = express.Router();
 // middleware to use for all requests
 router.use(function(req, res, next) {
 	console.log('Something is happening.');
+
+	// SUM OF ALL QUANT VARIABLES GROUPED BY LEARNER COURSE WEEK
+	Event.aggregate(
+		   [
+		     {
+		       $group:
+		         {
+		           _id: { id: req.body.id, course: req.body.course, week: req.body.week },
+		           totalSubmits: { $sum: "$uniqueSubmits" },
+		           totalVidDuration: { $sum: "$vidDuration" },
+		           totalVidWatched: { $sum: "$watched" },
+		           totalTimeSite: { $sum: "$timeSite" },
+		           totalEvents: { $sum: 1 }
+		         }
+		     }
+		   ], function(err,result) {
+		   		console.log(result);
+		    }
+		)
+	Event.aggregate(
+		   [
+		     { $sort: { id: 1, time: 1 } },
+		     {
+		       $group:
+		         {
+		           _id: { id: req.body.id, course: req.body.course, week: req.body.week },
+		           lastQualGoalSet: { $last: req.body.qualPlan },
+		           lastVidGoalSet: { $last: req.body.vidGoal},
+		           lastQuizGoalSet: { $last: req.body.quizGoal },
+		           lastTimeGoalSet: { $last: req.body.timeGoal }
+		         }
+		     }
+		   ], function(err,result) {
+		   		console.log(result);
+		   		res.send(result);
+		    }
+		)
 	next();
 });
 
@@ -123,3 +160,8 @@ app.use('/api', router);
 // =============================================================================
 app.listen(port);
 console.log('Node server start on port: ' + port);
+
+
+
+
+
