@@ -18,7 +18,10 @@ db.events.aggregate(
            totalEvents: { $sum: 1 }
          }
      }
-   ]
+   ] function(err,result) {
+
+       // Result is an array of documents
+    }
 )
 
 
@@ -36,4 +39,30 @@ db.events.aggregate(
      }
    ]
 )
+
+
+
+Event.
+  find({ id: 1234, week: "weekx" }).
+  where('id').equals("1234").
+  select('id uniqueSubmits').
+  exec(callback);
+
+////
+
+Recommend.aggregate(
+    [
+        // Grouping pipeline
+        { "$group": {  
+            "id": { "$id": 1 }
+        }},
+        // Sorting pipeline
+        { "$sort": { "recommendCount": -1 } },
+        // Optionally limit results
+    ],
+    function(err,result) {
+
+       // Result is an array of documents
+    }
+);
 
