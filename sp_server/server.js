@@ -84,6 +84,7 @@ router.route('/events')
 			     }
 			   ], function(err,result) {
 			   		console.log(result);
+			   		res.send(result);
 			    }
 			);
 		Event.aggregate(
