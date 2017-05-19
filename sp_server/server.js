@@ -118,6 +118,7 @@ router.route('/events')
 
 	// get all the events (accessed at GET http://localhost:8080/api/events)
 	.get(function(req, res) {
+		console.log("before find err");
 		Event.find(function(err, events) {
 			console.log("before if err");
 			if (err)
