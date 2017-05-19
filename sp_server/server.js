@@ -91,24 +91,6 @@ router.route('/events')
 			   		res.send(result);
 			    }
 			);
-		Event.aggregate(
-			   [
-			     { $sort: { id: 1, time: 1 } },
-			     {
-			       $group:
-			         {
-			           _id: { id: req.body.id, course: req.body.course, week: req.body.week },
-			           lastQualGoalSet: { $last: req.body.qualPlan },
-			           lastVidGoalSet: { $last: req.body.vidGoal},
-			           lastQuizGoalSet: { $last: req.body.quizGoal },
-			           lastTimeGoalSet: { $last: req.body.timeGoal }
-			         }
-			     }
-			   ], function(err,result) {
-			   		console.log(result);
-			   		res.send(result);
-			    }
-			);
 
 
 		event.save(function(err) {
@@ -123,9 +105,7 @@ router.route('/events')
 
 	// get all the events (accessed at GET http://localhost:8080/api/events)
 	.get(function(req, res) {
-		console.log("before find err");
 		Event.find({}, function(err, events) {
-			console.log("before if err");
 			if (err)
 				return res.send(err);
 
