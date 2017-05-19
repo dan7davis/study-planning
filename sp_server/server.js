@@ -10,10 +10,10 @@ var http = require('http');
 var fs = require('fs');
 var querystring = require('querystring');
 
-var Event     = require('./app/models/event');
-
 var mongoose   = require('mongoose');
-mongoose.connect('mongodb://localhost'); // connect to our database
+mongoose.set('debug', true);
+mongoose.connect('mongodb://localhost/le_db_name'); // connect to our database
+var Event     = require('./app/models/event');
 
 // configure body parser, get data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -162,8 +162,4 @@ app.use('/api', router);
 // =============================================================================
 app.listen(port);
 console.log('Node server start on port: ' + port);
-
-
-
-
 
