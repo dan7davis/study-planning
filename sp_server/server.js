@@ -108,7 +108,7 @@ router.route('/events')
 
 		event.save(function(err) {
 			if (err)
-				res.send(err);
+				return res.send(err);
 
 			res.json({ message: 'event created!' });
 		});
