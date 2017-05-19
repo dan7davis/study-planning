@@ -79,7 +79,11 @@ router.route('/events')
 			           totalVidDuration: { $sum: "$vidDuration" },
 			           totalVidWatched: { $sum: "$watched" },
 			           totalTimeSite: { $sum: "$timeSite" },
-			           totalEvents: { $sum: 1 }
+			           totalEvents: { $sum: 1 },
+			           lastQualGoalSet: { $last: req.body.qualPlan },
+			           lastVidGoalSet: { $last: req.body.vidGoal},
+			           lastQuizGoalSet: { $last: req.body.quizGoal },
+			           lastTimeGoalSet: { $last: req.body.timeGoal }
 			         }
 			     }
 			   ], function(err,result) {
