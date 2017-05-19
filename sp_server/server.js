@@ -88,7 +88,7 @@ router.route('/events')
 			     }
 			   ], function(err,result) {
 			   		console.log(result);
-			   		res.send(result);
+			   		res.json(result);
 			    }
 			);
 
