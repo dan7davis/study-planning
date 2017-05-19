@@ -50,6 +50,7 @@ router.route('/events')
 
 	// create an event (accessed at POST https://server:port/api/events)
 	.post(function(req, res) {
+		console.log("start post");
 		
 		var event = new Event();		// create a new instance of the event model
 		event.week 				= req.body.week;  // set the events week (comes from the request)
@@ -67,6 +68,7 @@ router.route('/events')
 		event.timeSite 			= req.body.timeSite;
 		event.qualPlan 			= req.body.qualPlan;
 		event.quantGoals		= req.body.quantGoals;
+		console.log("mid post");
 
 		// SUM OF ALL QUANT VARIABLES GROUPED BY LEARNER COURSE WEEK
 		Event.aggregate(
