@@ -9,9 +9,9 @@ var https = require('https');
 var http = require('http');
 var fs = require('fs');
 var options = {
-  key: fs.readFileSync('/etc/letsencrypt/live/145.100.59.49.surf-hosted.nl/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/145.100.59.49.surf-hosted.nl/fullchain.pem'),
-  ca: fs.readFileSync('/etc/letsencrypt/live/145.100.59.49.surf-hosted.nl/chain.pem')
+  key: fs.readFileSync('/home/ubuntu/privkey.pem'),
+  cert: fs.readFileSync('/home/ubuntu/fullchain.pem'),
+  ca: fs.readFileSync('/home/ubuntu/chain.pem')
 }
 var querystring = require('querystring');
 
