@@ -143,6 +143,9 @@
         var time;
         var datas = {};
 
+
+        
+
         function get_data() {
           datas = {};
           username = analytics._user._getTraits().username;
@@ -218,64 +221,14 @@ function edited() {
         //////////////////////////////////////////////
         //          Logging User Video Activity       //
         //////////////////////////////////////////////
-//Holds a reference to the YouTube player
-var ik_player;
+
 
 //this function is called by the API
-window.onload = function onYouTubeIframeAPIReady() {
-  initDansListeners();
+window.onload = function initDansListeners() {
   get_data();
-  //creates the player object
-  var playerId = $('iframe').attr('id');
-  ik_player = new YT.Player(playerId);
-       
-  console.log('Video API is loaded');
-       
-  //subscribe to events
-  ik_player.addEventListener("onStateChange", "onYouTubePlayerStateChange");
-}
-var k = [];
-function onYouTubePlayerStateChange(event) {
-  var d = new Date();
-  var n = d.getTime();
-  k.push(n/1000);
-
-  
-function diff(ary) {
-    var newA = [];
-    for (var i = 1; i < ary.length; i++)  newA.push(ary[i] - ary[i - 1])
-    return newA;
+  datas.quantGoals = {};
 };
 
-
-//console.log(diff(k));
-var diffy = diff(k);
-var ar =[];
-for (var i = 0; i < diffy.length; i++) {
-    if(i % 2 === 0) { 
-        ar.push(diffy[i]);
-    }
-  //console.log(ar);
-  var sum = ar.reduce(add, 0);
-
-function add(a, b) {
-    return a + b;
-}
-var playerId = $('iframe').attr('id');
-datas.vidID = playerId;
-datas.vidDuration = sum;
-if (sum > 30) {
-  datas.watched = 1;
-} else {
-  datas.watched = 0
-};
-datas.time = new Date();
-datas.index = datas.id + "_" + datas.time.getTime();
-console.log(datas);
-}
-;
-  
-}
  
          //////////////////////////////////////////////
          ////////////////////////////////////////////// 
@@ -284,29 +237,30 @@ console.log(datas);
          //////////////////////////////////////////////
         //          Logging User Quiz Activity       //
         //////////////////////////////////////////////
-var subs = [];
-var uniqueSubs =[];
+// var subs = [];
+// var uniqueSubs =[];
 
-setTimeout(function(){
-  for (i=0; i<100; i++) {
-    document.getElementsByClassName("submit btn-brand")[i].addEventListener("click", myFunction);
-  }
-}, 3000);
+// setTimeout(function(){
+//   for (i=0; i<100; i++) {
+//     console.log("buttclick1");
+//     document.getElementsByClassName("submit btn-brand")[i].addEventListener("click", myFunction);
+//   }
+// }, 3000);
 
   
-function myFunction() {
-  subs.push(this.parentNode.parentNode.parentNode.parentNode.id);
-  console.log(subs);
-  datas.submits = subs;
-  $.each(subs, function(i, el){
-    if($.inArray(el, uniqueSubs) === -1) uniqueSubs.push(el);
-});
-  console.log(uniqueSubs.length);
-  datas.uniqueSubmits = uniqueSubs.length;
-  datas.time = new Date();
-  datas.index = datas.id + "_" + datas.time.getTime();
-  console.log(datas);
-};
+// function myFunction() {
+//   subs.push(this.parentNode.parentNode.parentNode.parentNode.id);
+//   console.log(subs);
+//   datas.submits = subs;
+//   $.each(subs, function(i, el){
+//     if($.inArray(el, uniqueSubs) === -1) uniqueSubs.push(el);
+// });
+//   console.log(uniqueSubs.length);
+//   datas.uniqueSubmits = uniqueSubs.length;
+//   datas.time = new Date();
+//   datas.index = datas.id + "_" + datas.time.getTime();
+//   console.log(datas);
+// };
 
 
 
@@ -336,8 +290,6 @@ function myFunction() {
            console.log(timeSite);
            datas.time = new Date();
            datas.index = datas.id + "_" + datas.time.getTime();
-           console.log(datas);
-           alert("Send datas to server!");
            console.log(datas);
            get_data();
            return datas;
@@ -487,13 +439,27 @@ function myFunction() {
 
 
   function initDansListeners(event) {
-
       get_data();
+      };
 
-      // handle form submission
+
+
+
+      // handle reveal btn
+      var revealBtn = document.getElementById('revealBtn');
+      console.log("buttclick3");
+      revealBtn.addEventListener('click', function(e){
+        reveal();
+      })
+    
+
+
+          // handle form submission
       var myForm = document.getElementById('qlPlan');
+      console.log("buttclick2");
       myForm.addEventListener('submit', function(e){
         e.preventDefault();
+        datas.quantGoals = {};
         var textArea = $( "textarea" ).text();
         x = $( "textarea" ).val() == "Enter your story here..."
         if (x.toString() == "false") {
@@ -511,19 +477,10 @@ function myFunction() {
           datas.index = datas.id + "_" + datas.time.getTime();
           datas.qualPlan = "No plan yet";
         };
-        alert("Send datas to server!");
-        console.log(datas);
+        log();
+        console.log(aggd);
         get_data();
-        console.log(datas);
       });
-
-
-      // handle reveal btn
-      var revealBtn = document.getElementById('revealBtn');
-      revealBtn.addEventListener('click', function(e){
-        reveal();
-      })
-    };
 
 </script>
 
@@ -538,8 +495,6 @@ function myFunction() {
 
 
 <script>
-get_data();  
-
 
   function reveal() {
       $("#replace").toggle();
@@ -553,10 +508,50 @@ get_data();
     alert("Send datas to server!");
     console.log(datas);
     get_data();
-  })
+  });
+
+
 
 
 
 
 
 </script>
+
+<script>
+
+function log() {
+var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events",
+  "method": "POST",
+  "data": {
+    "week": datas.week,
+    "id": datas.id,
+    "course": datas.course,
+    "vert": datas.vert,
+    "edited": datas.edited,
+    "vidId": datas.vidID,
+    "uniqueSubmits": datas.uniqueSubmits,
+    "vidDuration": datas.vidDuration,
+    "timeSite": datas.timeSite,
+    "watched": datas.watched,
+    "qualPlan": datas.qualPlan,
+    "time": datas.time,
+    "vidGoal": datas.quantGoals.plannedVideos,
+    "quizGoal": datas.quantGoals.plannedQuiz,
+    "timeGoal": datas.quantGoals.plannedTimes,
+    "index": datas.index
+  }
+}
+
+$.ajax(settings).done(function (response) {
+  var aggd = response[0];
+  var week = response[0]._id.course;
+  $(".aggr").text(week);
+  console.log(aggd);
+});
+  }
+</script>
+<div class="aggr"></div>
