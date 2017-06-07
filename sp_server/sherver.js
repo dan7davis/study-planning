@@ -85,7 +85,7 @@ router.route('/events')
 			           totalVidWatched: { $sum: "$watched" },
 			           totalTimeSite: { $sum: "$timeSite" },
 			           totalEvents: { $sum: 1 },
-			           lastQualGoalSet: { $last: req.body.qualPlan },
+			           lastQualGoalSet: { $last: req.body.qualPlan { $where: req.body.qualPlan.length > 2} },
 			           lastVidGoalSet: { $last: req.body.vidGoal},
 			           lastQuizGoalSet: { $last: req.body.quizGoal },
 			           lastTimeGoalSet: { $last: req.body.timeGoal }
