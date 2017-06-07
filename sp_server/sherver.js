@@ -72,7 +72,6 @@ router.route('/events')
 		event.submits 			= req.body.submits;
 		event.uniqueSubmits 	= req.body.uniqueSubmits;
 		event.timeSite 			= req.body.timeSite;
-		event.quantGoals		= req.body.quantGoals;
 
 		// SUM OF ALL QUANT VARIABLES GROUPED BY LEARNER COURSE WEEK
 		Event.aggregate(
@@ -86,11 +85,7 @@ router.route('/events')
 			           totalVidWatched: { $sum: "$watched" },
 			           totalTimeSite: { $sum: "$timeSite" },
 			           totalEvents: { $sum: 1 },
-			           lastQualGoalSet: { $last: req.body.qualPlan },
-			           lastVidGoalSet: { $last: req.body.vidGoal},
-			           lastQuizGoalSet: { $last: req.body.quizGoal },
 			           edited: { $sum: "$edited" },
-			           lastTimeGoalSet: { $last: req.body.timeGoal }
 			         }
 			     }
 			   ], function(err,result) {
