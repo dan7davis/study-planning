@@ -74,8 +74,12 @@ router.route('/events')
 		event.quantGoals		= req.body.quantGoals;
 
 		// SUM OF ALL QUANT VARIABLES GROUPED BY LEARNER COURSE WEEK
-		Event.aggregate(
-			   [
+		Event.aggregate([
+		       {
+			        "$match": {
+			            "datas.qualPlan": { "$ne": null }
+			        }
+			    },
 			     {
 			       $group:
 			         {
