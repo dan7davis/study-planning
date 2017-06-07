@@ -19,7 +19,8 @@ var mongoose   = require('mongoose');
 mongoose.set('debug', true);
 mongoose.connect('mongodb://localhost/le_db_name'); // connect to our database
 var Event     = require('./app/models/event');
-var pLog 	  = require('./app/models/event')
+var pLog 	  = require('./app/models/event');
+var zLog 	  = require('./app/models/event')
 
 // configure body parser, get data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -158,6 +159,62 @@ router.route('/events/pLog')
 				return res.send(err);
 
 			res.json({ message: 'pLog event created!' });
+		});
+
+		
+	})
+
+	// get all the events (accessed at GET http://localhost:8080/api/events)
+	.get(function(req, res) {
+		pLog.find({}, function(err, events) {
+			if (err)
+				return res.send(err);
+
+			res.json(events);
+		});
+	});
+
+
+	router.route('/events/zLog')
+
+	// create an event (accessed at POST https://server:port/api/events)
+	.post(function(req, res) {
+		
+		var event = new zLog();		// create a new instance of the event model
+		event.week 				= req.body.week;  // set the events week (comes from the request)
+		event.id 				= req.body.id;
+		event.course 			= req.body.course;
+		event.time 				= req.body.time;
+		event.vert 				= req.body.vert;		
+		event.index 			= req.body.index;
+		event.vidGoal 			= req.body.vidGoal;
+		event.quizGoal 			= req.body.quizGoal;
+		event.timeGoal 			= req.body.timeGoal;
+
+		// SUM OF ALL QUANT VARIABLES GROUPED BY LEARNER COURSE WEEK
+		pLog.aggregate(
+			   [
+			     {
+			       $group:
+			         {
+			           _id: { id: req.body.id, course: req.body.course, week: req.body.week },
+			           lastVidGoalSet: { $last: req.body.vidGoal},
+			           lastQuizGoalSet: { $last: req.body.quizGoal },
+			           lastTimeGoalSet: { $last: req.body.timeGoal }
+			         }
+			     }
+			   ], function(err,result) {
+			   		console.log(result);
+			   		res.json(result);
+			    }
+			);
+
+
+		event.save(function(err) {
+			if (err)
+				return res.send(err);
+
+			res.json({ message: 'zLog event created!' });
 		});
 
 		
