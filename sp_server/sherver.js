@@ -72,7 +72,6 @@ router.route('/events')
 		event.submits 			= req.body.submits;
 		event.uniqueSubmits 	= req.body.uniqueSubmits;
 		event.timeSite 			= req.body.timeSite;
-		event.qualPlan 			= req.body.qualPlan;
 		event.quantGoals		= req.body.quantGoals;
 
 		// SUM OF ALL QUANT VARIABLES GROUPED BY LEARNER COURSE WEEK
@@ -188,6 +187,7 @@ router.route('/events/pLog')
 		event.vert 				= req.body.vert;		
 		event.index 			= req.body.index;
 		event.vidGoal 			= req.body.vidGoal;
+		event.edited 			= req.body.edited;
 		event.quizGoal 			= req.body.quizGoal;
 		event.timeGoal 			= req.body.timeGoal;
 
