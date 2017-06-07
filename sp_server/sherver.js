@@ -143,8 +143,7 @@ router.route('/events/pLog')
 			       $group:
 			         {
 			           _id: { id: req.body.id, course: req.body.course, week: req.body.week },
-			           lastQualGoalSet: { $last: req.body.qualPlan },
-			           vert: { req.body.vert }
+			           lastQualGoalSet: { $last: req.body.qualPlan }
 			         }
 			     }
 			   ], function(err,result) {
