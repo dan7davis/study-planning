@@ -19,6 +19,7 @@ var mongoose   = require('mongoose');
 mongoose.set('debug', true);
 mongoose.connect('mongodb://localhost/le_db_name'); // connect to our database
 var Event     = require('./app/models/event');
+var pLog 	  = require('./app/models/event')
 
 // configure body parser, get data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -119,13 +120,12 @@ router.route('/events')
 		});
 	});
 
-
-router.route('/events/log/pLog')
+router.route('/events/pLog')
 
 	// create an event (accessed at POST https://server:port/api/events)
 	.post(function(req, res) {
 		
-		var event = new Event();		// create a new instance of the event model
+		var event = new pLog();		// create a new instance of the event model
 		event.week 				= req.body.week;  // set the events week (comes from the request)
 		event.id 				= req.body.id;
 		event.course 			= req.body.course;
@@ -137,7 +137,7 @@ router.route('/events/log/pLog')
 		
 
 		// SUM OF ALL QUANT VARIABLES GROUPED BY LEARNER COURSE WEEK
-		Event.aggregate(
+		pLog.aggregate(
 			   [
 			     {
 			       $group:
@@ -166,7 +166,7 @@ router.route('/events/log/pLog')
 
 	// get all the events (accessed at GET http://localhost:8080/api/events)
 	.get(function(req, res) {
-		Event.find({}, function(err, events) {
+		pLog.find({}, function(err, events) {
 			if (err)
 				return res.send(err);
 
