@@ -88,7 +88,7 @@ router.route('/events')
 			           lastQualGoalSet: { $last: req.body.qualPlan },
 			           lastVidGoalSet: { $last: req.body.vidGoal},
 			           lastQuizGoalSet: { $last: req.body.quizGoal },
-			           edited: { $sum: "edited" },
+			           edited: { $sum: "$edited" },
 			           lastTimeGoalSet: { $last: req.body.timeGoal }
 			         }
 			     }
