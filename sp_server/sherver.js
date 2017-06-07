@@ -119,6 +119,60 @@ router.route('/events')
 		});
 	});
 
+
+router.route('/events/log/pLog')
+
+	// create an event (accessed at POST https://server:port/api/events)
+	.post(function(req, res) {
+		
+		var event = new Event();		// create a new instance of the event model
+		event.week 				= req.body.week;  // set the events week (comes from the request)
+		event.id 				= req.body.id;
+		event.course 			= req.body.course;
+		event.time 				= req.body.time;
+		event.index 			= req.body.index;
+		event.vert 				= req.body.vert;
+		event.edited 			= req.body.edited;
+		event.qualPlan 			= req.body.qualPlan;
+		
+
+		// SUM OF ALL QUANT VARIABLES GROUPED BY LEARNER COURSE WEEK
+		Event.aggregate(
+			   [
+			     {
+			       $group:
+			         {
+			           _id: { id: req.body.id, course: req.body.course, week: req.body.week },
+			           lastQualGoalSet: { $last: req.body.qualPlan },
+			           vert: { req.body.vert }
+			         }
+			     }
+			   ], function(err,result) {
+			   		console.log(result);
+			   		res.json(result);
+			    }
+			);
+
+
+		event.save(function(err) {
+			if (err)
+				return res.send(err);
+
+			res.json({ message: 'pLog event created!' });
+		});
+
+		
+	})
+
+	// get all the events (accessed at GET http://localhost:8080/api/events)
+	.get(function(req, res) {
+		Event.find({}, function(err, events) {
+			if (err)
+				return res.send(err);
+
+			res.json(events);
+		});
+	});
 // on routes that end in /events/:event_id
 // ----------------------------------------------------
 router.route('/events/:event_id')
