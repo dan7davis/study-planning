@@ -173,9 +173,9 @@ router.route('/events/pLog')
 		  .sort({time: -1})
 		  // only get the first one for efficiency
 		  .limit(1)
-		  .exec(function(result, err){
-		  	res.send(result);
+		  .exec(function(err, result){
 		    var whatIWant = result[0];
+		    console.log(whatIWant);
 		  });
 	});
 
