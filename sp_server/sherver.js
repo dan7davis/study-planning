@@ -119,7 +119,7 @@ router.route('/events/pLog')
 
 	// create an event (accessed at POST https://server:port/api/events)
 	.post(function(req, res) {
-		
+		console.log(req.body);
 		var event = new pLog();		// create a new instance of the event model
 		event.week 				= req.body.week;  // set the events week (comes from the request)
 		event.id 				= req.body.id;
@@ -160,6 +160,7 @@ router.route('/events/pLog')
 
 	// get all the events (accessed at GET http://localhost:8080/api/events)
 	.get(function(req, res) {
+		console.log(req.body);
 		pLog.find({ 
 		    id: req.body.id,
 		    course: req.body.course,
