@@ -168,7 +168,7 @@ router.route('/events/pLog')
 		    course: req.query.course,
 		    week: req.query.week,
 		    time: req.query.time,
-		    qualPlan: { $ne: "" }
+		    qualPlan: { $ne: null }
 		  })
 		  // -1 will sort descending (newest to oldest) by lastQualGoalSet
 		  .sort({time: -1})
