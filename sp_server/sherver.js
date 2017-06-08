@@ -160,12 +160,21 @@ router.route('/events/pLog')
 
 	// get all the events (accessed at GET http://localhost:8080/api/events)
 	.get(function(req, res) {
-		pLog.findById(req.body.id, function(err, events) {
-			if (err)
-				return res.send(err);
-			res.json(events);
+			pLog.aggregate(
+			   [
+			     {
+			       $group:
+			         {
+			           _id: { id: req.body.id, course: req.body.course, week: req.body.week },
+			           lastQualGoalSet: { $last: req.body.qualPlan }
+			         }
+			     }
+			   ], function(err,result) {
+			   		console.log(result);
+			   		res.json(result);
+			    }
+			);
 		});
-	});
 
 
 	router.route('/events/zLog')
