@@ -160,7 +160,7 @@ router.route('/events/pLog')
 
 	// get all the events (accessed at GET http://localhost:8080/api/events)
 	.get(function(req, res) {
-		console.log("QUERY: " + req.query[0]);
+		console.log("QUERY: " + req.query);
 		pLog
 		  // our criteria to filter with
 		  .find({ 
