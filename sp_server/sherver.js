@@ -160,14 +160,12 @@ router.route('/events/pLog')
 
 	// get all the events (accessed at GET http://localhost:8080/api/events)
 	.get(function(req, res) {
-		console.log("QUERY: " + req.query);
 		pLog
 		  // our criteria to filter with
 		  .find({ 
 		    id: req.query.id,
 		    course: req.query.course,
 		    week: req.query.week,
-		    time: req.query.time,
 		    qualPlan: { $ne: null }
 		  })
 		  // -1 will sort descending (newest to oldest) by lastQualGoalSet
