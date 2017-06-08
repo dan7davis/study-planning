@@ -230,7 +230,10 @@ function edited() {
 window.onload = function initDansListeners() {
   get_data();
   datas.quantGoals = {};
+  pgLog();
 };
+
+
 
  
          //////////////////////////////////////////////
@@ -541,15 +544,7 @@ var settings = {
 $.ajax(settings).done(function (response) {
   var aggd = response[0];
   console.log(aggd);
-  var id = response[0]._id.id;
-  var week = response[0]._id.week;
-  $(".week").text(week);
-  var id = response[0]._id.id;
-  $(".id").text(id);
-  var course = response[0]._id.course;
-  $(".course").text(course);
   var lastQualGoalSet = response[0].lastQualGoalSet;
-  $(".lastQualGoalSet").text("Last Qual Goal:" + lastQualGoalSet);
 });
   }
 
@@ -575,7 +570,7 @@ $.ajax(settings).done(function (response) {
   var aggd = response[0];
   console.log(aggd);
   var lastQualGoalSet = response[0].qualPlan;
-  $(".lastQualGoalSet").text("Last Qual Goal:" + lastQualGoalSet);
+  $("#planningText").text(lastQualGoalSet);
 });
 }
 
@@ -667,12 +662,13 @@ $.ajax(settings).done(function (response) {
   var edited = response[0].edited;
   $( ".edited" ).text("Edited: " + edited);
 });
-  }
+  };
+
+
 </script>
 <div class="week"></div>
 <div class="id"></div>
 <div class="course"></div>
-<div class="lastQualGoalSet"></div>
 <div class="lastQuizGoalSet"></div>
 <div class="lastTimeGoalSet"></div>
 <div class="lastVidGoalSet"></div>

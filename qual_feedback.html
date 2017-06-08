@@ -143,8 +143,14 @@
         var time;
         var datas = {};
 
+
+
+
+        
+
         function get_data() {
           datas = {};
+          datas.edited = 0;
           username = analytics._user._getTraits().username;
           var url = window.location.href;
           var split = url.split("/");
@@ -168,7 +174,6 @@
           $('#dx-username').text(username);
           return datas;
         }
-                 
                   
 
         //////////////////////////////////////////////
@@ -179,7 +184,7 @@
     <main class="main">
     <p id="header">WHAT DRIVES YOU:</p>
   <p class="left" id="quote">&ldquo;</p>
-  <p class="midd" id="planningText">I want to be able to build interactive web interfaces in the edX platform using JavaScript.
+  <p class="midd" id="planningText" class="lastQualGoalSet">You haven't set a goal yet. Click "Edit" below to create one.
   </p>
   <p class="rite" id="quote">&rdquo;</p>
   <p class="left"></p>
@@ -201,7 +206,7 @@ function edited() {
   datas.edited = 1;
   datas.time = new Date();
   datas.index = datas.id + "_" + datas.time.getTime();
-  alert("Send datas to server!");
+  log();
   console.log(datas);
   get_data();
 };
@@ -219,64 +224,17 @@ function edited() {
         //////////////////////////////////////////////
         //          Logging User Video Activity       //
         //////////////////////////////////////////////
-//Holds a reference to the YouTube player
-var ik_player;
+
 
 //this function is called by the API
-window.onload = function onYouTubeIframeAPIReady() {
-  initDansListeners();
-    get_data();
-  //creates the player object
-  var playerId = $('iframe').attr('id');
-  ik_player = new YT.Player(playerId);
-       
-  console.log('Video API is loaded');
-       
-  //subscribe to events
-  ik_player.addEventListener("onStateChange", "onYouTubePlayerStateChange");
-}
-var k = [];
-function onYouTubePlayerStateChange(event) {
-  var d = new Date();
-  var n = d.getTime();
-  k.push(n/1000);
-
-  
-function diff(ary) {
-    var newA = [];
-    for (var i = 1; i < ary.length; i++)  newA.push(ary[i] - ary[i - 1])
-    return newA;
+window.onload = function initDansListeners() {
+  get_data();
+  datas.quantGoals = {};
+  pgLog();
 };
 
 
-//console.log(diff(k));
-var diffy = diff(k);
-var ar =[];
-for (var i = 0; i < diffy.length; i++) {
-    if(i % 2 === 0) { 
-        ar.push(diffy[i]);
-    }
-  //console.log(ar);
-  var sum = ar.reduce(add, 0);
 
-function add(a, b) {
-    return a + b;
-}
-var playerId = $('iframe').attr('id');
-datas.vidID = playerId;
-datas.vidDuration = sum;
-if (sum > 30) {
-  datas.watched = 1;
-} else {
-  datas.watched = 0
-};
-datas.time = new Date();
-datas.index = datas.id + "_" + datas.time.getTime();
-console.log(datas);
-}
-;
-  
-}
  
          //////////////////////////////////////////////
          ////////////////////////////////////////////// 
@@ -285,29 +243,30 @@ console.log(datas);
          //////////////////////////////////////////////
         //          Logging User Quiz Activity       //
         //////////////////////////////////////////////
-var subs = [];
-var uniqueSubs =[];
+// var subs = [];
+// var uniqueSubs =[];
 
-setTimeout(function(){
-  for (i=0; i<100; i++) {
-    document.getElementsByClassName("submit btn-brand")[i].addEventListener("click", myFunction);
-  }
-}, 3000);
+// setTimeout(function(){
+//   for (i=0; i<100; i++) {
+//     console.log("buttclick1");
+//     document.getElementsByClassName("submit btn-brand")[i].addEventListener("click", myFunction);
+//   }
+// }, 3000);
 
   
-function myFunction() {
-  subs.push(this.parentNode.parentNode.parentNode.parentNode.id);
-  console.log(subs);
-  datas.submits = subs;
-  $.each(subs, function(i, el){
-    if($.inArray(el, uniqueSubs) === -1) uniqueSubs.push(el);
-});
-  console.log(uniqueSubs.length);
-  datas.uniqueSubmits = uniqueSubs.length;
-  datas.time = new Date();
-  datas.index = datas.id + "_" + datas.time.getTime();
-  console.log(datas);
-};
+// function myFunction() {
+//   subs.push(this.parentNode.parentNode.parentNode.parentNode.id);
+//   console.log(subs);
+//   datas.submits = subs;
+//   $.each(subs, function(i, el){
+//     if($.inArray(el, uniqueSubs) === -1) uniqueSubs.push(el);
+// });
+//   console.log(uniqueSubs.length);
+//   datas.uniqueSubmits = uniqueSubs.length;
+//   datas.time = new Date();
+//   datas.index = datas.id + "_" + datas.time.getTime();
+//   console.log(datas);
+// };
 
 
 
@@ -337,8 +296,6 @@ function myFunction() {
            console.log(timeSite);
            datas.time = new Date();
            datas.index = datas.id + "_" + datas.time.getTime();
-           console.log(datas);
-           alert("Send datas to server!");
            console.log(datas);
            get_data();
            return datas;
@@ -475,7 +432,7 @@ function myFunction() {
 
   <form id="qlPlan">
   <div id="three">
-           <textarea form="usrform" name="styled-textarea" id="styled" onfocus="this.value=''; setbg('#e5fff3');" onblur="setbg('white')">Enter your story here...</textarea>
+           <textarea form="usrform" name="styled-textarea" id="styled" onfocus="this.value='';">Enter your story here...</textarea>
         </div>
 <br>
 <p id="buts">
@@ -488,11 +445,26 @@ function myFunction() {
 
 
   function initDansListeners(event) {
+      get_data();
+      };
 
-      // handle form submission
+
+
+
+      // handle reveal btn
+      var revealBtn = document.getElementById('revealBtn');
+      console.log("buttclick3");
+      revealBtn.addEventListener('click', function(e){
+        reveal();
+      })
+    
+
+
+          // handle form submission
       var myForm = document.getElementById('qlPlan');
       myForm.addEventListener('submit', function(e){
         e.preventDefault();
+        datas.quantGoals = {};
         var textArea = $( "textarea" ).text();
         x = $( "textarea" ).val() == "Enter your story here..."
         if (x.toString() == "false") {
@@ -510,19 +482,9 @@ function myFunction() {
           datas.index = datas.id + "_" + datas.time.getTime();
           datas.qualPlan = "No plan yet";
         };
-        alert("Send datas to server!");
-        console.log(datas);
+        pLog();
         get_data();
-        console.log(datas);
       });
-
-
-      // handle reveal btn
-      var revealBtn = document.getElementById('revealBtn');
-      revealBtn.addEventListener('click', function(e){
-        reveal();
-      })
-    };
 
 </script>
 
@@ -537,25 +499,182 @@ function myFunction() {
 
 
 <script>
-get_data();  
-
 
   function reveal() {
       $("#replace").toggle();
       $("#startPlan").toggle();
-      alert("Send datas to server!");
-      console.log(datas);
+      log();
       get_data();
   };
 
   $(".sequence-nav").unbind('click').click(function () {
-    alert("Send datas to server!");
+    log();
     console.log(datas);
     get_data();
-  })
+  });
+
+
 
 
 
 
 
 </script>
+
+<script>
+// QUALITATIVE PLANNING SUBMIT
+function pLog() {
+var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events/pLog",
+  "method": "POST",
+  "data": {
+    "week": datas.week,
+    "id": datas.id,
+    "course": datas.course,
+    "vert": datas.vert,
+    "edited": datas.edited,
+    "qualPlan": datas.qualPlan,
+    "time": datas.time,
+    "index": datas.index
+  }
+}
+  
+$.ajax(settings).done(function (response) {
+  var aggd = response[0];
+  console.log(aggd);
+  var lastQualGoalSet = response[0].lastQualGoalSet;
+});
+  }
+
+
+function pgLog() {
+var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events/pLog",
+  "method": "GET",
+  "data": {
+    "week": datas.week,
+    "id": datas.id,
+    "course": datas.course,
+    "vert": datas.vert,
+    "edited": datas.edited,
+    "time": datas.time,
+    "index": datas.index
+  }
+}
+
+$.ajax(settings).done(function (response) {
+  var aggd = response[0];
+  console.log(aggd);
+  var lastQualGoalSet = response[0].qualPlan;
+  $("#planningText").text(lastQualGoalSet);
+});
+}
+
+// GENERAL LOGGING
+function log() {
+var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events",
+  "method": "POST",
+  "data": {
+    "week": datas.week,
+    "id": datas.id,
+    "course": datas.course,
+    "vert": datas.vert,
+    "edited": datas.edited,
+    "vidId": datas.vidID,
+    "uniqueSubmits": datas.uniqueSubmits,
+    "vidDuration": datas.vidDuration,
+    "timeSite": datas.timeSite,
+    "watched": datas.watched,
+    "time": datas.time,
+    "index": datas.index
+  }
+}
+  
+$.ajax(settings).done(function (response) {
+  var aggd = response[0];
+  console.log(aggd);
+  var id = response[0]._id.id;
+  var week = response[0]._id.week;
+  $(".week").text(week);
+  var id = response[0]._id.id;
+  $(".id").text(id);
+  var course = response[0]._id.course;
+  $(".course").text(course);
+  var totalEvents = response[0].totalEvents;
+  $(".totalEvents").text("Total Events" + totalEvents);
+  var totalSubmits = response[0].totalSubmits;
+  $(".totalSubmits").text("Total Submits" + totalSubmits);
+  var totalTimeSite = response[0].totalTimeSite;
+  $(".totalTimeSite").text("Total TimeSite" + totalTimeSite);
+  var totalVidDuration = response[0].totalVidDuration;
+  $(".totalVidDuration").text("Total Vid Duration" + totalVidDuration);
+  var totalVidWatched = response[0].totalVidWatched;
+  $(".totalVidWatched").text("Total Vids Watched" + totalVidWatched);
+  var edited = response[0].edited;
+  $( ".edited" ).text("Edited: " + edited);
+});
+  }
+
+//QUANTITATIVE SPLANNING SUBMIT
+function zLog() {
+var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events/zLog",
+  "method": "POST",
+  "data": {
+    "week": datas.week,
+    "id": datas.id,
+    "course": datas.course,
+    "vert": datas.vert,
+    "edited": datas.edited,
+    "time": datas.time,
+    "vidGoal": datas.quantGoals.plannedVideos,
+    "quizGoal": datas.quantGoals.plannedQuiz,
+    "timeGoal": datas.quantGoals.plannedTimes,
+    "index": datas.index
+  }
+}
+  
+$.ajax(settings).done(function (response) {
+  var aggd = response[0];
+  console.log(aggd);
+  var id = response[0]._id.id;
+  var week = response[0]._id.week;
+  $(".week").text(week);
+  var id = response[0]._id.id;
+  $(".id").text(id);
+  var course = response[0]._id.course;
+  $(".course").text(course);
+  var lastQuizGoalSet = response[0].lastQuizGoalSet;
+  $(".lastQuizGoalSet").text("Last Quiz Goal" + lastQuizGoalSet);
+  var lastTimeGoalSet = response[0].lastTimeGoalSet;
+  $(".lastTimeGoalSet").text("Last Time Goal" + lastTimeGoalSet);
+  var lastVidGoalSet = response[0].lastVidGoalSet;
+  $(".lastVidGoalSet").text("Last Vid Goal" + lastVidGoalSet);
+  var edited = response[0].edited;
+  $( ".edited" ).text("Edited: " + edited);
+});
+  };
+
+
+</script>
+<div class="week"></div>
+<div class="id"></div>
+<div class="course"></div>
+<div class="lastQuizGoalSet"></div>
+<div class="lastTimeGoalSet"></div>
+<div class="lastVidGoalSet"></div>
+<div class="totalEvents"></div>
+<div class="totalSubmits"></div>
+<div class="totalTimeSite"></div>
+<div class="totalVidDuration"></div>
+<div class="totalVidWatched"></div>
+<div class="edited"></div>
