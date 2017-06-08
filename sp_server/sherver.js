@@ -163,16 +163,8 @@ router.route('/events/pLog')
 		console.log("QUERY: " + req.query);
 		pLog
 		  // our criteria to filter with
-		  .find({ 
-		    id: req.query.id,
-		    course: req.query.course,
-		    week: req.query.week,
-		    time: req.query.time
-		  })
-		  // -1 will sort descending (newest to oldest) by lastQualGoalSet
-		  .sort({time: -1})
-		  // only get the first one for efficiency
-		  .limit(1)
+		  .find({"id": "91735", "week": "5e61005aa3ed4e8e971427ea62c57e80", "course": "DelftX+DD.002x+2017"})
+		  .sort({time: -1}).limit(1)
 		  .exec(function(results, err){
 		    // if there is a results array, it will just have one element
 		    var whatIWant = results[0];
