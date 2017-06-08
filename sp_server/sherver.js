@@ -174,8 +174,8 @@ router.route('/events/pLog')
 		  // only get the first one for efficiency
 		  .limit(1)
 		  .exec(function(err, result){
-		    var whatIWant = result;
-		    console.log(whatIWant);
+		    console.log(result);
+		    res.json(result);
 		  });
 	});
 
