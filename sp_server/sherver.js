@@ -160,10 +160,9 @@ router.route('/events/pLog')
 
 	// get all the events (accessed at GET http://localhost:8080/api/events)
 	.get(function(req, res) {
-		pLog.find({}, function(err, events) {
+		pLog.findById(req.body.id, function(err, events) {
 			if (err)
 				return res.send(err);
-
 			res.json(events);
 		});
 	});
@@ -217,7 +216,7 @@ router.route('/events/pLog')
 
 	// get all the events (accessed at GET http://localhost:8080/api/events)
 	.get(function(req, res) {
-		pLog.find({}, function(err, events) {
+		zLog.find({}, function(err, events) {
 			if (err)
 				return res.send(err);
 
