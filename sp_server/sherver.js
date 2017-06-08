@@ -160,21 +160,12 @@ router.route('/events/pLog')
 
 	// get all the events (accessed at GET http://localhost:8080/api/events)
 	.get(function(req, res) {
-		console.log(req.body);
-		pLog.find({ 
-		    id: req.body.id,
-		    course: req.body.course,
-		    week: req.body.week,
-		    lastQualGoalSet: req.body.qualPlan 
-		  })
-		  // -1 will sort descending (newest to oldest) by lastQualGoalSet
-		  .sort({lastQualGoalSet: -1})
-		  // only get the first one for efficiency
-		  .limit(1)
-		  .exec(function(results, err){
-		    // if there is a results array, it will just have one element
-		    var whatIWant = results[0];
-		  });
+		pLog.find({}, function(err, events) {
+			if (err)
+				return res.send(err);
+
+			res.json(events);
+		});
 	});
 
 
