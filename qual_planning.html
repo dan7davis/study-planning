@@ -484,7 +484,18 @@ window.onload = function initDansListeners() {
         };
         pLog();
         get_data();
+        respSaved();
       });
+
+
+      function respSaved() {
+        console.log("saved?")
+        var origTxt = $( "textarea" ).text();
+        $( "textarea" ).val("Response saved!");
+          setTimeout( function() {
+            $( "textarea" ).val(origTxt);
+          }, 3000);
+      };
 
 </script>
 
