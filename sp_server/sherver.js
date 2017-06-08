@@ -169,7 +169,7 @@ router.route('/events/pLog')
 		    week: req.query.week
 		  })
 		  // -1 will sort descending (newest to oldest) by lastQualGoalSet
-		  .sort({lastQualGoalSet: -1})
+		  .sort({time: -1})
 		  // only get the first one for efficiency
 		  .limit(1)
 		  .exec(function(results, err){
