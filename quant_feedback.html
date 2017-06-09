@@ -137,8 +137,7 @@
           $('#dx-username').text(username);
           return datas;
         }
-                 
-          
+               
 
           //////////////////////////////////////////////
 // Retrieve Current Weeks Vid and Quiz Info //
@@ -180,63 +179,14 @@
         //////////////////////////////////////////////
         //          Logging User Video Activity       //
         //////////////////////////////////////////////
-//Holds a reference to the YouTube player
-var ik_player;
+
+
 
 //this function is called by the API
-window.onload = function onYouTubeIframeAPIReady() {
-  initDansListeners();
-    get_data();
-  //creates the player object
-  var playerId = $('iframe').attr('id');
-  ik_player = new YT.Player(playerId);
-  console.log('Video API is loaded');
-       
-  //subscribe to events
-  ik_player.addEventListener("onStateChange", "onYouTubePlayerStateChange");
-}
-var k = [];
-function onYouTubePlayerStateChange(event) {
-  var d = new Date();
-  var n = d.getTime();
-  k.push(n/1000);
-
-  
-function diff(ary) {
-    var newA = [];
-    for (var i = 1; i < ary.length; i++)  newA.push(ary[i] - ary[i - 1])
-    return newA;
+window.onload = function initDansListeners() {
+  get_data();
+  datas.quantGoals = {};
 };
-
-
-//console.log(diff(k));
-var diffy = diff(k);
-var ar =[];
-for (var i = 0; i < diffy.length; i++) {
-    if(i % 2 === 0) { 
-        ar.push(diffy[i]);
-    }
-  //console.log(ar);
-  var sum = ar.reduce(add, 0);
-
-function add(a, b) {
-    return a + b;
-}
-var playerId = $('iframe').attr('id');
-datas.vidID = playerId;
-datas.vidDuration = sum;
-if (sum > 30) {
-  datas.watched = 1;
-} else {
-  datas.watched = 0
-};
-datas.time = new Date();
-datas.index = datas.id + "_" + datas.time.getTime();
-console.log(datas);
-}
-;
-  
-}
  
          //////////////////////////////////////////////
          ////////////////////////////////////////////// 
@@ -310,7 +260,7 @@ function myFunction() {
 
 </script>
 
-<body>
+<body id="bars">
 <p id="header">Progress towards your goals this week:</p>
   <div id="three">
     <div id="videobar"></div>
@@ -323,23 +273,27 @@ function myFunction() {
 
 
 <script type="text/javascript">
-  
+function barGen() {
+$( "#videobar" ).empty();
+$( "#questionbar" ).empty();
+$( "#timebar" ).empty();
+
 // progressbar.js@1.0.0 version is used
 // Docs: http://progressbarjs.readthedocs.org/en/1.0.0/
 
 var vidActual = 26;
-var vidIntended = 34;
+var vidIntended = Number($("#rVid").text());
 var vidScaled = vidActual/vidIntended;
 
 var questionActual = 12;
-var questionIntended = 17;
+var questionIntended = Number($("#rQuiz").text());
 var questionScaled = questionActual/questionIntended;
 
 
 var timeActual = 2;
-var timeIntended = 5;
+var timeIntended = Number($("#rTime").text());
 var timeScaled = timeActual/timeIntended;
-
+textgen();
 
 ///////////////////////////////////////////////////////////
 //            Video Viz                                   //
@@ -450,34 +404,37 @@ bar3.text.style.fontSize = '2rem';
 
 bar3.animate(timeScaled);  // Number from 0.0 to 1.0
 
-
+};
 
 </script>
 
 <body>
 
 <div id="three">
-    <div id="videotex">You planed for: <span id="vidIntended"></span></div>
-    <div id="questiontex">You planed for: <span id="questionIntended"></span></div>
-    <div id="timetex">You planed for: <span id="timeIntended"></span></div>
+    <div id="vidIntended"></div>
+    <div id="questionIntended"></span></div>
+    <div id="timeIntended"></span></div>
   </div>
 
 <script>
 
 
 function textgen() {
-      document.getElementById("vidIntended").innerHTML=vidIntended;
-      document.getElementById("questionIntended").innerHTML=questionIntended;
-      document.getElementById("timeIntended").innerHTML=timeIntended;
+      document.getElementById("vidIntended").innerHTML= "You planned to watch " + Number($("#rVid").text()) + " videos.";
+      document.getElementById("questionIntended").innerHTML= "You planned to answer " +  Number($("#rQuiz").text())  + " questions.";
+      document.getElementById("timeIntended").innerHTML= "You planned to spend " +   Number($("#rTime").text())   + " hours in the course.";
   };
  
  
- textgen();
+ 
 
 
 </script>
 
 <p><input type="submit" onclick="reveal();edited();" value="Edit Goals" class="emerald-flat-button-small"></p>
+<div id="rVid"></div>
+<div id="rQuiz"></div>
+<div id="rTime"></div>
 
 </body>
 </div>
@@ -619,8 +576,6 @@ function textgen() {
 // The DOMContentLoaded is fired when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading. This means that all your initial DOM nodes have been parsed
 
 
-  function initDansListeners(event) {
-
       // handle form submission
       var myForm = document.getElementById('qtPlan');
       myForm.addEventListener('submit', function(e){
@@ -630,7 +585,7 @@ function textgen() {
         quantGoals.plannedQuiz= Number($( "#quizs").val());
         quantGoals.plannedTimes = Number($( "#times").val());   
         datas.quantGoals = quantGoals;
-        alert("Send datas to server!");
+        zLog();
         console.log(datas);
         get_data(); 
       });
@@ -641,7 +596,7 @@ function textgen() {
       revealBtn.addEventListener('click', function(e){
         reveal();
       })
-    };
+    
 
 </script>
 
@@ -670,7 +625,6 @@ function textgen() {
 <script>
   
 
-  get_data();
 
 
   function edited() {
@@ -695,3 +649,124 @@ function textgen() {
 
 </script>
 
+<script>
+  function log() {
+    var settings = {
+      "async": true,
+      "crossDomain": true,
+      "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events",
+      "method": "POST",
+      "data": {
+        "week": datas.week,
+        "id": datas.id,
+        "course": datas.course,
+        "vert": datas.vert,
+        "edited": datas.edited,
+        "vidId": datas.vidID,
+        "uniqueSubmits": datas.uniqueSubmits,
+        "vidDuration": datas.vidDuration,
+        "timeSite": datas.timeSite,
+        "watched": datas.watched,
+        "time": datas.time,
+        "index": datas.index
+      }
+    }
+      
+    $.ajax(settings).done(function (response) {
+      var aggd = response[0];
+      console.log(aggd);
+      var id = response[0]._id.id;
+      var week = response[0]._id.week;
+      $(".week").text(week);
+      var id = response[0]._id.id;
+      $(".id").text(id);
+      var course = response[0]._id.course;
+      $(".course").text(course);
+      var totalEvents = response[0].totalEvents;
+      $(".totalEvents").text("Total Events" + totalEvents);
+      var totalSubmits = response[0].totalSubmits;
+      $(".totalSubmits").text("Total Submits" + totalSubmits);
+      var totalTimeSite = response[0].totalTimeSite;
+      $(".totalTimeSite").text("Total TimeSite" + totalTimeSite);
+      var totalVidDuration = response[0].totalVidDuration;
+      $(".totalVidDuration").text("Total Vid Duration" + totalVidDuration);
+      var totalVidWatched = response[0].totalVidWatched;
+      $(".totalVidWatched").text("Total Vids Watched" + totalVidWatched);
+      var edited = response[0].edited;
+      $( ".edited" ).text("Edited: " + edited);
+    });
+  };
+
+//QUANTITATIVE SPLANNING SUBMIT
+function zLog() {
+var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events/zLog",
+  "method": "POST",
+  "data": {
+    "week": datas.week,
+    "id": datas.id,
+    "course": datas.course,
+    "vert": datas.vert,
+    "edited": datas.edited,
+    "time": datas.time,
+    "vidGoal": datas.quantGoals.plannedVideos,
+    "quizGoal": datas.quantGoals.plannedQuiz,
+    "timeGoal": datas.quantGoals.plannedTimes,
+    "index": datas.index
+  }
+}
+  
+$.ajax(settings).done(function (response) {
+  var aggd = response[0];
+  console.log(aggd);
+  var id = response[0]._id.id;
+  var week = response[0]._id.week;
+  $(".week").text(week);
+  var id = response[0]._id.id;
+  $(".id").text(id);
+  var course = response[0]._id.course;
+  $(".course").text(course);
+  var lastQuizGoalSet = response[0].lastQuizGoalSet;
+  $(".lastQuizGoalSet").text("Last Quiz Goal" + lastQuizGoalSet);
+  var lastTimeGoalSet = response[0].lastTimeGoalSet;
+  $(".lastTimeGoalSet").text("Last Time Goal" + lastTimeGoalSet);
+  var lastVidGoalSet = response[0].lastVidGoalSet;
+  $(".lastVidGoalSet").text("Last Vid Goal" + lastVidGoalSet);
+  var edited = response[0].edited;
+  $( ".edited" ).text("Edited: " + edited);
+});
+  };
+
+
+function zgLog() {
+var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events/zLog",
+  "method": "GET",
+  "data": {
+    "week": datas.week,
+    "id": datas.id,
+    "course": datas.course,
+    "vert": datas.vert,
+    "edited": datas.edited,
+    "time": datas.time,
+    "index": datas.index
+  }
+}
+
+$.ajax(settings).done(function (response) {
+  var aggd = response[0];
+  console.log(aggd);
+  $("#rVid").text(aggd.vidGoal);
+  $("#rQuiz").text(aggd.quizGoal);
+  $("#rTime").text(aggd.timeGoal);
+  barGen();
+});
+}
+</script>
+<div id="rVid"></div>
+<div id="rQuiz"></div>
+<div id="rTime"></div>
