@@ -84,15 +84,52 @@
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
 }
+
+#rVid {
+  display: none;
+}
+#rQuiz {
+  display: none;
+}
+#rTime {
+  display: none;
+}
+.totalSubmits {
+  display: none;
+}
+.totalVidWatched {
+  display: none;
+}
+.totalTimeSite {
+  display: none;
+}
+#vidIntended {
+  max-width: 250px
+}
+#questionIntended {
+  max-width: 250px
+}
+#timeIntended {
+  max-width: 250px
+}
+
 #replace {
   display: none;
 
 }
 #startPlan {
   display: block;
-}
-
+} 
 </style>
+
+
+
+
+
+
+
+
+
 <script src="/static/pbref.js"></script>
 
 <script>
@@ -186,6 +223,8 @@
 window.onload = function initDansListeners() {
   get_data();
   datas.quantGoals = {};
+  log();
+  zgLog();
 };
  
          //////////////////////////////////////////////
@@ -272,27 +311,38 @@ function myFunction() {
 
 
 
+
+
 <script type="text/javascript">
 function barGen() {
 $( "#videobar" ).empty();
 $( "#questionbar" ).empty();
 $( "#timebar" ).empty();
-
+textgen();
 // progressbar.js@1.0.0 version is used
 // Docs: http://progressbarjs.readthedocs.org/en/1.0.0/
 
-var vidActual = 26;
+var vidActual = Number($(".totalVidWatched").text());
 var vidIntended = Number($("#rVid").text());
 var vidScaled = vidActual/vidIntended;
+if (vidActual > vidIntended) {
+  vidScaled = 1;
+};
 
-var questionActual = 12;
+var questionActual = Number($(".totalSubmits").text());
 var questionIntended = Number($("#rQuiz").text());
 var questionScaled = questionActual/questionIntended;
+if (questionActual > questionIntended) {
+  questionScaled = 1;
+};
 
 
-var timeActual = 2;
+var timeActual = Number($(".totalTimeSite").text());
 var timeIntended = Number($("#rTime").text());
 var timeScaled = timeActual/timeIntended;
+if (timeActual > timeIntended) {
+  timeScaled = 1;
+};
 textgen();
 
 ///////////////////////////////////////////////////////////
@@ -423,14 +473,33 @@ function textgen() {
       document.getElementById("vidIntended").innerHTML= "You planned to watch " + Number($("#rVid").text()) + " videos.";
       document.getElementById("questionIntended").innerHTML= "You planned to answer " +  Number($("#rQuiz").text())  + " questions.";
       document.getElementById("timeIntended").innerHTML= "You planned to spend " +   Number($("#rTime").text())   + " hours in the course.";
+
+      var vidActual = Number($(".totalVidWatched").text());
+      var vidIntended = Number($("#rVid").text());
+      var questionActual = Number($(".totalSubmits").text());
+      var questionIntended = Number($("#rQuiz").text());
+      var timeActual = Number($(".totalTimeSite").text());
+      var timeIntended = Number($("#rTime").text());
+
+      if (vidActual > vidIntended) {
+        $( "#vidIntended" ).text("Goal Completed! You planned for " + vidIntended + " " + "and have watched " + vidActual + " " + "videos!");
+      };
+
+      if (questionActual > questionIntended) {
+        $( "#questionIntended" ).text("Goal Completed! You planned for " + questionIntended + " " + "and have watched " + questionActual + " " + "videos!");
+      };
+
+      if (timeActual > timeIntended) {
+        $( "#timeIntended" ).text("Goal Completed! You planned for " + timeIntended + " " + "and have watched " + timeActual + " " + "videos!");
+      };
   };
  
- 
+
  
 
 
 </script>
-
+<br>
 <p><input type="submit" onclick="reveal();edited();" value="Edit Goals" class="emerald-flat-button-small"></p>
 <div id="rVid"></div>
 <div id="rQuiz"></div>
@@ -595,6 +664,8 @@ function textgen() {
       var revealBtn = document.getElementById('revealBtn');
       revealBtn.addEventListener('click', function(e){
         reveal();
+        log();
+        zgLog();
       })
     
 
@@ -685,13 +756,13 @@ function textgen() {
       var totalEvents = response[0].totalEvents;
       $(".totalEvents").text("Total Events" + totalEvents);
       var totalSubmits = response[0].totalSubmits;
-      $(".totalSubmits").text("Total Submits" + totalSubmits);
+      $(".totalSubmits").text(totalSubmits);
       var totalTimeSite = response[0].totalTimeSite;
-      $(".totalTimeSite").text("Total TimeSite" + totalTimeSite);
+      $(".totalTimeSite").text(totalTimeSite);
       var totalVidDuration = response[0].totalVidDuration;
       $(".totalVidDuration").text("Total Vid Duration" + totalVidDuration);
       var totalVidWatched = response[0].totalVidWatched;
-      $(".totalVidWatched").text("Total Vids Watched" + totalVidWatched);
+      $(".totalVidWatched").text(totalVidWatched);
       var edited = response[0].edited;
       $( ".edited" ).text("Edited: " + edited);
     });
@@ -739,7 +810,7 @@ $.ajax(settings).done(function (response) {
 });
   };
 
-
+//QUANTITATIVE REQUEST
 function zgLog() {
 var settings = {
   "async": true,
@@ -770,3 +841,6 @@ $.ajax(settings).done(function (response) {
 <div id="rVid"></div>
 <div id="rQuiz"></div>
 <div id="rTime"></div>
+<div class="totalSubmits"></div>
+<div class="totalVidWatched"></div>
+<div class="totalTimeSite"></div>
