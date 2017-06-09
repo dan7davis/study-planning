@@ -226,12 +226,23 @@ router.route('/events/pLog')
 
 	// get all the events (accessed at GET http://localhost:8080/api/events)
 	.get(function(req, res) {
-		zLog.find({}, function(err, events) {
-			if (err)
-				return res.send(err);
-
-			res.json(events);
-		});
+		zLog
+		  // our criteria to filter with
+		  .find({ 
+		    id: req.query.id,
+		    course: req.query.course,
+		    week: req.query.week,
+		    vidGoal: { $ne: null },
+		    quizGoal: { $ne: null },
+		    timeGoal: { $ne: null }
+		  })
+		  // -1 will sort descending (newest to oldest) by lastQualGoalSet
+		  .sort({time: -1})
+		  // only get the first one for efficiency
+		  .limit(1)
+		  .exec(function(err, result){
+		    res.json(result);
+		  });
 	});
 // on routes that end in /events/:event_id
 // ----------------------------------------------------
