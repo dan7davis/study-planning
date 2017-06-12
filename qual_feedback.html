@@ -582,6 +582,7 @@ $.ajax(settings).done(function (response) {
   console.log(aggd);
   var lastQualGoalSet = response[0].qualPlan;
   $("#planningText").text(lastQualGoalSet);
+  $(".lastQualGoalSet").text(lastQualGoalSet);
 });
 }
 
