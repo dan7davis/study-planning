@@ -113,8 +113,33 @@
   max-width: 250px
 }
 
+#subConfirm {
+  visibility: hidden;
+  display: none;
+  text-align: center;
+  font-weight: bolder;
+  color: #2ecc71;
+}
 
+#subError {
+  visibility: hidden;
+  display: none;
+  text-align: center;
+  font-weight: bolder;
+  color: #C84B4B;
+}
 
+.vidFeedback {
+  font-weight: bolder;
+}
+
+.quizFeedback {
+  font-weight: bolder;
+}
+
+.timeFeedback {
+  font-weight: bolder;
+}
 
 #replace {
   display: block;
@@ -304,6 +329,12 @@ function myFunction() {
 
 <body id="bars">
 <p id="header">Progress towards your goals this week:</p>
+<br>
+  <div id="three">
+    <div class="vidFeedback">Videos</div>
+    <div class="quizFeedback">Questions</div>
+    <div class="timeFeedback">Time</div>
+  </div>
   <div id="three">
     <div id="videobar"></div>
     <div id="questionbar"></div>
@@ -312,7 +343,7 @@ function myFunction() {
 
 </body>
 
-
+<p class="noPlan"></p>
 
 
 
@@ -321,7 +352,6 @@ function barGen() {
 $( "#videobar" ).empty();
 $( "#questionbar" ).empty();
 $( "#timebar" ).empty();
-textgen();
 // progressbar.js@1.0.0 version is used
 // Docs: http://progressbarjs.readthedocs.org/en/1.0.0/
 
@@ -499,11 +529,14 @@ function textgen() {
  
 
  
-
+function editButtonReset() {
+  $("#revealBtn").removeClass("emerald-flat-button");
+  $("#revealBtn").addClass("emerald-flat-button-small");
+};
 
 </script>
 <br>
-<p><input type="submit" onclick="reveal();edited();" value="Edit Goals" class="emerald-flat-button-small"></p>
+<p><input id="editGoals" type="submit" onclick="reveal();edited();editButtonReset();" value="Edit Goals" class="emerald-flat-button-small"></p>
 <div id="rVid"></div>
 <div id="rQuiz"></div>
 <div id="rTime"></div>
@@ -635,10 +668,12 @@ function textgen() {
   hours to the course. </p>
 
   </div>
-
+<p id="subConfirm">Response saved!</p>
+<p id="subError">Invalid Response: Please enter numbers only.</p>
+<p class="pHolder" style="visibility: hidden">Place</p>
 
  <input type="submit" value="Submit" class="emerald-flat-button"> 
- <br>
+   <br>
  <p id="buts">
  <input type="button" id="revealBtn" value="View Progress" class="emerald-flat-button-small"> 
 </p>
@@ -658,8 +693,13 @@ function textgen() {
         quantGoals.plannedTimes = Number($( "#times").val());   
         datas.quantGoals = quantGoals;
         zLog();
-        console.log(datas);
-        get_data(); 
+        if (quantGoals.plannedVideos >= 1 && quantGoals.plannedQuiz >= 1 &&  quantGoals.plannedTimes >= 1) {
+          respSaved(); 
+          console.log(datas);
+          get_data();
+        } else {
+          respError();
+        }; 
       });
 
 
@@ -671,7 +711,29 @@ function textgen() {
         zgLog();
       })
     
+    function respSaved() {
+      $(".pHolder").css("display", "none");
+      $("#subConfirm").css({"visibility": "visible", "display": "block"});
+      setTimeout( function(){
+        $("#subConfirm").fadeTo( "slow", 0 );
+        $(".pHolder").css("display", "block");
+        $("#subConfirm").css("display", "none")
+      }, 2000);
+      $("#subConfirm").css({"visibility": "invisible", "opacity": "1"});
+    }
 
+    function respError() {
+      $(".pHolder").css("display", "none");
+      $("#subError").css({"visibility": "visible", "display": "block"});
+      setTimeout( function(){
+        $("#subError").fadeTo( "slow", 0 );
+        $(".pHolder").css("display", "block");
+        $("#subError").css("display", "none");
+      }, 2000);
+      $("#subError").css({"visibility": "invisible", "opacity": "1"});
+      $("#bars").css("display", "none");
+      $("#editGoals").addClass("emerald-flat-button").removeClass("emerald-flat-button-small");
+    }
 </script>
 
 </main>
@@ -719,6 +781,8 @@ function textgen() {
     alert("Send datas to server!");
     console.log(datas);
     get_data();
+    log();
+    zgLog();
   })
 
 </script>
@@ -837,7 +901,17 @@ $.ajax(settings).done(function (response) {
   $("#rVid").text(aggd.vidGoal);
   $("#rQuiz").text(aggd.quizGoal);
   $("#rTime").text(aggd.timeGoal);
-  barGen();
+  if (aggd.vidGoal >= 1 && aggd.quizGoal >= 1 &&  aggd.timeGoal >= 1) {
+    barGen();
+    $("#bars").css("display", "block");
+    $( ".noPlan" ).css("display", "none");
+    $( "#editGoals" ).removeClass("emerald-flat-button").addClass("emerald-flat-button-small");
+  }
+    else {
+      $("#bars").css("display", "none");
+      $("#editGoals").addClass("emerald-flat-button").removeClass("emerald-flat-button-small");
+      $( ".noPlan" ).text("You haven't set goals yet this week. Click the 'Edit Goals' button below to get started!");
+    };
 });
 }
 </script>
