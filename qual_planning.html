@@ -108,6 +108,11 @@
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
 }
+
+.ajaxLanding {
+  display: none;
+}
+
 #replace {
   display: block;
 
@@ -230,6 +235,7 @@ function edited() {
 window.onload = function initDansListeners() {
   get_data();
   datas.quantGoals = {};
+  log();
   pgLog();
 };
 
@@ -428,11 +434,11 @@ window.onload = function initDansListeners() {
 }
 </style>
 <p id="header">WHAT DRIVES YOU?</p>
-  <p class="header1">Please share what's motivating you to be a part of this course community.</p>
+  <p class="header1">What brought you here? What do you hope to gain from this course?</p>
 
   <form id="qlPlan">
   <div id="three">
-           <textarea form="usrform" name="styled-textarea" id="styled" onfocus="this.value='';">Enter your story here...</textarea>
+           <textarea form="usrform" name="styled-textarea" id="styled" onfocus="this.value='';">Enter your motivation here...</textarea>
         </div>
 <br>
 <p id="buts">
@@ -522,6 +528,7 @@ window.onload = function initDansListeners() {
     log();
     console.log(datas);
     get_data();
+    pgLog();
   });
 
 
@@ -678,15 +685,17 @@ $.ajax(settings).done(function (response) {
 
 
 </script>
-<div class="week"></div>
-<div class="id"></div>
-<div class="course"></div>
-<div class="lastQuizGoalSet"></div>
-<div class="lastTimeGoalSet"></div>
-<div class="lastVidGoalSet"></div>
-<div class="totalEvents"></div>
-<div class="totalSubmits"></div>
-<div class="totalTimeSite"></div>
-<div class="totalVidDuration"></div>
-<div class="totalVidWatched"></div>
-<div class="edited"></div>
+<div class="ajaxLanding">
+  <div class="week"></div>
+  <div class="id"></div>
+  <div class="course"></div>
+  <div class="lastQuizGoalSet"></div>
+  <div class="lastTimeGoalSet"></div>
+  <div class="lastVidGoalSet"></div>
+  <div class="totalEvents"></div>
+  <div class="totalSubmits"></div>
+  <div class="totalTimeSite"></div>
+  <div class="totalVidDuration"></div>
+  <div class="totalVidWatched"></div>
+  <div class="edited"></div>
+</div>
