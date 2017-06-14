@@ -184,7 +184,7 @@ router.route('/events/pLog')
 	.get(function(req, res) {
 		vLog
 		  // our criteria to filter with
-		  .distinct("vidID", { 
+		  .distinct(vidID, { 
 		  		id: req.query.id, 
 		  		week: req.query.week, 
 		  		course: req.query.course,
