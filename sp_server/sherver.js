@@ -20,6 +20,7 @@ mongoose.set('debug', true);
 mongoose.connect('mongodb://localhost/sp_exp'); // connect to our database
 var Event     = require('./app/models/event');
 var pLog 	  = require('./app/models/event');
+var vLog 	  = require('./app/models/event');
 var zLog 	  = require('./app/models/event')
 
 // configure body parser, get data from a POST
