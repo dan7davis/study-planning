@@ -191,7 +191,7 @@ router.route('/events/pLog')
 		   })
 		  .length
 		  .exec(function(err, result){
-		    res.send(result);
+		    res.json(result);
 		  });
 	});
 
