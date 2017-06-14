@@ -189,9 +189,8 @@ router.route('/events/pLog')
 		  		week: req.query.week, 
 		  		course: req.query.course,
 		   })
-		  .length
 		  .exec(function(err, result){
-		    res.json(result);
+		    res.json(result.length);
 		  });
 	});
 
