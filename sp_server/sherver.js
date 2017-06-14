@@ -179,50 +179,7 @@ router.route('/events/pLog')
 	});
 
 
-	router.route('/events/vLog')
-
-	.post(function(req, res) {
-		
-		var event = new zLog();		// create a new instance of the event model
-		event.week 				= req.body.week;  // set the events week (comes from the request)
-		event.id 				= req.body.id;
-		event.course 			= req.body.course;
-		event.time 				= req.body.time;
-		event.vert 				= req.body.vert;		
-		event.index 			= req.body.index;
-		event.vidGoal 			= req.body.vidGoal;
-		event.edited 			= req.body.edited;
-		event.quizGoal 			= req.body.quizGoal;
-		event.timeGoal 			= req.body.timeGoal;
-
-		// SUM OF ALL QUANT VARIABLES GROUPED BY LEARNER COURSE WEEK
-		vLog.aggregate(
-			   [
-			     {
-			       $group:
-			         {
-			           _id: { id: req.body.id, course: req.body.course, week: req.body.week },
-			           lastVidGoalSet: { $last: req.body.vidGoal},
-			           lastQuizGoalSet: { $last: req.body.quizGoal },
-			           lastTimeGoalSet: { $last: req.body.timeGoal }
-			         }
-			     }
-			   ], function(err,result) {
-			   		console.log(result);
-			   		res.json(result);
-			    }
-			);
-
-
-		event.save(function(err) {
-			if (err)
-				return res.send(err);
-
-			res.json({ message: 'zLog event created!' });
-		});
-
-		
-	})
+router.route('/events/vLog')
 
 	.get(function(req, res) {
 		console.log(req.query);
