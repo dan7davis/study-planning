@@ -921,3 +921,69 @@ $.ajax(settings).done(function (response) {
 <div class="totalSubmits"></div>
 <div class="totalVidWatched"></div>
 <div class="totalTimeSite"></div>
+
+<script>
+  //function takes a string to be sent via xhr and turns it back into an object to make it easier
+  //to read on the console
+  function splitParamString(input) {
+    if(input == null){
+      return {};
+    }
+    var params = input.split("&");
+    var paramObject = {};
+    params.forEach(function(element) {
+      var keyValue = element.split("=");
+      paramObject[keyValue[0]]=keyValue[1];
+    });
+    return paramObject;
+  }
+  
+  //Goal: log all data that is send in xhr post requests to console before they are sent
+  //Code snippet inspired by: http://stackoverflow.com/questions/25335648/how-to-intercept-all-ajax-requests-made-by-different-js-libraries
+  var vidlog;
+  var plays = [];
+  var pauses = [];
+  var durVid;
+  var vidSum = [];
+  var url = document.URL;
+
+  // This will break studio if it runs inside of it, so this IF statement make it so the XHR intercept only fires if not in studio
+  if ( url.includes('studio') === false) {
+    (function() {
+      var origSend = XMLHttpRequest.prototype.send;
+      XMLHttpRequest.prototype.send = function(data) {     
+        console.log("[AJAX SEND CAUGHT]");
+        console.log("[CAUGHT DATA]"+data);
+        vidlog = splitParamString(data);
+        vidlog.time = new Date();
+        console.log(vidlog);
+        if (vidlog.event_type === "play_video") {
+          plays.push(vidlog.time);
+        } else if (vidlog.event_type === "pause_video") {
+          pauses.push(vidlog.time);
+        }
+        origSend.call(this,data);
+        };
+    })();
+  } else {
+    console.log("You're in studio.")
+  };
+
+
+// Takes the Pauses and Plays arrays and finds total duration between play and pause events
+function addUp() {
+  for (i=0; i<= pauses.length-1; i++) {
+    vidSum[i] = pauses[i] - plays[i];
+  };
+  durVid = vidSum.reduce(add, 0) / 1000;
+  console.log(durVid);
+};
+
+
+// Returns the Sum of an Array
+function add(a, b) {
+    return a + b;
+};
+
+</script>
+

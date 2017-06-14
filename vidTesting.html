@@ -1,10 +1,15 @@
 <p>A little piece of JavaScript that captures all xhr messages to be sent and prints them to console.</p>
 
+
+
 <script>
   //function takes a string to be sent via xhr and turns it back into an object to make it easier
   //to read on the console
   function splitParamString(input) {
-  var params = input.split("&");
+    if(input == null){
+      return {};
+    }
+    var params = input.split("&");
     var paramObject = {};
     params.forEach(function(element) {
       var keyValue = element.split("=");
@@ -24,10 +29,11 @@
 
   // This will break studio if it runs inside of it, so this IF statement make it so the XHR intercept only fires if not in studio
   if ( url.includes('studio') === false) {
-  (function() {
-    var origSend = XMLHttpRequest.prototype.send;
-    XMLHttpRequest.prototype.send = function(data) {     
+    (function() {
+      var origSend = XMLHttpRequest.prototype.send;
+      XMLHttpRequest.prototype.send = function(data) {     
         console.log("[AJAX SEND CAUGHT]");
+        console.log("[CAUGHT DATA]"+data);
         vidlog = splitParamString(data);
         vidlog.time = new Date();
         console.log(vidlog);
@@ -38,11 +44,10 @@
         }
         origSend.call(this,data);
         };
-   
-})();
-} else {
-  console.log("You're in studio.")
-};
+    })();
+  } else {
+    console.log("You're in studio.")
+  };
 
 
 // Takes the Pauses and Plays arrays and finds total duration between play and pause events

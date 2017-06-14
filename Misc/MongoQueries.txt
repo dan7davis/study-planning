@@ -1,0 +1,16 @@
+db.events.find({"id": "91735", "week": "5e61005aa3ed4e8e971427ea62c57e80", "course": "DelftX+DD.002x+2017"}).sort({time: -1}).limit(1)
+
+db.events
+.find({ time: new Date("Thu, 08 Jun 2017 11:53:19 GMT"), week: '5e61005aa3ed4e8e971427ea62c57e80', course: 'DelftX+DD.002x+2017', id: '91735' }, { sort: { time: -1 }, limit: 1, fields: {} })
+
+
+db.events.find({ 
+		    id: req.query.id,
+		    course: req.query.course,
+		    week: req.query.week,
+		    time: req.query.time
+		  })
+		  // -1 will sort descending (newest to oldest) by lastQualGoalSet
+		  .sort({time: -1})
+		  // only get the first one for efficiency
+		  .limit(1)
