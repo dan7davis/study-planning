@@ -178,6 +178,22 @@ router.route('/events/pLog')
 	});
 
 
+	router.route('/events/vLog')
+
+	.get(function(req, res) {
+		vLog
+		  // our criteria to filter with
+		  .distinct("vidID", { 
+		  		id: req.query.id, 
+		  		week: req.query.week, 
+		  		course: req.query.course,
+		   })
+		  .length
+		  .exec(function(err, result){
+		    res.send(result);
+		  });
+	});
+
 	router.route('/events/zLog')
 
 	// create an event (accessed at POST https://server:port/api/events)
