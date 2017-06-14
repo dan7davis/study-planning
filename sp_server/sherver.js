@@ -182,6 +182,7 @@ router.route('/events/pLog')
 	router.route('/events/vLog')
 
 	.get(function(req, res) {
+		console.log(req.query);
 		vLog
 		  // our criteria to filter with
 		  .distinct("vidID", { 
