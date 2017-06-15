@@ -10,6 +10,7 @@ var EventSchema 		= new Schema({
 	vert: 			String,
 	edited: 		Number,
 	vidID: 			String,
+	quID: 			String,
 	vidDuration: 	Number,
 	watched: 		Number,
 	submits: 		String,
