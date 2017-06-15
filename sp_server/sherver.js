@@ -210,7 +210,7 @@ router.route('/events/quLog')
 		  		course: req.query.course,
 		   })
 		  .exec(function(err, result){
-		    res.send(result.length);
+		    res.json(result.length);
 		  });
 	});
 
