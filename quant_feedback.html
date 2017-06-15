@@ -253,6 +253,7 @@ window.onload = function initDansListeners() {
   datas.quantGoals = {};
   log();
   zgLog();
+  vgLog()
 };
  
          //////////////////////////////////////////////
@@ -317,6 +318,7 @@ function myFunction() {
            datas.index = datas.id + "_" + datas.time.getTime();
            console.log(datas);
            alert("Send datas to server!");
+           addUp();
            get_data();
            return datas;
           }
@@ -800,7 +802,8 @@ function editButtonReset() {
         "course": datas.course,
         "vert": datas.vert,
         "edited": datas.edited,
-        "vidId": datas.vidID,
+        "vidID": datas.vidID,
+        "quID": datas.quID,
         "uniqueSubmits": datas.uniqueSubmits,
         "vidDuration": datas.vidDuration,
         "timeSite": datas.timeSite,
@@ -828,8 +831,6 @@ function editButtonReset() {
       $(".totalTimeSite").text(totalTimeSite);
       var totalVidDuration = response[0].totalVidDuration;
       $(".totalVidDuration").text("Total Vid Duration" + totalVidDuration);
-      var totalVidWatched = response[0].totalVidWatched;
-      $(".totalVidWatched").text(totalVidWatched);
       var edited = response[0].edited;
       $( ".edited" ).text("Edited: " + edited);
     });
@@ -902,7 +903,7 @@ $.ajax(settings).done(function (response) {
   $("#rQuiz").text(aggd.quizGoal);
   $("#rTime").text(aggd.timeGoal);
   if (aggd.vidGoal >= 1 && aggd.quizGoal >= 1 &&  aggd.timeGoal >= 1) {
-    barGen();
+    vgLog();
     $("#bars").css("display", "block");
     $( ".noPlan" ).css("display", "none");
     $( "#editGoals" ).removeClass("emerald-flat-button").addClass("emerald-flat-button-small");
@@ -914,6 +915,36 @@ $.ajax(settings).done(function (response) {
     };
 });
 }
+
+
+//Video REQUEST
+function vgLog() {
+var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events/vLog",
+  "method": "GET",
+  "data": {
+    "week": datas.week,
+    "id": datas.id,
+    "course": datas.course,
+    "vert": datas.vert,
+    "edited": datas.edited,
+    "time": datas.time,
+    "index": datas.index
+  }
+}
+
+$.ajax(settings).done(function (response) {
+  var aggd = response;
+  console.log(aggd);
+  $( ".totalVidWatched" ).text(aggd);
+  log();
+  barGen();
+});
+}
+
+
 </script>
 <div id="rVid"></div>
 <div id="rQuiz"></div>
@@ -961,6 +992,11 @@ $.ajax(settings).done(function (response) {
           plays.push(vidlog.time);
         } else if (vidlog.event_type === "pause_video") {
           pauses.push(vidlog.time);
+        } else if (vidlog.event_type === "problem_check") {
+          datas.quID = vidlog.event.split("_")[1];
+          console.log("problem" + datas.quID + " caught");
+          log();
+          get_data();
         }
         origSend.call(this,data);
         };
@@ -977,6 +1013,14 @@ function addUp() {
   };
   durVid = vidSum.reduce(add, 0) / 1000;
   console.log(durVid);
+  if (durVid >= 30 ) {
+    datas.vidID = vidlog.event.split("%")[5];
+    log();
+    get_data();
+    console.log(datas);
+  } else if (durVid < 30) {
+    console.log("not finished yet");
+  }
 };
 
 

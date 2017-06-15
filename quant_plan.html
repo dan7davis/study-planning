@@ -253,6 +253,7 @@ window.onload = function initDansListeners() {
   datas.quantGoals = {};
   log();
   zgLog();
+  vgLog()
 };
  
          //////////////////////////////////////////////
@@ -800,7 +801,7 @@ function editButtonReset() {
         "course": datas.course,
         "vert": datas.vert,
         "edited": datas.edited,
-        "vidId": datas.vidID,
+        "vidID": datas.vidID,
         "uniqueSubmits": datas.uniqueSubmits,
         "vidDuration": datas.vidDuration,
         "timeSite": datas.timeSite,
@@ -828,8 +829,6 @@ function editButtonReset() {
       $(".totalTimeSite").text(totalTimeSite);
       var totalVidDuration = response[0].totalVidDuration;
       $(".totalVidDuration").text("Total Vid Duration" + totalVidDuration);
-      var totalVidWatched = response[0].totalVidWatched;
-      $(".totalVidWatched").text(totalVidWatched);
       var edited = response[0].edited;
       $( ".edited" ).text("Edited: " + edited);
     });
@@ -902,7 +901,7 @@ $.ajax(settings).done(function (response) {
   $("#rQuiz").text(aggd.quizGoal);
   $("#rTime").text(aggd.timeGoal);
   if (aggd.vidGoal >= 1 && aggd.quizGoal >= 1 &&  aggd.timeGoal >= 1) {
-    barGen();
+    vgLog();
     $("#bars").css("display", "block");
     $( ".noPlan" ).css("display", "none");
     $( "#editGoals" ).removeClass("emerald-flat-button").addClass("emerald-flat-button-small");
@@ -914,6 +913,36 @@ $.ajax(settings).done(function (response) {
     };
 });
 }
+
+
+//Video REQUEST
+function vgLog() {
+var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events/vLog",
+  "method": "GET",
+  "data": {
+    "week": datas.week,
+    "id": datas.id,
+    "course": datas.course,
+    "vert": datas.vert,
+    "edited": datas.edited,
+    "time": datas.time,
+    "index": datas.index
+  }
+}
+
+$.ajax(settings).done(function (response) {
+  var aggd = response;
+  console.log(aggd);
+  $( ".totalVidWatched" ).text(aggd);
+  log();
+  barGen();
+});
+}
+
+
 </script>
 <div id="rVid"></div>
 <div id="rQuiz"></div>
@@ -921,3 +950,75 @@ $.ajax(settings).done(function (response) {
 <div class="totalSubmits"></div>
 <div class="totalVidWatched"></div>
 <div class="totalTimeSite"></div>
+
+<script>
+  //function takes a string to be sent via xhr and turns it back into an object to make it easier
+  //to read on the console
+  function splitParamString(input) {
+    if(input == null){
+      return {};
+    }
+    var params = input.split("&");
+    var paramObject = {};
+    params.forEach(function(element) {
+      var keyValue = element.split("=");
+      paramObject[keyValue[0]]=keyValue[1];
+    });
+    return paramObject;
+  }
+  
+  //Goal: log all data that is send in xhr post requests to console before they are sent
+  //Code snippet inspired by: http://stackoverflow.com/questions/25335648/how-to-intercept-all-ajax-requests-made-by-different-js-libraries
+  var vidlog;
+  var plays = [];
+  var pauses = [];
+  var durVid;
+  var vidSum = [];
+  var url = document.URL;
+
+  // This will break studio if it runs inside of it, so this IF statement make it so the XHR intercept only fires if not in studio
+  if ( url.includes('studio') === false) {
+    (function() {
+      var origSend = XMLHttpRequest.prototype.send;
+      XMLHttpRequest.prototype.send = function(data) {     
+        console.log("[AJAX SEND CAUGHT]");
+        console.log("[CAUGHT DATA]"+data);
+        vidlog = splitParamString(data);
+        vidlog.time = new Date();
+        console.log(vidlog);
+        if (vidlog.event_type === "play_video") {
+          plays.push(vidlog.time);
+        } else if (vidlog.event_type === "pause_video") {
+          pauses.push(vidlog.time);
+        }
+        origSend.call(this,data);
+        };
+    })();
+  } else {
+    console.log("You're in studio.")
+  };
+
+
+// Takes the Pauses and Plays arrays and finds total duration between play and pause events
+function addUp() {
+  for (i=0; i<= pauses.length-1; i++) {
+    vidSum[i] = pauses[i] - plays[i];
+  };
+  durVid = vidSum.reduce(add, 0) / 1000;
+  console.log(durVid);
+  if (durVid >= 30 ) {
+    datas.vidID = vidlog.event.split("%")[5];
+    console.log(datas);
+  } else if (durVid < 30) {
+    console.log("not finished yet");
+  }
+};
+
+
+// Returns the Sum of an Array
+function add(a, b) {
+    return a + b;
+};
+
+</script>
+
