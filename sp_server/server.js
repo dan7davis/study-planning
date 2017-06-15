@@ -50,7 +50,7 @@ router.route('/events')
 
 	// create an event (accessed at POST https://server:port/api/events)
 	.post(function(req, res) {
-		
+		console.log(req.body);
 		var event = new Event();		// create a new instance of the event model
 		event.week 				= req.body.week;  // set the events week (comes from the request)
 		event.id 				= req.body.id;
