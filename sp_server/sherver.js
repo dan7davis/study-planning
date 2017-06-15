@@ -21,6 +21,7 @@ mongoose.connect('mongodb://localhost/sp_exp'); // connect to our database
 var Event     = require('./app/models/event');
 var pLog 	  = require('./app/models/event');
 var vLog 	  = require('./app/models/event');
+var quLog 	  = require('./app/models/event');
 var zLog 	  = require('./app/models/event')
 
 // configure body parser, get data from a POST
@@ -193,6 +194,23 @@ router.route('/events/vLog')
 		   })
 		  .exec(function(err, result){
 		    res.json(result.length);
+		  });
+	});
+
+
+router.route('/events/quLog')
+
+	.get(function(req, res) {
+		console.log(req.query);
+		quLog
+		  // our criteria to filter with
+		  .distinct("quID", { 
+		  		id: req.query.id, 
+		  		week: req.query.week, 
+		  		course: req.query.course,
+		   })
+		  .exec(function(err, result){
+		    res.send(result.length);
 		  });
 	});
 
