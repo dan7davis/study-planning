@@ -68,6 +68,7 @@ router.route('/events')
 		event.vert 				= req.body.vert;
 		event.edited 			= req.body.edited;
 		event.vidID 			= req.body.vidID;
+		event.quID 				= req.body.quID;
 		event.vidDuration 		= req.body.vidDuration;
 		event.watched 			= req.body.watched;
 		event.submits 			= req.body.submits;
