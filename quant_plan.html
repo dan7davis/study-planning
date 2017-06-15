@@ -253,7 +253,8 @@ window.onload = function initDansListeners() {
   datas.quantGoals = {};
   log();
   zgLog();
-  vgLog()
+  qgLog();
+  vgLog();
 };
  
          //////////////////////////////////////////////
@@ -311,13 +312,15 @@ function myFunction() {
 
 
           window.onbeforeunload=function(){
-           timeSite=new Date()-startTime;
+           timeSite= (new Date()-startTime ) / 1000;
            datas.timeSite = timeSite;
-           console.log(timeSite);
            datas.time = new Date();
            datas.index = datas.id + "_" + datas.time.getTime();
            console.log(datas);
+           console.log('%c TimeSite: %d', 'background: green; color: white; display: block;', timeSite);
            alert("Send datas to server!");
+           log();
+           addUp();
            get_data();
            return datas;
           }
@@ -334,7 +337,7 @@ function myFunction() {
   <div id="three">
     <div class="vidFeedback">Videos</div>
     <div class="quizFeedback">Questions</div>
-    <div class="timeFeedback">Time</div>
+    <div class="timeFeedback">Time (Hours)</div>
   </div>
   <div id="three">
     <div id="videobar"></div>
@@ -372,12 +375,17 @@ if (questionActual > questionIntended) {
 
 
 var timeActual = Number($(".totalTimeSite").text());
+            var secs    = timeActual;
+            var hours   = (secs / 60) / 60;
+            var hoursR  = Math.floor(hours);
+            timeActual = hours;
 var timeIntended = Number($("#rTime").text());
 var timeScaled = timeActual/timeIntended;
 if (timeActual > timeIntended) {
   timeScaled = 1;
 };
 textgen();
+
 
 ///////////////////////////////////////////////////////////
 //            Video Viz                                   //
@@ -487,7 +495,6 @@ bar3.text.style.fontFamily = '"Abel", Helvetica, sans-serif';
 bar3.text.style.fontSize = '2rem';
 
 bar3.animate(timeScaled);  // Number from 0.0 to 1.0
-
 };
 
 </script>
@@ -503,17 +510,30 @@ bar3.animate(timeScaled);  // Number from 0.0 to 1.0
 <script>
 
 
+
+
 function textgen() {
-      document.getElementById("vidIntended").innerHTML= "You planned to watch " + Number($("#rVid").text()) + " videos.";
-      document.getElementById("questionIntended").innerHTML= "You planned to answer " +  Number($("#rQuiz").text())  + " questions.";
-      document.getElementById("timeIntended").innerHTML= "You planned to spend " +   Number($("#rTime").text())   + " hours in the course.";
+
 
       var vidActual = Number($(".totalVidWatched").text());
       var vidIntended = Number($("#rVid").text());
       var questionActual = Number($(".totalSubmits").text());
       var questionIntended = Number($("#rQuiz").text());
-      var timeActual = Number($(".totalTimeSite").text());
+      var timeActual = (Number($(".totalTimeSite").text()));
+            var secs    = timeActual;
+            var hours   = (secs / 60) / 60;
+            var hoursR  = Math.floor(hours);
+            var mins    = hours - hoursR;
+            var minsR   = Math.floor(mins * 60);
+            var timeR   = hoursR + " hours and" + " " + minsR + " minutes.";
+            window.replR   = hoursR + ":" + minsR;
+            timeActual = hours;
       var timeIntended = Number($("#rTime").text());
+
+
+      document.getElementById("vidIntended").innerHTML= "You planned to watch " + Number($("#rVid").text()) + " videos.";
+      document.getElementById("questionIntended").innerHTML= "You planned to answer " +  Number($("#rQuiz").text())  + " questions.";
+      document.getElementById("timeIntended").innerHTML= "You planned to spend " +   Number($("#rTime").text())   + " hours in the course and have spent" + " " + timeR;
 
       if (vidActual > vidIntended) {
         $( "#vidIntended" ).text("Goal Completed! You planned for " + vidIntended + " " + "and have watched " + vidActual + " " + "videos!");
@@ -524,7 +544,7 @@ function textgen() {
       };
 
       if (timeActual > timeIntended) {
-        $( "#timeIntended" ).text("Goal Completed! You planned for " + timeIntended + " " + "and have spent " + timeActual + " " + "hours!");
+        $( "#timeIntended" ).text("Goal Completed! You planned for " + timeIntended + " " + "and have spent " + timeR + " " + "hours!");
       };
   };
  
@@ -802,6 +822,7 @@ function editButtonReset() {
         "vert": datas.vert,
         "edited": datas.edited,
         "vidID": datas.vidID,
+        "quID": datas.quID,
         "uniqueSubmits": datas.uniqueSubmits,
         "vidDuration": datas.vidDuration,
         "timeSite": datas.timeSite,
@@ -823,8 +844,6 @@ function editButtonReset() {
       $(".course").text(course);
       var totalEvents = response[0].totalEvents;
       $(".totalEvents").text("Total Events" + totalEvents);
-      var totalSubmits = response[0].totalSubmits;
-      $(".totalSubmits").text(totalSubmits);
       var totalTimeSite = response[0].totalTimeSite;
       $(".totalTimeSite").text(totalTimeSite);
       var totalVidDuration = response[0].totalVidDuration;
@@ -943,6 +962,32 @@ $.ajax(settings).done(function (response) {
 }
 
 
+
+function qgLog() {
+var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events/quLog",
+  "method": "GET",
+  "data": {
+    "week": datas.week,
+    "id": datas.id,
+    "course": datas.course,
+    "vert": datas.vert,
+    "edited": datas.edited,
+    "time": datas.time,
+    "index": datas.index
+  }
+}
+
+$.ajax(settings).done(function (response) {
+  var aggd = response;
+  console.log(aggd);
+  $( ".totalSubmits" ).text(aggd);
+});
+}
+
+
 </script>
 <div id="rVid"></div>
 <div id="rQuiz"></div>
@@ -990,6 +1035,11 @@ $.ajax(settings).done(function (response) {
           plays.push(vidlog.time);
         } else if (vidlog.event_type === "pause_video") {
           pauses.push(vidlog.time);
+        } else if (vidlog.event_type === "problem_check") {
+          datas.quID = vidlog.event.split("_")[1];
+          console.log("problem" + datas.quID + " caught");
+          log();
+          get_data();
         }
         origSend.call(this,data);
         };
@@ -1008,6 +1058,8 @@ function addUp() {
   console.log(durVid);
   if (durVid >= 30 ) {
     datas.vidID = vidlog.event.split("%")[5];
+    log();
+    get_data();
     console.log(datas);
   } else if (durVid < 30) {
     console.log("not finished yet");
@@ -1019,6 +1071,26 @@ function addUp() {
 function add(a, b) {
     return a + b;
 };
+
+// //// //// THIS FUNCTION WOULD REPLACE THE TIME WITH A HOUR:MINUTE FORMAT
+// function repInt() {
+//     intrvl = setInterval(replaceTime, 50);
+// }
+
+// function myStopFunction() {
+//     clearInterval(intrvl);
+// }
+
+// function replaceTime() {
+//   if ($(".progressbar-text").eq(2).text() == replR) {
+//     myStopFunction();
+//   }
+//   $(".progressbar-text").eq(2).text(replR);
+//   console.log("interval live");
+// };
+
+// repInt();
+
 
 </script>
 
