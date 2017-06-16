@@ -528,10 +528,13 @@ window.onload = function initDansListeners() {
   };
 
   $(".sequence-nav").unbind('click').click(function () {
-    log();
-    console.log(datas);
-    get_data();
-    pgLog();
+      get_data();
+      datas.quantGoals = {};
+      log();
+      zgLog();
+      qgLog();
+      vgLog();
+      pgLog();
   });
 
 

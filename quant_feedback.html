@@ -799,12 +799,14 @@ function editButtonReset() {
   };
 
   $(".sequence-nav").unbind('click').click(function () {
-    alert("Send datas to server!");
-    //console.log(datas);
-    get_data();
-    log();
-    zgLog();
-  })
+      get_data();
+      datas.quantGoals = {};
+      log();
+      zgLog();
+      qgLog();
+      vgLog();
+      pgLog();
+  });
 
 </script>
 
