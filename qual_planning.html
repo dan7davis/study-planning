@@ -739,18 +739,21 @@ $.ajax(settings).done(function (response) {
     (function() {
       var origSend = XMLHttpRequest.prototype.send;
       XMLHttpRequest.prototype.send = function(data) {     
-        console.log("[AJAX SEND CAUGHT]");
-        console.log("[CAUGHT DATA]"+data);
+        //console.log("[AJAX SEND CAUGHT]");
+        //console.log("[CAUGHT DATA]"+data);
         vidlog = splitParamString(data);
         vidlog.time = new Date();
-        console.log(vidlog);
+        //console.log(vidlog);
         if (vidlog.event_type === "play_video") {
           plays.push(vidlog.time);
+          addUp();
+          //console.log('%c TimeSite: %d', 'background: green; color: white; display: block;', timeSite);
         } else if (vidlog.event_type === "pause_video") {
           pauses.push(vidlog.time);
+          addUp();
         } else if (vidlog.event_type === "problem_check") {
           datas.quID = vidlog.event.split("_")[1];
-          console.log("problem" + datas.quID + " caught");
+          //console.log("problem" + datas.quID + " caught");
           log();
           get_data();
         }

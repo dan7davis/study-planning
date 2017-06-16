@@ -195,10 +195,10 @@
           datas.time = new Date();
           datas.index = datas.id + "_" + datas.time.getTime();
           datas.vert = vert;
-          console.log("user: " + userid);
-          console.log("course: " + course);
-          console.log("origin: " + origin);
-          console.log("week: " + chap);
+          //console.log("user: " + userid);
+          //console.log("course: " + course);
+          //console.log("origin: " + origin);
+          //console.log("week: " + chap);
           $('#dx-username').text(username);
           return datas;
         }
@@ -215,7 +215,7 @@
   } else {
     var corrVid = "";
     var corrQuiz = "";
-    console.log("Data not found!");
+    //console.log("Data not found!");
   };
 };
 
@@ -276,16 +276,16 @@ setTimeout(function(){
   
 function myFunction() {
   subs.push(this.parentNode.parentNode.parentNode.parentNode.id);
-  console.log(subs);
+  //console.log(subs);
   datas.submits = subs;
   $.each(subs, function(i, el){
     if($.inArray(el, uniqueSubs) === -1) uniqueSubs.push(el);
 });
-  console.log(uniqueSubs.length);
+  //console.log(uniqueSubs.length);
   datas.uniqueSubmits = uniqueSubs.length;
   datas.time = new Date();
   datas.index = datas.id + "_" + datas.time.getTime();
-  console.log(datas);
+  //console.log(datas);
 };
 
 
@@ -316,8 +316,8 @@ function myFunction() {
            datas.timeSite = timeSite;
            datas.time = new Date();
            datas.index = datas.id + "_" + datas.time.getTime();
-           console.log(datas);
-           console.log('%c TimeSite: %d', 'background: green; color: white; display: block;', timeSite);
+           //console.log(datas);
+           //console.log('%c TimeSite: %d', 'background: green; color: white; display: block;', timeSite);
            alert("Send datas to server!");
            log();
            addUp();
@@ -716,7 +716,7 @@ function editButtonReset() {
         zLog();
         if (quantGoals.plannedVideos >= 1 && quantGoals.plannedQuiz >= 1 &&  quantGoals.plannedTimes >= 1) {
           respSaved(); 
-          console.log(datas);
+          //console.log(datas);
           get_data();
         } else {
           respError();
@@ -794,13 +794,13 @@ function editButtonReset() {
       $("#replace").toggle();
       $("#startPlan").toggle();
       alert("Send datas to server!");
-      console.log(datas);
+      //console.log(datas);
       get_data();
   };
 
   $(".sequence-nav").unbind('click').click(function () {
     alert("Send datas to server!");
-    console.log(datas);
+    //console.log(datas);
     get_data();
     log();
     zgLog();
@@ -834,7 +834,7 @@ function editButtonReset() {
       
     $.ajax(settings).done(function (response) {
       var aggd = response[0];
-      console.log(aggd);
+      //console.log(aggd);
       var id = response[0]._id.id;
       var week = response[0]._id.week;
       $(".week").text(week);
@@ -876,7 +876,7 @@ var settings = {
   
 $.ajax(settings).done(function (response) {
   var aggd = response[0];
-  console.log(aggd);
+  //console.log(aggd);
   var id = response[0]._id.id;
   var week = response[0]._id.week;
   $(".week").text(week);
@@ -915,7 +915,7 @@ var settings = {
 
 $.ajax(settings).done(function (response) {
   var aggd = response[0];
-  console.log(aggd);
+  //console.log(aggd);
   $("#rVid").text(aggd.vidGoal);
   $("#rQuiz").text(aggd.quizGoal);
   $("#rTime").text(aggd.timeGoal);
@@ -954,7 +954,7 @@ var settings = {
 
 $.ajax(settings).done(function (response) {
   var aggd = response;
-  console.log(aggd);
+  //console.log(aggd);
   $( ".totalVidWatched" ).text(aggd);
   log();
   barGen();
@@ -982,7 +982,7 @@ var settings = {
 
 $.ajax(settings).done(function (response) {
   var aggd = response;
-  console.log(aggd);
+  //console.log(aggd);
   $( ".totalSubmits" ).text(aggd);
 });
 }
@@ -1012,7 +1012,7 @@ $.ajax(settings).done(function (response) {
     return paramObject;
   }
   
-  //Goal: log all data that is send in xhr post requests to console before they are sent
+  //Goal: log all data that is sent in xhr post requests to console before they are sent
   //Code snippet inspired by: http://stackoverflow.com/questions/25335648/how-to-intercept-all-ajax-requests-made-by-different-js-libraries
   var vidlog;
   var plays = [];
@@ -1026,18 +1026,21 @@ $.ajax(settings).done(function (response) {
     (function() {
       var origSend = XMLHttpRequest.prototype.send;
       XMLHttpRequest.prototype.send = function(data) {     
-        console.log("[AJAX SEND CAUGHT]");
-        console.log("[CAUGHT DATA]"+data);
+        //console.log("[AJAX SEND CAUGHT]");
+        //console.log("[CAUGHT DATA]"+data);
         vidlog = splitParamString(data);
         vidlog.time = new Date();
-        console.log(vidlog);
+        //console.log(vidlog);
         if (vidlog.event_type === "play_video") {
           plays.push(vidlog.time);
+          addUp();
+          //console.log('%c TimeSite: %d', 'background: green; color: white; display: block;', timeSite);
         } else if (vidlog.event_type === "pause_video") {
           pauses.push(vidlog.time);
+          addUp();
         } else if (vidlog.event_type === "problem_check") {
           datas.quID = vidlog.event.split("_")[1];
-          console.log("problem" + datas.quID + " caught");
+          //console.log("problem" + datas.quID + " caught");
           log();
           get_data();
         }
@@ -1055,14 +1058,14 @@ function addUp() {
     vidSum[i] = pauses[i] - plays[i];
   };
   durVid = vidSum.reduce(add, 0) / 1000;
-  console.log(durVid);
+  //console.log(durVid);
   if (durVid >= 30 ) {
     datas.vidID = vidlog.event.split("%")[5];
     log();
     get_data();
-    console.log(datas);
+    //console.log(datas);
   } else if (durVid < 30) {
-    console.log("not finished yet");
+    //console.log("not finished yet");
   }
 };
 
@@ -1086,7 +1089,7 @@ function add(a, b) {
 //     myStopFunction();
 //   }
 //   $(".progressbar-text").eq(2).text(replR);
-//   console.log("interval live");
+//   //console.log("interval live");
 // };
 
 // repInt();
