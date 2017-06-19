@@ -113,7 +113,7 @@ var uniqueSubs =[];
     //console.log(datas);
     get_data();
     log();
-  })
+  });
 
 
   function log() {
@@ -137,7 +137,7 @@ var uniqueSubs =[];
         "time": datas.time,
         "index": datas.index
       }
-    }
+    };
       
     $.ajax(settings).done(function (response) {
       var aggd = response[0];
@@ -158,49 +158,49 @@ var uniqueSubs =[];
       var edited = response[0].edited;
       $( ".edited" ).text("Edited: " + edited);
     });
-  };
+  }
 
 //QUANTITATIVE SPLANNING SUBMIT
 function zLog() {
-var settings = {
-  "async": true,
-  "crossDomain": true,
-  "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events/zLog",
-  "method": "POST",
-  "data": {
-    "week": datas.week,
-    "id": datas.id,
-    "course": datas.course,
-    "vert": datas.vert,
-    "edited": datas.edited,
-    "time": datas.time,
-    "vidGoal": datas.quantGoals.plannedVideos,
-    "quizGoal": datas.quantGoals.plannedQuiz,
-    "timeGoal": datas.quantGoals.plannedTimes,
-    "index": datas.index
-  }
-}
+    var settings = {
+      "async": true,
+      "crossDomain": true,
+      "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events/zLog",
+      "method": "POST",
+      "data": {
+        "week": datas.week,
+        "id": datas.id,
+        "course": datas.course,
+        "vert": datas.vert,
+        "edited": datas.edited,
+        "time": datas.time,
+        "vidGoal": datas.quantGoals.plannedVideos,
+        "quizGoal": datas.quantGoals.plannedQuiz,
+        "timeGoal": datas.quantGoals.plannedTimes,
+        "index": datas.index
+            }
+    };
   
-$.ajax(settings).done(function (response) {
-  var aggd = response[0];
-  //console.log(aggd);
-  var id = response[0]._id.id;
-  var week = response[0]._id.week;
-  $(".week").text(week);
-  var id = response[0]._id.id;
-  $(".id").text(id);
-  var course = response[0]._id.course;
-  $(".course").text(course);
-  var lastQuizGoalSet = response[0].lastQuizGoalSet;
-  $(".lastQuizGoalSet").text("Last Quiz Goal" + lastQuizGoalSet);
-  var lastTimeGoalSet = response[0].lastTimeGoalSet;
-  $(".lastTimeGoalSet").text("Last Time Goal" + lastTimeGoalSet);
-  var lastVidGoalSet = response[0].lastVidGoalSet;
-  $(".lastVidGoalSet").text("Last Vid Goal" + lastVidGoalSet);
-  var edited = response[0].edited;
-  $( ".edited" ).text("Edited: " + edited);
-});
-  };
+    $.ajax(settings).done(function (response) {
+      var aggd = response[0];
+      //console.log(aggd);
+      var id = response[0]._id.id;
+      var week = response[0]._id.week;
+      $(".week").text(week);
+      var id = response[0]._id.id;
+      $(".id").text(id);
+      var course = response[0]._id.course;
+      $(".course").text(course);
+      var lastQuizGoalSet = response[0].lastQuizGoalSet;
+      $(".lastQuizGoalSet").text("Last Quiz Goal" + lastQuizGoalSet);
+      var lastTimeGoalSet = response[0].lastTimeGoalSet;
+      $(".lastTimeGoalSet").text("Last Time Goal" + lastTimeGoalSet);
+      var lastVidGoalSet = response[0].lastVidGoalSet;
+      $(".lastVidGoalSet").text("Last Vid Goal" + lastVidGoalSet);
+      var edited = response[0].edited;
+      $( ".edited" ).text("Edited: " + edited);
+    });
+}
 
 
 
@@ -265,14 +265,14 @@ $.ajax(settings).done(function (response) {
     })();
   } else {
     console.log("You're in studio.")
-  };
+  }
 
 
 // Takes the Pauses and Plays arrays and finds total duration between play and pause events
 function addUp() {
   for (i=0; i<= pauses.length-1; i++) {
     vidSum[i] = pauses[i] - plays[i];
-  };
+  }
   durVid = vidSum.reduce(add, 0) / 1000;
   //console.log(durVid);
   if (durVid >= 30 ) {
@@ -283,13 +283,13 @@ function addUp() {
   } else if (durVid < 30) {
     //console.log("not finished yet");
   }
-};
+}
 
 
 // Returns the Sum of an Array
 function add(a, b) {
     return a + b;
-};
+}
 
 
 </script>
