@@ -257,41 +257,53 @@
 <!-- Code for the quality applet -->
 <script type="text/javascript">
 
+
+    //////////////////////////////////////////////
+    //               Global vars                //
+    //////////////////////////////////////////////
+
+    //User data
+    var origin;
+    var userid;
+    var course;
+    var userData = {};
+
+    //Runtime data
+    var dev = true;
+
+    //////////////////////////////////////////////
+    //////////////////////////////////////////////
+
+
+
     //////////////////////////////////////////////
     //             Logging User Data            //
     //////////////////////////////////////////////
 
-    var chap;
-    var seq;
-    var vert;
-    var origin;
-    var username;
-    var userid;
-    var myId;
-    var course;
-    var time;
-    var datas = {};
-    var dev = true;
-
+    // Get the initial user data from edX
     function get_data() {
-        datas = {};
-        datas.edited = 0;
-        username = analytics._user._getTraits().username;
+        userData = {};
+        userData.edited = 0;
+        var username = analytics._user._getTraits().username;
         var url = window.location.href;
         var split = url.split("/");
-        chap = split[6];
-        datas.week = chap;
-        seq = split[7];
+        var chap = split[6];
+        var seq = split[7];
         var block = $('#sequence-list .nav-item.active').data('id');
-        vert = block.split("@").pop();
+        var vertical = block.split("@").pop();
+        var origin = chap+"/"+seq+"/"+vertical;
+
         course = split[4].split(":")[1];
-        origin = chap+"/"+seq+"/"+vert;
         userid = analytics.user()._getId();
-        datas.id = userid;
-        datas.course = course;
-        datas.time = new Date();
-        datas.index = datas.id + "_" + datas.time.getTime();
-        datas.vert = vert;
+
+        userData.userName = username;
+        userData.id = userid;
+        userData.course = course;
+        userData.time = new Date();
+        userData.index = userData.id + "_" + userData.time.getTime();
+        userData.vert = vertical;
+        userData.week = chap;
+
         if(dev) {
             console.log("user: " + userid);
             console.log("course: " + course);
@@ -299,239 +311,16 @@
             console.log("week: " + chap);
             $('#dx-username').text(username);
         }
-        return datas;
     }
 
-    //////////////////////////////////////////////
-    //////////////////////////////////////////////
-
-
+    // Mark that data is edited
     function edited() {
-        datas.edited = 1;
-        datas.time = new Date();
-        datas.index = datas.id + "_" + datas.time.getTime();
+        userData.edited = 1;
+        userData.time = new Date();
+        userData.index = userData.id + "_" + userData.time.getTime();
         log();
-        console.log(datas);
+        console.log(userData);
         get_data();
-    }
-
-    // ***************************************************************
-    // ACTIVITY DATA KEYS
-
-    // TIME: datas.time
-    // Videos: datas.watched
-    // Quiz: datas.uniqueSubmits
-    // ***************************************************************
-
-
-
-    //////////////////////////////////////////////
-    //          Logging User Video Activity       //
-    //////////////////////////////////////////////
-
-
-    //this function is called by the API
-    window.onload = function initDansListeners() {
-        get_data();
-        datas.quantGoals = {};
-        log();
-        pgLog();
-    };
-
-
-
-
-    //////////////////////////////////////////////
-    //////////////////////////////////////////////
-
-
-    //////////////////////////////////////////////
-    //          Logging User Quiz Activity       //
-    //////////////////////////////////////////////
-    // var subs = [];
-    // var uniqueSubs =[];
-
-    // setTimeout(function(){
-    //   for (i=0; i<100; i++) {
-    //     console.log("buttclick1");
-    //     document.getElementsByClassName("submit btn-brand")[i].addEventListener("click", myFunction);
-    //   }
-    // }, 3000);
-
-
-    // function myFunction() {
-    //   subs.push(this.parentNode.parentNode.parentNode.parentNode.id);
-    //   console.log(subs);
-    //   datas.submits = subs;
-    //   $.each(subs, function(i, el){
-    //     if($.inArray(el, uniqueSubs) === -1) uniqueSubs.push(el);
-    // });
-    //   console.log(uniqueSubs.length);
-    //   datas.uniqueSubmits = uniqueSubs.length;
-    //   datas.time = new Date();
-    //   datas.index = datas.id + "_" + datas.time.getTime();
-    //   console.log(datas);
-    // };
-
-
-
-
-    // window.onbeforeunload = function() {
-    //  sendData();
-    // };
-
-
-    //////////////////////////////////////////////
-    //////////////////////////////////////////////
-
-
-    //////////////////////////////////////////////
-    //          Logging User Time Spent        //
-    //////////////////////////////////////////////
-
-    var startTime,timeSite;
-    setTimeout(function(){
-        startTime=new Date();
-    }, 1000);
-
-
-    window.onbeforeunload=function(){
-        timeSite= (new Date()-startTime ) / 1000;
-        datas.timeSite = timeSite;
-        datas.time = new Date();
-        datas.index = datas.id + "_" + datas.time.getTime();
-        console.log(datas);
-        console.log('%c TimeSite: %d', 'background: green; color: white; display: block;', timeSite);
-        alert("Send datas to server!");
-        log();
-        addUp();
-        get_data();
-        return datas;
-    };
-
-
-    //////////////////////////////////////////////
-    //////////////////////////////////////////////
-
-
-    // The DOMContentLoaded is fired when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading. This means that all your initial DOM nodes have been parsed
-
-
-
-    // handle reveal btn
-    var revealBtn = document.getElementById('revealBtn');
-    console.log("buttclick3");
-    revealBtn.addEventListener('click', function(e){
-        reveal();
-    });
-
-
-
-    // handle form submission
-    var myForm = document.getElementById('qlPlan');
-    myForm.addEventListener('submit', function(e){
-        e.preventDefault();
-        datas.quantGoals = {};
-        var textArea = $( "textarea" ).text();
-        x = $( "textarea" ).val() == "Enter your story here...";
-        if (x.toString() == "false") {
-            var textArea = $( "textarea" ).text();
-            datas.id = userid;
-            datas.course = course;
-            datas.qualPlan = $( "textarea" ).val();
-            document.getElementById("planningText").innerHTML = datas.qualPlan;
-            datas.time = new Date();
-            datas.index = datas.id + "_" + datas.time.getTime();
-        } else {
-            datas.id = userid;
-            datas.course = course;
-            datas.time = new Date();
-            datas.index = datas.id + "_" + datas.time.getTime();
-            datas.qualPlan = "No plan yet";
-        }
-        pLog();
-        get_data();
-        respSaved();
-    });
-
-
-    function respSaved() {
-        console.log("saved?");
-        var origTxt = $( "textarea" ).text();
-        $( "textarea" ).val("Response saved!");
-        setTimeout( function() {
-            $( "textarea" ).val(origTxt);
-        }, 3000);
-    }
-
-    function reveal() {
-        $("#replace").toggle();
-        $("#startPlan").toggle();
-        log();
-        get_data();
-    }
-
-    $(".sequence-nav").unbind('click').click(function () {
-        get_data();
-        datas.quantGoals = {};
-        log();
-        zgLog();
-        qgLog();
-        vgLog();
-        pgLog();
-    });
-
-    // QUALITATIVE PLANNING SUBMIT
-    function pLog() {
-        var settings = {
-            "async": true,
-            "crossDomain": true,
-            "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events/pLog",
-            "method": "POST",
-            "data": {
-                "week": datas.week,
-                "id": datas.id,
-                "course": datas.course,
-                "vert": datas.vert,
-                "edited": datas.edited,
-                "qualPlan": datas.qualPlan,
-                "time": datas.time,
-                "index": datas.index
-            }
-        };
-
-        $.ajax(settings).done(function (response) {
-            var aggd = response[0];
-            console.log(aggd);
-            var lastQualGoalSet = response[0].lastQualGoalSet;
-        });
-    }
-
-
-    function pgLog() {
-        var settings = {
-            "async": true,
-            "crossDomain": true,
-            "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events/pLog",
-            "method": "GET",
-            "data": {
-                "week": datas.week,
-                "id": datas.id,
-                "course": datas.course,
-                "vert": datas.vert,
-                "edited": datas.edited,
-                "time": datas.time,
-                "index": datas.index
-            }
-        };
-
-        $.ajax(settings).done(function (response) {
-            var aggd = response[0];
-            console.log(aggd);
-            var lastQualGoalSet = response[0].qualPlan;
-            $("#planningText").text(lastQualGoalSet);
-            $(".lastQualGoalSet").text(lastQualGoalSet);
-        });
     }
 
     // GENERAL LOGGING
@@ -542,18 +331,18 @@
             "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events",
             "method": "POST",
             "data": {
-                "week": datas.week,
-                "id": datas.id,
-                "course": datas.course,
-                "vert": datas.vert,
-                "edited": datas.edited,
-                "vidId": datas.vidID,
-                "uniqueSubmits": datas.uniqueSubmits,
-                "vidDuration": datas.vidDuration,
-                "timeSite": datas.timeSite,
-                "watched": datas.watched,
-                "time": datas.time,
-                "index": datas.index
+                "week": userData.week,
+                "id": userData.id,
+                "course": userData.course,
+                "vert": userData.vert,
+                "edited": userData.edited,
+                "vidId": userData.vidID,
+                "uniqueSubmits": userData.uniqueSubmits,
+                "vidDuration": userData.vidDuration,
+                "timeSite": userData.timeSite,
+                "watched": userData.watched,
+                "time": userData.time,
+                "index": userData.index
             }
         };
 
@@ -582,6 +371,190 @@
         });
     }
 
+    //////////////////////////////////////////////
+    //////////////////////////////////////////////
+
+
+
+
+    // ***************************************************************
+    // ACTIVITY DATA KEYS
+
+    // TIME: datas.time
+    // Videos: datas.watched
+    // Quiz: datas.uniqueSubmits
+    // ***************************************************************
+
+
+
+    //////////////////////////////////////////////
+    //          Logging User Video Activity       //
+    //////////////////////////////////////////////
+
+
+    //this function is called by the API
+    window.onload = function initDansListeners() {
+        get_data();
+        userData.quantGoals = {};
+        log();
+        pgLog();
+    };
+
+
+
+
+    //////////////////////////////////////////////
+    //////////////////////////////////////////////
+
+
+    //////////////////////////////////////////////
+    //          Logging User Time Spent        //
+    //////////////////////////////////////////////
+
+    var startTime,timeSite;
+    setTimeout(function(){
+        startTime=new Date();
+    }, 1000);
+
+
+    window.onbeforeunload=function(){
+        timeSite= (new Date()-startTime ) / 1000;
+        userData.timeSite = timeSite;
+        userData.time = new Date();
+        userData.index = userData.id + "_" + userData.time.getTime();
+        console.log(userData);
+        console.log('%c TimeSite: %d', 'background: green; color: white; display: block;', timeSite);
+        alert("Send datas to server!");
+        log();
+        addUp();
+        get_data();
+        return userData;
+    };
+
+
+    //////////////////////////////////////////////
+    //////////////////////////////////////////////
+
+
+    // The DOMContentLoaded is fired when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading. This means that all your initial DOM nodes have been parsed
+
+
+
+    // handle reveal btn
+    var revealBtn = document.getElementById('revealBtn');
+    console.log("buttclick3");
+    revealBtn.addEventListener('click', function(e){
+        reveal();
+    });
+
+
+
+    // handle form submission
+    var myForm = document.getElementById('qlPlan');
+    myForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        userData.quantGoals = {};
+        var textArea = $( "textarea" ).text();
+        x = $( "textarea" ).val() == "Enter your story here...";
+        if (x.toString() == "false") {
+            var textArea = $( "textarea" ).text();
+            userData.id = userid;
+            userData.course = course;
+            userData.qualPlan = $( "textarea" ).val();
+            document.getElementById("planningText").innerHTML = userData.qualPlan;
+            userData.time = new Date();
+            userData.index = userData.id + "_" + userData.time.getTime();
+        } else {
+            userData.id = userid;
+            userData.course = course;
+            userData.time = new Date();
+            userData.index = userData.id + "_" + userData.time.getTime();
+            userData.qualPlan = "No plan yet";
+        }
+        pLog();
+        get_data();
+        respSaved();
+    });
+
+
+    function respSaved() {
+        console.log("saved?");
+        var origTxt = $( "textarea" ).text();
+        $( "textarea" ).val("Response saved!");
+        setTimeout( function() {
+            $( "textarea" ).val(origTxt);
+        }, 3000);
+    }
+
+    function reveal() {
+        $("#replace").toggle();
+        $("#startPlan").toggle();
+        log();
+        get_data();
+    }
+
+    $(".sequence-nav").unbind('click').click(function () {
+        get_data();
+        userData.quantGoals = {};
+        log();
+        zgLog();
+        qgLog();
+        vgLog();
+        pgLog();
+    });
+
+    // QUALITATIVE PLANNING SUBMIT
+    function pLog() {
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events/pLog",
+            "method": "POST",
+            "data": {
+                "week": userData.week,
+                "id": userData.id,
+                "course": userData.course,
+                "vert": userData.vert,
+                "edited": userData.edited,
+                "qualPlan": userData.qualPlan,
+                "time": userData.time,
+                "index": userData.index
+            }
+        };
+
+        $.ajax(settings).done(function (response) {
+            var aggd = response[0];
+            console.log(aggd);
+            var lastQualGoalSet = response[0].lastQualGoalSet;
+        });
+    }
+
+
+    function pgLog() {
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events/pLog",
+            "method": "GET",
+            "data": {
+                "week": userData.week,
+                "id": userData.id,
+                "course": userData.course,
+                "vert": userData.vert,
+                "edited": userData.edited,
+                "time": userData.time,
+                "index": userData.index
+            }
+        };
+
+        $.ajax(settings).done(function (response) {
+            var aggd = response[0];
+            console.log(aggd);
+            var lastQualGoalSet = response[0].qualPlan;
+            $("#planningText").text(lastQualGoalSet);
+            $(".lastQualGoalSet").text(lastQualGoalSet);
+        });
+    }
 
 
     //QUANTITATIVE SPLANNING SUBMIT
@@ -592,16 +565,16 @@
             "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events/zLog",
             "method": "POST",
             "data": {
-                "week": datas.week,
-                "id": datas.id,
-                "course": datas.course,
-                "vert": datas.vert,
-                "edited": datas.edited,
-                "time": datas.time,
-                "vidGoal": datas.quantGoals.plannedVideos,
-                "quizGoal": datas.quantGoals.plannedQuiz,
-                "timeGoal": datas.quantGoals.plannedTimes,
-                "index": datas.index
+                "week": userData.week,
+                "id": userData.id,
+                "course": userData.course,
+                "vert": userData.vert,
+                "edited": userData.edited,
+                "time": userData.time,
+                "vidGoal": userData.quantGoals.plannedVideos,
+                "quizGoal": userData.quantGoals.plannedQuiz,
+                "timeGoal": userData.quantGoals.plannedTimes,
+                "index": userData.index
             }
         };
 
@@ -669,7 +642,7 @@
                 pauses.push(vidlog.time);
                 addUp();
             } else if (vidlog.event_type === "problem_check") {
-                datas.quID = vidlog.event.split("_")[1];
+                userData.quID = vidlog.event.split("_")[1];
                 //console.log("problem" + datas.quID + " caught");
                 log();
                 get_data();
@@ -694,10 +667,10 @@
         console.log(durVid);
 
         if (durVid >= 30 ) {
-            datas.vidID = vidlog.event.split("%")[5];
+            userData.vidID = vidlog.event.split("%")[5];
             log();
             get_data();
-            console.log(datas);
+            console.log(userData);
         } else if (durVid < 30) {
             console.log("not finished yet");
         }
