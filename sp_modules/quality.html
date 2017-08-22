@@ -417,7 +417,7 @@
     }, 1000);
 
 
-    window.onbeforeunload=function(){
+    window.onbeforeunload = function(){
         timeSite= (new Date()-startTime ) / 1000;
         userData.timeSite = timeSite;
         userData.time = new Date();
@@ -682,26 +682,6 @@
         return a + b;
     }
 
-    // //// //// THIS FUNCTION WOULD REPLACE THE TIME WITH A HOUR:MINUTE FORMAT
-    // function repInt() {
-    //     intrvl = setInterval(replaceTime, 50);
-    // }
-
-    // function myStopFunction() {
-    //     clearInterval(intrvl);
-    // }
-
-    // function replaceTime() {
-    //   if ($(".progressbar-text").eq(2).text() == replR) {
-    //     myStopFunction();
-    //   }
-    //   $(".progressbar-text").eq(2).text(replR);
-    //   console.log("interval live");
-    // };
-
-    // repInt();
-
-
 
 </script>
 
@@ -713,7 +693,7 @@
         <main class="main">
             <p id="header">WHAT DRIVES YOU:</p>
             <p class="left" id="quote">&ldquo;</p>
-            <p class="midd" id="planningText" class="lastQualGoalSet">You haven't set a goal yet. Click "Edit" below to create one.</p>
+            <p class="midd lastQualGoalSet" id="planningText">You haven't set a goal yet. Click "Edit" below to create one.</p>
             <p class="rite" id="quote-close">&rdquo;</p>
             <p class="left"></p>
             <p class="attr"> - <span id="dx-username"></span></p>
