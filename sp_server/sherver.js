@@ -22,7 +22,7 @@ var Event     = require('./app/models/event');
 var pLog 	  = require('./app/models/event');
 var vLog 	  = require('./app/models/event');
 var quLog 	  = require('./app/models/event');
-var zLog 	  = require('./app/models/event')
+var zLog 	  = require('./app/models/event');
 
 // configure body parser, get data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -59,7 +59,9 @@ router.route('/events')
 
 	// create an event (accessed at POST https://server:port/api/events)
 	.post(function(req, res) {
-		
+
+		var response = {};
+
 		var event = new Event();		// create a new instance of the event model
 		event.week 				= req.body.week;  // set the events week (comes from the request)
 		event.id 				= req.body.id;
@@ -88,22 +90,27 @@ router.route('/events')
 			           totalVidWatched: { $sum: "$watched" },
 			           totalTimeSite: { $sum: "$timeSite" },
 			           totalEvents: { $sum: 1 },
-			           edited: { $sum: "$edited" },
+			           edited: { $sum: "$edited" }
 			         }
 			     }
 			   ], function(err,result) {
 			   		console.log(result);
-			   		res.json(result);
+			   		//res.json(result);
+			   		response.insert(result);
+					event.save(function(err) {
+						if (err)
+							return res.send(err);
+
+
+						response.message = 'event created';
+						res.json(response);
+					});
+
 			    }
 			);
 
 
-		event.save(function(err) {
-			if (err)
-				return res.send(err);
 
-			res.json({ message: 'event created!' });
-		});
 
 		
 	})
@@ -190,7 +197,7 @@ router.route('/events/vLog')
 		  .distinct("vidID", { 
 		  		id: req.query.id, 
 		  		week: req.query.week, 
-		  		course: req.query.course,
+		  		course: req.query.course
 		   })
 		  .exec(function(err, result){
 		    res.json(result.length);
@@ -207,7 +214,7 @@ router.route('/events/quLog')
 		  .distinct("quID", { 
 		  		id: req.query.id, 
 		  		week: req.query.week, 
-		  		course: req.query.course,
+		  		course: req.query.course
 		   })
 		  .exec(function(err, result){
 		    res.json(result.length);
