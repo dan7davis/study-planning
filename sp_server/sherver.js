@@ -96,7 +96,7 @@ router.route('/events')
 			   ], function(err,result) {
 			   		console.log(result);
 			   		//res.json(result);
-			   		response.insert(result);
+			   		response.result = result;
 					event.save(function(err) {
 						if (err)
 							return res.send(err);
