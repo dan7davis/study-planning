@@ -103,6 +103,9 @@ router.route('/events')
 
 
 						response.message = 'event created';
+						console.log("<-------------Here is an response------------------>");
+						console.log(response);
+                        console.log("<-------------------------------------------------->");
 						res.json(response);
 					});
 
