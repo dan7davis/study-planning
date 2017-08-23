@@ -150,6 +150,8 @@
         //               Logging User Data           //
         //////////////////////////////////////////////
 
+        var TIME_PER_WEEK = 6;
+
         var chap;
         var seq;
         var vert;
@@ -533,15 +535,15 @@
             document.getElementById("questionIntended").innerHTML= "You planned to answer " +  Number(responseDatas.rQuiz)  + " questions.";
             document.getElementById("timeIntended").innerHTML= "You planned to spend " +   Number(responseDatas.rTime)   + " hours in the course and have spent" + " " + timeR;
 
-            if (vidActual > vidIntended) {
+            if (vidActual >= vidIntended) {
                 $( "#vidIntended" ).text("Goal Completed! You planned for " + vidIntended + " " + "and have watched " + vidActual + " " + "videos!");
             }
 
-            if (questionActual > questionIntended) {
+            if (questionActual >= questionIntended) {
                 $( "#questionIntended" ).text("Goal Completed! You planned for " + questionIntended + " " + "and have watched " + questionActual + " " + "videos!");
             }
 
-            if (timeActual > timeIntended) {
+            if (timeActual >= timeIntended) {
                 $( "#timeIntended" ).text("Goal Completed! You planned for " + timeIntended + " " + "and have spent " + timeR + " " + "hours!");
             }
         }
@@ -679,13 +681,13 @@
 
                 <p class="time">I plan to <i>devote</i>...<br>
                     <br>
-                    <input class="txtenter" id="times" type="text" name="pin" maxlength="4" size="2" input style="font-size:120%"> / 4 <br>
+                    <input class="txtenter" id="times" type="text" name="pin" maxlength="4" size="2" input style="font-size:120%"> / <span id="weekTime"></span> <br>
                     <br>
                     hours to the course. </p>
 
             </div>
             <p id="subConfirm">Response saved!</p>
-            <p id="subError">Invalid Response: Please enter numbers only.</p>
+            <p id="subError"></p>
             <p class="pHolder" style="visibility: hidden">Place</p>
 
             <input type="submit" value="Submit" class="emerald-flat-button">
@@ -709,12 +711,21 @@
                 quantGoals.plannedTimes = Number($( "#times").val());
                 datas.quantGoals = quantGoals;
                 zLog();
-                if (quantGoals.plannedVideos >= 1 && quantGoals.plannedQuiz >= 1 &&  quantGoals.plannedTimes >= 1) {
-                    respSaved();
-                    //console.log(datas);
-                    get_data();
+                //check for positive
+                if (quantGoals.plannedVideos >= 0 && quantGoals.plannedQuiz >= 0 &&  quantGoals.plannedTimes >= 0) {
+                    if (quantGoals.plannedVideos % 1 == 0 && quantGoals.plannedQuiz % 1 == 0 && quantGoals.plannedTimes % 1 == 0) {
+                        if (quantGoals.plannedVideos <= corrVid && quantGoals.plannedQuiz <= corrQuiz ) {
+                            respSaved();
+                            get_data();
+                        } else {
+                            respError("Invalid Response: Video and quiz activity cannot be bigger than total");
+                        }
+
+                    } else {
+                        respError("Invalid Response: Must be a whole number");
+                    }
                 } else {
-                    respError();
+                    respError("Invalid Response: Please enter numbers only.");
                 }
             });
 
@@ -738,7 +749,8 @@
                 $("#subConfirm").css({"visibility": "invisible", "opacity": "1"});
             }
 
-            function respError() {
+            function respError(text) {
+                $("#subError").text(text);
                 $(".pHolder").css("display", "none");
                 $("#subError").css({"visibility": "visible", "display": "block"});
                 setTimeout( function(){
@@ -762,6 +774,7 @@
         function populate() {
             document.getElementById("vidzn").innerHTML=corrVid;
             document.getElementById("quizdzn").innerHTML=corrQuiz;
+            document.getElementById("weekTime").innerHTML=TIME_PER_WEEK;
         }
 
         populate();
@@ -824,25 +837,19 @@
             }
         };
 
-        $.ajax(settings).done(function (response) {
-            var aggd = response[0];
-            //console.log(aggd);
+        $.ajax(settings).done(function (res) {
+            console.log(res);
 
-            console.log(response);
+            var result = res.result[0];
 
-            if (response[0] == undefined){
+            responseDatas.week =  result._id.week;
+            responseDatas.id = result._id.id;
+            responseDatas.course = result._id.course;
 
-            }
-
-            var id = response[0]._id.id;
-            responseDatas.week =  response[0]._id.week;
-            responseDatas.id = response[0]._id.id;
-            responseDatas.course = response[0]._id.course;
-
-            responseDatas.totalEvents = response[0].totalEvents;
-            responseDatas.totalTimeSite = response[0].totalTimeSite;
-            responseDatas.totalVidDuration = response[0].totalVidDuration;
-            responseDatas.edited = response[0].edited;
+            responseDatas.totalEvents = result.totalEvents;
+            responseDatas.totalTimeSite = result.totalTimeSite;
+            responseDatas.totalVidDuration = result.totalVidDuration;
+            responseDatas.edited = result.edited;
 
             if(callback != undefined) {
                 callback(arg1,arg2)
