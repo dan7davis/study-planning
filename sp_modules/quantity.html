@@ -7,21 +7,18 @@
         #videobar {
             margin-top: 20px;
             margin-bottom: 20px;
-            width: 200px;
             height: 100px;
         }
 
         #questionbar {
             margin-top: 20px;
             margin-bottom: 20px;
-            width: 200px;
             height: 100px;
         }
 
         #timebar {
             margin-top: 20px;
             margin-bottom: 20px;
-            width: 200px;
             height: 100px;
         }
 
@@ -57,6 +54,7 @@
             display: flex;
             font-size: 240%;
         }
+
         .emerald-flat-button-small {
             position: relative !important;
             display: block !important;
@@ -78,21 +76,39 @@
             box-shadow: inset 0 -2px #28be68 !important;
             transition: all 0.3s ease 0s !important;
         }
+
+        .titel {
+            text-align: center;
+        }
+
+        .bar {
+            width: 100%;
+        }
+
+        .text {
+            text-align: center;
+            margin-top: 30px;
+        }
+
         .emerald-flat-button-small:hover {
             opacity: 0.75 !important;
         }
+
         .emerald-flat-button-small:active {
             top: 1px !important;
             outline: none !important;
             -webkit-box-shadow: none !important;
             box-shadow: none !important;
         }
+
         #vidIntended {
             max-width: 250px
         }
+
         #questionIntended {
             max-width: 250px
         }
+
         #timeIntended {
             max-width: 250px
         }
@@ -275,7 +291,7 @@
             datas.time = new Date();
             datas.index = datas.id + "_" + datas.time.getTime();
             //console.log(datas);
-        };
+        }
 
 
 
@@ -324,16 +340,25 @@
     <p id="header">Progress towards your goals this week:</p>
     <br>
     <div id="three">
-        <div class="vidFeedback">Videos</div>
-        <div class="quizFeedback">Questions</div>
-        <div class="timeFeedback">Time (Hours)</div>
-    </div>
-    <div id="three">
-        <div id="videobar"></div>
-        <div id="questionbar"></div>
-        <div id="timebar"></div>
-    </div>
+        <div id="col1">
+            <div class="vidFeedback titel">Videos</div>
+            <div id="videobar" class="bar"></div>
+            <div id="vidIntended" class="text"></div>
+        </div>
+        <div id="col2">
+            <div class="quizFeedback titel">Questions</div>
+            <div id="questionbar" class="bar"></div>
+            <div id="questionIntended" class="text"></div>
 
+        </div>
+        <div id="col3">
+            <div class="timeFeedback titel">Time (Hours)</div>
+            <div id="timebar" class="bar"></div>
+            <div id="timeIntended" class="text"></div>
+
+        </div>
+
+    </div>
     </body>
 
     <p class="noPlan"></p>
@@ -491,11 +516,7 @@
 
     <body>
 
-    <div id="three">
-        <div id="vidIntended"></div>
-        <div id="questionIntended"></span></div>
-        <div id="timeIntended"></span></div>
-    </div>
+
 
     <script>
 
@@ -540,11 +561,11 @@
             }
 
             if (questionActual >= questionIntended) {
-                $( "#questionIntended" ).text("Goal Completed! You planned for " + questionIntended + " " + "and have watched " + questionActual + " " + "videos!");
+                $( "#questionIntended" ).text("Goal Completed! You planned for " + questionIntended + " " + "and have answered " + questionActual + " " + "questions!");
             }
 
             if (timeActual >= timeIntended) {
-                $( "#timeIntended" ).text("Goal Completed! You planned for " + timeIntended + " " + "and have spent " + timeR + " " + "hours!");
+                $( "#timeIntended" ).text("Goal Completed! You planned for " + timeIntended + " " + "and have spent " + timeR);
             }
         }
 
@@ -710,17 +731,16 @@
                 quantGoals.plannedQuiz= Number($( "#quizs").val());
                 quantGoals.plannedTimes = Number($( "#times").val());
                 datas.quantGoals = quantGoals;
-                zLog();
                 //check for positive
                 if (quantGoals.plannedVideos >= 0 && quantGoals.plannedQuiz >= 0 &&  quantGoals.plannedTimes >= 0) {
                     if (quantGoals.plannedVideos % 1 == 0 && quantGoals.plannedQuiz % 1 == 0 && quantGoals.plannedTimes % 1 == 0) {
                         if (quantGoals.plannedVideos <= corrVid && quantGoals.plannedQuiz <= corrQuiz ) {
+                            zLog();
                             respSaved();
                             get_data();
                         } else {
                             respError("Invalid Response: Video and quiz activity cannot be bigger than total");
                         }
-
                     } else {
                         respError("Invalid Response: Must be a whole number");
                     }
@@ -734,8 +754,7 @@
             var revealBtn = document.getElementById('revealBtn');
             revealBtn.addEventListener('click', function(e){
                 reveal();
-                log();
-                zgLog();
+                log(zgLog,qgLog,vgLog);
             });
 
             function respSaved() {
@@ -877,7 +896,7 @@
                 "timeGoal": datas.quantGoals.plannedTimes,
                 "index": datas.index
             }
-        }
+        };
 
         $.ajax(settings).done(function (response) {
             var aggd = response[0];
