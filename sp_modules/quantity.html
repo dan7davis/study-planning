@@ -166,6 +166,8 @@
         //               Logging User Data           //
         //////////////////////////////////////////////
 
+        var WRONG_USER = "This modal is inactive.";
+
         var TIME_PER_WEEK = 6;
 
         var chap;
@@ -205,8 +207,12 @@
             console.log("origin: " + origin);
             console.log("week: " + chap);
 
-            if (callback != undefined){
-                callback(arg1,arg2,arg3)
+            if (userid % 4 == 1 || userid % 4 == 3) {
+                if (callback != undefined) {
+                    callback(arg1, arg2, arg3)
+                }
+            } else {
+                $("#startPlan").empty().text(WRONG_USER)
             }
 
             return datas;
@@ -763,7 +769,9 @@
                 setTimeout( function(){
                     $("#subConfirm").fadeTo( "slow", 0 );
                     $(".pHolder").css("display", "block");
-                    $("#subConfirm").css("display", "none")
+                    $("#subConfirm").css("display", "none");
+                    reveal();
+                    log(zgLog,qgLog,vgLog);
                 }, 2000);
                 $("#subConfirm").css({"visibility": "invisible", "opacity": "1"});
             }
