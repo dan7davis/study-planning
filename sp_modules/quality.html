@@ -270,6 +270,7 @@
 
     //Runtime data
     var dev = true;
+    var WRONG_USER = "This modal is inactive.";
 
     //////////////////////////////////////////////
     //////////////////////////////////////////////
@@ -310,6 +311,10 @@
             console.log("origin: " + origin);
             console.log("week: " + chap);
             $('#dx-username').text(username);
+        }
+
+        if (userid % 4 == 0 || userid % 4 == 2) {
+            $("#qualityContent").empty().text(WRONG_USER)
         }
     }
 
