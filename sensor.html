@@ -2,205 +2,205 @@
 <style type="text/css">
 
 
-#rVid {
-  display: none;
-}
-#rQuiz {
-  display: none;
-}
-#rTime {
-  display: none;
-}
-.totalSubmits {
-  display: none;
-}
-.totalVidWatched {
-  display: none;
-}
-.totalTimeSite {
-  display: none;
-}
+    #rVid {
+        display: none;
+    }
+    #rQuiz {
+        display: none;
+    }
+    #rTime {
+        display: none;
+    }
+    .totalSubmits {
+        display: none;
+    }
+    .totalVidWatched {
+        display: none;
+    }
+    .totalTimeSite {
+        display: none;
+    }
 
 </style>
 
 
 
 <script>
-  
-         //////////////////////////////////////////////
-        //               Logging User Data           //
-        //////////////////////////////////////////////
 
-        var chap;
-        var seq;
-        var vert;
-        var origin;
-        var username;
-        var userid;
-        var myId;
-        var course;
-        var time;
-        var datas = {};
+    //////////////////////////////////////////////
+    //               Logging User Data           //
+    //////////////////////////////////////////////
 
-        function get_data() {
-          datas = {};
-          username = analytics._user._getTraits().username;
-          var url = window.location.href;
-          var split = url.split("/");
-          chap = split[6];
-          datas.week = chap;
-          seq = split[7];
-          var block = $('#sequence-list .nav-item.active').data('id');
-          vert = block.split("@").pop();
-          course = split[4].split(":")[1];
-          origin = chap+"/"+seq+"/"+vert;
-          userid = analytics.user()._getId();
-          datas.id = userid;
-          datas.course = course;
-          datas.time = new Date();
-          datas.index = datas.id + "_" + datas.time.getTime();
-          datas.vert = vert;
-          //console.log("user: " + userid);
-          //console.log("course: " + course);
-          //console.log("origin: " + origin);
-          //console.log("week: " + chap);
-          $('#dx-username').text(username);
-          return datas;
-        }
+    var chap;
+    var seq;
+    var vert;
+    var origin;
+    var username;
+    var userid;
+    var myId;
+    var course;
+    var time;
+    var datas = {};
 
-window.onload = function initDansListeners() {
-  get_data();
-  datas.quantGoals = {};
-};
+    function get_data() {
+        datas = {};
+        username = analytics._user._getTraits().username;
+        var url = window.location.href;
+        var split = url.split("/");
+        chap = split[6];
+        datas.week = chap;
+        seq = split[7];
+        var block = $('#sequence-list .nav-item.active').data('id');
+        vert = block.split("@").pop();
+        course = split[4].split(":")[1];
+        origin = chap+"/"+seq+"/"+vert;
+        userid = analytics.user()._getId();
+        datas.id = userid;
+        datas.course = course;
+        datas.time = new Date();
+        datas.index = datas.id + "_" + datas.time.getTime();
+        datas.vert = vert;
+        //console.log("user: " + userid);
+        //console.log("course: " + course);
+        //console.log("origin: " + origin);
+        //console.log("week: " + chap);
+        $('#dx-username').text(username);
+        return datas;
+    }
 
-         //////////////////////////////////////////////
-        //          Logging User Quiz Activity       //
-        //////////////////////////////////////////////
-var subs = [];
-var uniqueSubs =[];
-
-
-
-
-         //////////////////////////////////////////////
-        //          Logging User Time Spent        //
-        //////////////////////////////////////////////
-          
-
-          var startTime,timeSite;
-          setTimeout(function(){
-           startTime=new Date();
-          }, 1000);
-
-
-          window.onbeforeunload=function(){
-           timeSite= (new Date()-startTime ) / 1000;
-           datas.timeSite = timeSite;
-           datas.time = new Date();
-           datas.index = datas.id + "_" + datas.time.getTime();
-           log();
-           addUp();
-           get_data();
-           return datas;
-          }
-
-         //////////////////////////////////////////////
-         //////////////////////////////////////////////
-  
-
-  $(".sequence-nav").unbind('click').click(function () {
-    //alert("Send datas to server!");
-    //console.log(datas);
-    get_data();
-    log();
-  });
-
-
-  function log() {
-    var settings = {
-      "async": true,
-      "crossDomain": true,
-      "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events",
-      "method": "POST",
-      "data": {
-        "week": datas.week,
-        "id": datas.id,
-        "course": datas.course,
-        "vert": datas.vert,
-        "edited": datas.edited,
-        "vidID": datas.vidID,
-        "quID": datas.quID,
-        "uniqueSubmits": datas.uniqueSubmits,
-        "vidDuration": datas.vidDuration,
-        "timeSite": datas.timeSite,
-        "watched": datas.watched,
-        "time": datas.time,
-        "index": datas.index
-      }
+    window.onload = function initDansListeners() {
+        get_data();
+        datas.quantGoals = {};
     };
-      
-    $.ajax(settings).done(function (response) {
-      var aggd = response[0];
-      //console.log(aggd);
-      var id = response[0]._id.id;
-      var week = response[0]._id.week;
-      $(".week").text(week);
-      var id = response[0]._id.id;
-      $(".id").text(id);
-      var course = response[0]._id.course;
-      $(".course").text(course);
-      var totalEvents = response[0].totalEvents;
-      $(".totalEvents").text("Total Events" + totalEvents);
-      var totalTimeSite = response[0].totalTimeSite;
-      $(".totalTimeSite").text(totalTimeSite);
-      var totalVidDuration = response[0].totalVidDuration;
-      $(".totalVidDuration").text("Total Vid Duration" + totalVidDuration);
-      var edited = response[0].edited;
-      $( ".edited" ).text("Edited: " + edited);
-    });
-  }
 
-//QUANTITATIVE SPLANNING SUBMIT
-function zLog() {
-    var settings = {
-      "async": true,
-      "crossDomain": true,
-      "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events/zLog",
-      "method": "POST",
-      "data": {
-        "week": datas.week,
-        "id": datas.id,
-        "course": datas.course,
-        "vert": datas.vert,
-        "edited": datas.edited,
-        "time": datas.time,
-        "vidGoal": datas.quantGoals.plannedVideos,
-        "quizGoal": datas.quantGoals.plannedQuiz,
-        "timeGoal": datas.quantGoals.plannedTimes,
-        "index": datas.index
+    //////////////////////////////////////////////
+    //          Logging User Quiz Activity       //
+    //////////////////////////////////////////////
+    var subs = [];
+    var uniqueSubs =[];
+
+
+
+
+    //////////////////////////////////////////////
+    //          Logging User Time Spent        //
+    //////////////////////////////////////////////
+
+
+    var startTime,timeSite;
+    setTimeout(function(){
+        startTime=new Date();
+    }, 1000);
+
+
+    window.onbeforeunload=function(){
+        timeSite= (new Date()-startTime ) / 1000;
+        datas.timeSite = timeSite;
+        datas.time = new Date();
+        datas.index = datas.id + "_" + datas.time.getTime();
+        log();
+        addUp();
+        get_data();
+        return datas;
+    };
+
+    //////////////////////////////////////////////
+    //////////////////////////////////////////////
+
+
+    $(".sequence-nav").unbind('click').click(function () {
+        //alert("Send datas to server!");
+        //console.log(datas);
+        get_data();
+        log();
+    });
+
+
+    function log() {
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events",
+            "method": "POST",
+            "data": {
+                "week": datas.week,
+                "id": datas.id,
+                "course": datas.course,
+                "vert": datas.vert,
+                "edited": datas.edited,
+                "vidID": datas.vidID,
+                "quID": datas.quID,
+                "uniqueSubmits": datas.uniqueSubmits,
+                "vidDuration": datas.vidDuration,
+                "timeSite": datas.timeSite,
+                "watched": datas.watched,
+                "time": datas.time,
+                "index": datas.index
             }
-    };
-  
-    $.ajax(settings).done(function (response) {
-      var aggd = response[0];
-      //console.log(aggd);
-      var id = response[0]._id.id;
-      var week = response[0]._id.week;
-      $(".week").text(week);
-      var id = response[0]._id.id;
-      $(".id").text(id);
-      var course = response[0]._id.course;
-      $(".course").text(course);
-      var lastQuizGoalSet = response[0].lastQuizGoalSet;
-      $(".lastQuizGoalSet").text("Last Quiz Goal" + lastQuizGoalSet);
-      var lastTimeGoalSet = response[0].lastTimeGoalSet;
-      $(".lastTimeGoalSet").text("Last Time Goal" + lastTimeGoalSet);
-      var lastVidGoalSet = response[0].lastVidGoalSet;
-      $(".lastVidGoalSet").text("Last Vid Goal" + lastVidGoalSet);
-      var edited = response[0].edited;
-      $( ".edited" ).text("Edited: " + edited);
-    });
-}
+        };
+
+        $.ajax(settings).done(function (response) {
+            var aggd = response[0];
+            //console.log(aggd);
+            var id = response[0]._id.id;
+            var week = response[0]._id.week;
+            $(".week").text(week);
+            var id = response[0]._id.id;
+            $(".id").text(id);
+            var course = response[0]._id.course;
+            $(".course").text(course);
+            var totalEvents = response[0].totalEvents;
+            $(".totalEvents").text("Total Events" + totalEvents);
+            var totalTimeSite = response[0].totalTimeSite;
+            $(".totalTimeSite").text(totalTimeSite);
+            var totalVidDuration = response[0].totalVidDuration;
+            $(".totalVidDuration").text("Total Vid Duration" + totalVidDuration);
+            var edited = response[0].edited;
+            $( ".edited" ).text("Edited: " + edited);
+        });
+    }
+
+    //QUANTITATIVE SPLANNING SUBMIT
+    function zLog() {
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://145.100.59.49.surf-hosted.nl:8080/api/events/zLog",
+            "method": "POST",
+            "data": {
+                "week": datas.week,
+                "id": datas.id,
+                "course": datas.course,
+                "vert": datas.vert,
+                "edited": datas.edited,
+                "time": datas.time,
+                "vidGoal": datas.quantGoals.plannedVideos,
+                "quizGoal": datas.quantGoals.plannedQuiz,
+                "timeGoal": datas.quantGoals.plannedTimes,
+                "index": datas.index
+            }
+        };
+
+        $.ajax(settings).done(function (response) {
+            var aggd = response[0];
+            //console.log(aggd);
+            var id = response[0]._id.id;
+            var week = response[0]._id.week;
+            $(".week").text(week);
+            var id = response[0]._id.id;
+            $(".id").text(id);
+            var course = response[0]._id.course;
+            $(".course").text(course);
+            var lastQuizGoalSet = response[0].lastQuizGoalSet;
+            $(".lastQuizGoalSet").text("Last Quiz Goal" + lastQuizGoalSet);
+            var lastTimeGoalSet = response[0].lastTimeGoalSet;
+            $(".lastTimeGoalSet").text("Last Time Goal" + lastTimeGoalSet);
+            var lastVidGoalSet = response[0].lastVidGoalSet;
+            $(".lastVidGoalSet").text("Last Vid Goal" + lastVidGoalSet);
+            var edited = response[0].edited;
+            $( ".edited" ).text("Edited: " + edited);
+        });
+    }
 
 
 
@@ -213,83 +213,83 @@ function zLog() {
 <div class="totalTimeSite"></div>
 
 <script>
-  //function takes a string to be sent via xhr and turns it back into an object to make it easier
-  //to read on the console
-  function splitParamString(input) {
-    if(input == null){
-      return {};
-    }
-    var params = input.split("&");
-    var paramObject = {};
-    params.forEach(function(element) {
-      var keyValue = element.split("=");
-      paramObject[keyValue[0]]=keyValue[1];
-    });
-    return paramObject;
-  }
-  
-  //Goal: log all data that is sent in xhr post requests to console before they are sent
-  //Code snippet inspired by: http://stackoverflow.com/questions/25335648/how-to-intercept-all-ajax-requests-made-by-different-js-libraries
-  var vidlog;
-  var plays = [];
-  var pauses = [];
-  var durVid;
-  var vidSum = [];
-  var url = document.URL;
-
-  // This will break studio if it runs inside of it, so this IF statement make it so the XHR intercept only fires if not in studio
-  if ( url.includes('studio') === false) {
-    (function() {
-      var origSend = XMLHttpRequest.prototype.send;
-      XMLHttpRequest.prototype.send = function(data) {     
-        //console.log("[AJAX SEND CAUGHT]");
-        //console.log("[CAUGHT DATA]"+data);
-        vidlog = splitParamString(data);
-        vidlog.time = new Date();
-        //console.log(vidlog);
-        if (vidlog.event_type === "play_video") {
-          plays.push(vidlog.time);
-          addUp();
-          //console.log('%c TimeSite: %d', 'background: green; color: white; display: block;', timeSite);
-        } else if (vidlog.event_type === "pause_video") {
-          pauses.push(vidlog.time);
-          addUp();
-        } else if (vidlog.event_type === "problem_check") {
-          datas.quID = vidlog.event.split("_")[1];
-          //console.log("problem" + datas.quID + " caught");
-          log();
-          get_data();
+    //function takes a string to be sent via xhr and turns it back into an object to make it easier
+    //to read on the console
+    function splitParamString(input) {
+        if(input == null){
+            return {};
         }
-        origSend.call(this,data);
-        };
-    })();
-  } else {
-    console.log("You're in studio.")
-  }
+        var params = input.split("&");
+        var paramObject = {};
+        params.forEach(function(element) {
+            var keyValue = element.split("=");
+            paramObject[keyValue[0]]=keyValue[1];
+        });
+        return paramObject;
+    }
+
+    //Goal: log all data that is sent in xhr post requests to console before they are sent
+    //Code snippet inspired by: http://stackoverflow.com/questions/25335648/how-to-intercept-all-ajax-requests-made-by-different-js-libraries
+    var vidlog;
+    var plays = [];
+    var pauses = [];
+    var durVid;
+    var vidSum = [];
+    var url = document.URL;
+
+    // This will break studio if it runs inside of it, so this IF statement make it so the XHR intercept only fires if not in studio
+    if ( url.includes('studio') === false) {
+        (function() {
+            var origSend = XMLHttpRequest.prototype.send;
+            XMLHttpRequest.prototype.send = function(data) {
+                //console.log("[AJAX SEND CAUGHT]");
+                //console.log("[CAUGHT DATA]"+data);
+                vidlog = splitParamString(data);
+                vidlog.time = new Date();
+                //console.log(vidlog);
+                if (vidlog.event_type === "play_video") {
+                    plays.push(vidlog.time);
+                    addUp();
+                    //console.log('%c TimeSite: %d', 'background: green; color: white; display: block;', timeSite);
+                } else if (vidlog.event_type === "pause_video") {
+                    pauses.push(vidlog.time);
+                    addUp();
+                } else if (vidlog.event_type === "problem_check") {
+                    datas.quID = vidlog.event.split("_")[1];
+                    //console.log("problem" + datas.quID + " caught");
+                    log();
+                    get_data();
+                }
+                origSend.call(this,data);
+            };
+        })();
+    } else {
+        console.log("You're in studio.")
+    }
 
 
-// Takes the Pauses and Plays arrays and finds total duration between play and pause events
-function addUp() {
-  for (i=0; i<= pauses.length-1; i++) {
-    vidSum[i] = pauses[i] - plays[i];
-  }
-  durVid = vidSum.reduce(add, 0) / 1000;
-  //console.log(durVid);
-  if (durVid >= 30 ) {
-    datas.vidID = vidlog.event.split("%")[5];
-    log();
-    get_data();
-    //console.log(datas);
-  } else if (durVid < 30) {
-    //console.log("not finished yet");
-  }
-}
+    // Takes the Pauses and Plays arrays and finds total duration between play and pause events
+    function addUp() {
+        for (i=0; i<= pauses.length-1; i++) {
+            vidSum[i] = pauses[i] - plays[i];
+        }
+        durVid = vidSum.reduce(add, 0) / 1000;
+        //console.log(durVid);
+        if (durVid >= 30 ) {
+            datas.vidID = vidlog.event.split("%")[5];
+            log();
+            get_data();
+            //console.log(datas);
+        } else if (durVid < 30) {
+            //console.log("not finished yet");
+        }
+    }
 
 
-// Returns the Sum of an Array
-function add(a, b) {
-    return a + b;
-}
+    // Returns the Sum of an Array
+    function add(a, b) {
+        return a + b;
+    }
 
 
 </script>
