@@ -320,7 +320,7 @@
         }, 1000);
 
 
-        window.onbeforeunload=function(){
+        $(window).on("onbeforeunload",function () {
             timeSite= (new Date()-startTime ) / 1000;
             datas.timeSite = timeSite;
             datas.time = new Date();
@@ -332,7 +332,7 @@
             addUp();
             get_data();
             return datas;
-        };
+        });
 
         //////////////////////////////////////////////
         //////////////////////////////////////////////

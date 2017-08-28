@@ -418,7 +418,7 @@
     }, 1000);
 
 
-    window.onbeforeunload = function(){
+    $(window).on("onbeforeunload",function () {
         timeSite= (new Date()-startTime ) / 1000;
         userData.timeSite = timeSite;
         userData.time = new Date();
@@ -430,7 +430,7 @@
         addUp();
         get_data();
         return userData;
-    };
+    });
 
 
     //////////////////////////////////////////////
