@@ -44,7 +44,7 @@
     var returnData = {};
     var trackerArray;
 
-    function get_data(callback, arg1) {
+    function get_data(callback) {
         datas = {};
         username = analytics._user._getTraits().username;
         var url = window.location.href;
@@ -70,7 +70,7 @@
         //Check for old verticals
         //And handles old page close data
 
-        callback(arg1);
+        callback();
 
     }
 
@@ -159,23 +159,17 @@
         };
 
         $.ajax(settingsSP).done(function (responseSP) {
-            var aggd = responseSP[0];
-            //console.log(aggd);
-            var id = responseSP[0]._id.id;
-            var week = responseSP[0]._id.week;
-            $(".week").text(week);
-            var id = responseSP[0]._id.id;
-            $(".id").text(id);
-            var course = responseSP[0]._id.course;
-            $(".course").text(course);
-            var totalEvents = responseSP[0].totalEvents;
-            $(".totalEvents").text("Total Events" + totalEvents);
-            var totalTimeSite = responseSP[0].totalTimeSite;
-            $(".totalTimeSite").text(totalTimeSite);
-            var totalVidDuration = responseSP[0].totalVidDuration;
-            $(".totalVidDuration").text("Total Vid Duration" + totalVidDuration);
-            var edited = responseSP[0].edited;
-            $(".edited").text("Edited: " + edited);
+            console.log("SP check");
+            var result = responseSP.result[0];
+
+            responseDatas.week =  result._id.week;
+            responseDatas.id = result._id.id;
+            responseDatas.course = result._id.course;
+
+            responseDatas.totalEvents = result.totalEvents;
+            responseDatas.totalTimeSite = result.totalTimeSite;
+            responseDatas.totalVidDuration = result.totalVidDuration;
+            responseDatas.edited = result.edited;
         });
 
     }
@@ -191,12 +185,13 @@
                 {
                     "user": userid,
                     "courseId": course,
-                    "section": sectionId,
+                    "section": chap,
                     "verticalId": vert,
                     "eventState": true
                 },
 
             success: function(response) {
+                console.log("RP check");
                 console.log(response);
             }
         };
@@ -219,6 +214,7 @@
         trackerArray.push(tracker);
 
         //Sending data to sever
+        console.log("sending RP");
         $.ajax(settings);
     }
 
@@ -247,20 +243,20 @@
             var aggd = response[0];
             //console.log(aggd);
             var id = response[0]._id.id;
-            var week = response[0]._id.week;
-            $(".week").text(week);
-            var id = response[0]._id.id;
-            $(".id").text(id);
-            var course = response[0]._id.course;
-            $(".course").text(course);
-            var lastQuizGoalSet = response[0].lastQuizGoalSet;
-            $(".lastQuizGoalSet").text("Last Quiz Goal" + lastQuizGoalSet);
-            var lastTimeGoalSet = response[0].lastTimeGoalSet;
-            $(".lastTimeGoalSet").text("Last Time Goal" + lastTimeGoalSet);
-            var lastVidGoalSet = response[0].lastVidGoalSet;
-            $(".lastVidGoalSet").text("Last Vid Goal" + lastVidGoalSet);
-            var edited = response[0].edited;
-            $( ".edited" ).text("Edited: " + edited);
+            responseDatas.week = response[0]._id.week;
+            responseDatas.id = response[0]._id.id;
+            responseDatas.course = response[0]._id.course;
+            responseDatas.lastQuizGoalSet = "Last Quiz Goal" + response[0].lastQuizGoalSet;
+            //$(".lastQuizGoalSet").text(responseDatas.lastQuizGoalSet);
+            responseDatas.lastTimeGoalSet = "Last Time Goal" + response[0].lastTimeGoalSet;
+            //$(".lastTimeGoalSet").text(responseDatas.lastTimeGoalSet);
+            responseDatas.lastVidGoalSet = "Last Vid Goal" + response[0].lastVidGoalSet;
+            //$(".lastVidGoalSet").text(responseDatas.lastVidGoalSet);
+            responseDatas.edited = response[0].edited;
+
+            if(callback != undefined) {
+                callback(arg1,arg2)
+            }
         });
     }
 

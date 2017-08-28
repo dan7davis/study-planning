@@ -141,23 +141,16 @@
         };
 
         $.ajax(settings).done(function (response) {
-            var aggd = response[0];
-            //console.log(aggd);
-            var id = response[0]._id.id;
-            var week = response[0]._id.week;
-            $(".week").text(week);
-            var id = response[0]._id.id;
-            $(".id").text(id);
-            var course = response[0]._id.course;
-            $(".course").text(course);
-            var totalEvents = response[0].totalEvents;
-            $(".totalEvents").text("Total Events" + totalEvents);
-            var totalTimeSite = response[0].totalTimeSite;
-            $(".totalTimeSite").text(totalTimeSite);
-            var totalVidDuration = response[0].totalVidDuration;
-            $(".totalVidDuration").text("Total Vid Duration" + totalVidDuration);
-            var edited = response[0].edited;
-            $( ".edited" ).text("Edited: " + edited);
+            var result = response.result[0];
+
+            responseDatas.week =  result._id.week;
+            responseDatas.id = result._id.id;
+            responseDatas.course = result._id.course;
+
+            responseDatas.totalEvents = result.totalEvents;
+            responseDatas.totalTimeSite = result.totalTimeSite;
+            responseDatas.totalVidDuration = result.totalVidDuration;
+            responseDatas.edited = result.edited;
         });
     }
 
@@ -186,20 +179,20 @@
             var aggd = response[0];
             //console.log(aggd);
             var id = response[0]._id.id;
-            var week = response[0]._id.week;
-            $(".week").text(week);
-            var id = response[0]._id.id;
-            $(".id").text(id);
-            var course = response[0]._id.course;
-            $(".course").text(course);
-            var lastQuizGoalSet = response[0].lastQuizGoalSet;
-            $(".lastQuizGoalSet").text("Last Quiz Goal" + lastQuizGoalSet);
-            var lastTimeGoalSet = response[0].lastTimeGoalSet;
-            $(".lastTimeGoalSet").text("Last Time Goal" + lastTimeGoalSet);
-            var lastVidGoalSet = response[0].lastVidGoalSet;
-            $(".lastVidGoalSet").text("Last Vid Goal" + lastVidGoalSet);
-            var edited = response[0].edited;
-            $( ".edited" ).text("Edited: " + edited);
+            responseDatas.week = response[0]._id.week;
+            responseDatas.id = response[0]._id.id;
+            responseDatas.course = response[0]._id.course;
+            responseDatas.lastQuizGoalSet = "Last Quiz Goal" + response[0].lastQuizGoalSet;
+            //$(".lastQuizGoalSet").text(responseDatas.lastQuizGoalSet);
+            responseDatas.lastTimeGoalSet = "Last Time Goal" + response[0].lastTimeGoalSet;
+            //$(".lastTimeGoalSet").text(responseDatas.lastTimeGoalSet);
+            responseDatas.lastVidGoalSet = "Last Vid Goal" + response[0].lastVidGoalSet;
+            //$(".lastVidGoalSet").text(responseDatas.lastVidGoalSet);
+            responseDatas.edited = response[0].edited;
+
+            if(callback != undefined) {
+                callback(arg1,arg2)
+            }
         });
     }
 
