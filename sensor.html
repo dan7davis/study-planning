@@ -41,9 +41,9 @@
     var course;
     var time;
     var datas = {};
-    var returnData = {};
+    var responseDatas = {};
 
-    function get_data() {
+    function SPget_data() {
         datas = {};
         username = analytics._user._getTraits().username;
         var url = window.location.href;
@@ -70,7 +70,7 @@
     }
 
     window.onload = function initDansListeners() {
-        get_data();
+        SPget_data();
         datas.quantGoals = {};
     };
 
@@ -99,9 +99,9 @@
         datas.timeSite = timeSite;
         datas.time = new Date();
         datas.index = datas.id + "_" + datas.time.getTime();
-        log();
+        SPlog();
         addUp();
-        get_data();
+        SPget_data();
         return datas;
     };
 
@@ -112,12 +112,12 @@
     $(".sequence-nav").unbind('click').click(function () {
         //alert("Send datas to server!");
         //console.log(datas);
-        get_data();
-        log();
+        SPget_data();
+        SPlog();
     });
 
 
-    function log() {
+    function SPlog() {
         var settings = {
             "async": true,
             "crossDomain": true,
@@ -141,6 +141,7 @@
         };
 
         $.ajax(settings).done(function (response) {
+            console.log("log");
             var result = response.result[0];
 
             responseDatas.week =  result._id.week;
@@ -176,6 +177,7 @@
         };
 
         $.ajax(settings).done(function (response) {
+            console.log("Zlog");
             var aggd = response[0];
             //console.log(aggd);
             var id = response[0]._id.id;
@@ -251,8 +253,8 @@
                 } else if (vidlog.event_type === "problem_check") {
                     datas.quID = vidlog.event.split("_")[1];
                     //console.log("problem" + datas.quID + " caught");
-                    log();
-                    get_data();
+                    SPlog();
+                    SPget_data();
                 }
                 origSend.call(this,data);
             };
@@ -271,8 +273,8 @@
         //console.log(durVid);
         if (durVid >= 30 ) {
             datas.vidID = vidlog.event.split("%")[5];
-            log();
-            get_data();
+            SPlog();
+            SPget_data();
             //console.log(datas);
         } else if (durVid < 30) {
             //console.log("not finished yet");
