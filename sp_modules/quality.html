@@ -267,6 +267,7 @@
     var userid;
     var course;
     var userData = {};
+    responseDatas = {};
 
     //Runtime data
     var dev = true;
@@ -329,7 +330,7 @@
     }
 
     // GENERAL LOGGING
-    function log() {
+    function log(callback) {
         var settings = {
             "async": true,
             "crossDomain": true,
@@ -351,28 +352,23 @@
             }
         };
 
-        $.ajax(settings).done(function (response) {
-            var aggd = response[0];
-            console.log(aggd);
-            var id = response[0]._id.id;
-            var week = response[0]._id.week;
-            $(".week").text(week);
-            var id = response[0]._id.id;
-            $(".id").text(id);
-            var course = response[0]._id.course;
-            $(".course").text(course);
-            var totalEvents = response[0].totalEvents;
-            $(".totalEvents").text("Total Events" + totalEvents);
-            var totalSubmits = response[0].totalSubmits;
-            $(".totalSubmits").text("Total Submits" + totalSubmits);
-            var totalTimeSite = response[0].totalTimeSite;
-            $(".totalTimeSite").text("Total TimeSite" + totalTimeSite);
-            var totalVidDuration = response[0].totalVidDuration;
-            $(".totalVidDuration").text("Total Vid Duration" + totalVidDuration);
-            var totalVidWatched = response[0].totalVidWatched;
-            $(".totalVidWatched").text("Total Vids Watched" + totalVidWatched);
-            var edited = response[0].edited;
-            $( ".edited" ).text("Edited: " + edited);
+        $.ajax(settings).done(function (res) {
+            console.log(res);
+
+            var result = res.result[0];
+
+            responseDatas.week =  result._id.week;
+            responseDatas.id = result._id.id;
+            responseDatas.course = result._id.course;
+
+            responseDatas.totalEvents = result.totalEvents;
+            responseDatas.totalTimeSite = result.totalTimeSite;
+            responseDatas.totalVidDuration = result.totalVidDuration;
+            responseDatas.edited = result.edited;
+
+            if(callback != undefined) {
+                callback(arg1,arg2)
+            }
         });
     }
 
@@ -563,7 +559,7 @@
 
 
     //QUANTITATIVE SPLANNING SUBMIT
-    function zLog() {
+    function zLog(callback) {
         var settings = {
             "async": true,
             "crossDomain": true,
@@ -583,25 +579,23 @@
             }
         };
 
-        $.ajax(settings).done(function (response) {
-            var aggd = response[0];
-            console.log(aggd);
-            var id = response[0]._id.id;
-            var week = response[0]._id.week;
-            $(".week").text(week);
-            var id = response[0]._id.id;
-            $(".id").text(id);
-            var course = response[0]._id.course;
-            $(".course").text(course);
-            var lastQuizGoalSet = response[0].lastQuizGoalSet;
-            $(".lastQuizGoalSet").text("Last Quiz Goal" + lastQuizGoalSet);
-            var lastTimeGoalSet = response[0].lastTimeGoalSet;
-            $(".lastTimeGoalSet").text("Last Time Goal" + lastTimeGoalSet);
-            var lastVidGoalSet = response[0].lastVidGoalSet;
-            $(".lastVidGoalSet").text("Last Vid Goal" + lastVidGoalSet);
-            var edited = response[0].edited;
-            $( ".edited" ).text("Edited: " + edited);
-        });
+        var aggd = response[0];
+        //console.log(aggd);
+        var id = response[0]._id.id;
+        responseDatas.week = response[0]._id.week;
+        responseDatas.id = response[0]._id.id;
+        responseDatas.course = response[0]._id.course;
+        responseDatas.lastQuizGoalSet = "Last Quiz Goal" + response[0].lastQuizGoalSet;
+        //$(".lastQuizGoalSet").text(responseDatas.lastQuizGoalSet);
+        responseDatas.lastTimeGoalSet = "Last Time Goal" + response[0].lastTimeGoalSet;
+        //$(".lastTimeGoalSet").text(responseDatas.lastTimeGoalSet);
+        responseDatas.lastVidGoalSet = "Last Vid Goal" + response[0].lastVidGoalSet;
+        //$(".lastVidGoalSet").text(responseDatas.lastVidGoalSet);
+        responseDatas.edited = response[0].edited;
+
+        if(callback != undefined) {
+            callback(arg1,arg2)
+        }
     }
 
 
