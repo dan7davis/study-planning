@@ -190,7 +190,7 @@
         size: 40px;
     }
 
-    textarea#styled {
+    textarea#QualTextArea {
         width: 620px;
         height: 200px;
         border: 5px solid #cccccc;
@@ -270,7 +270,7 @@
     responseDatas = {};
 
     //Runtime data
-    var dev = true;
+    var dev = false;
     var WRONG_USER = "This modal is inactive.";
 
     //////////////////////////////////////////////
@@ -455,13 +455,13 @@
     myForm.addEventListener('submit', function(e){
         e.preventDefault();
         userData.quantGoals = {};
-        var textArea = $( "textarea" ).text();
-        x = $( "textarea" ).val() == "Enter your story here...";
+        var textArea = $( "#QualTextArea" ).text();
+        x = $( "#QualTextArea" ).val() == "Enter your story here...";
         if (x.toString() == "false") {
-            var textArea = $( "textarea" ).text();
+            var textArea = $( "#QualTextArea" ).text();
             userData.id = userid;
             userData.course = course;
-            userData.qualPlan = $( "textarea" ).val();
+            userData.qualPlan = $( "#QualTextArea" ).val();
             document.getElementById("planningText").innerHTML = userData.qualPlan;
             userData.time = new Date();
             userData.index = userData.id + "_" + userData.time.getTime();
@@ -710,7 +710,7 @@
 
         <form id="qlPlan">
             <div id="three">
-                <textarea form="replace" name="styled-textarea" id="styled" onfocus="this.value='';">Enter your motivation here...</textarea>
+                <textarea form="replace" name="styled-textarea" id="QualTextArea" onfocus="this.value='';">Enter your motivation here...</textarea>
             </div>
             <br>
             <p id="buts">
