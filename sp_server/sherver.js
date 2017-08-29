@@ -178,8 +178,6 @@ router.route('/events/pLog')
         event.save(function(err) {
             if (err)
                 return res.send(err);
-
-            res.json({ message: 'pLog event created!' });
         });
 
 
