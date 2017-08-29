@@ -306,12 +306,13 @@
         userData.vert = vertical;
         userData.week = chap;
 
+        $('#dx-username').text(username);
+
         if(dev) {
             console.log("user: " + userid);
             console.log("course: " + course);
             console.log("origin: " + origin);
             console.log("week: " + chap);
-            $('#dx-username').text(username);
         }
 
         if (userid % 4 == 0 || userid % 4 == 2 || userid == 14917292) {
