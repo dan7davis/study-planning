@@ -57,7 +57,7 @@
 
         vert = block.split("@").pop();
         course = split[4].split(":")[1];
-        origin = chap+"/"+seq+"/"+vert;
+        origin = chap + "/" + seq + "/" + vert;
         userid = analytics.user()._getId();
         datas.id = userid;
         datas.course = course;
@@ -70,7 +70,9 @@
         //Check for old verticals
         //And handles old page close data
 
-        callback();
+        if (callback != undefined) {
+            callback();
+        }
 
     }
 
