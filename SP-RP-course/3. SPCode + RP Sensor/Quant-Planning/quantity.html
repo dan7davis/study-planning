@@ -181,6 +181,8 @@
         var time;
         var datas = {};
         var responseDatas = {};
+        var corrVid;
+        var corrQuiz;
 
         function get_data(callback,arg1,arg2,arg3) {
             datas = {};
@@ -220,16 +222,20 @@
         // Retrieve Current Weeks Vid and Quiz Info //
         //////////////////////////////////////////////
 
-        for (i=0; i < mapped.length; i++) {
-            if (mapped[i][0] !== chap) {
-                var corrVid = mapped[i][1];
-                var corrQuiz = mapped[i][2];
-            } else {
-                var corrVid = "";
-                var corrQuiz = "";
-                //console.log("Data not found!");
+        function mapping() {
+            for (i=0; i < mapped.length; i++) {
+                if (mapped[i][0] !== chap) {
+                    corrVid = mapped[i][1];
+                    corrQuiz = mapped[i][2];
+                } else {
+                    corrVid = "";
+                    corrQuiz = "";
+                    //console.log("Data not found!");
+                }
             }
+
         }
+
 
         //////////////////////////////////////////////
 
@@ -260,11 +266,14 @@
 
 
         //this function is called by the API
-        window.onload = function initDansListeners() {
-            get_data(log,zgLog,qgLog,vgLog);
-            datas.quantGoals = {};
-            //log(zgLog,qgLog,vgLog);
-        };
+        $( "#startPlan" ).ready(function() {
+            setTimeout(function () {
+                get_data(log,zgLog,qgLog,vgLog);
+                datas.quantGoals = {};
+                quantSetup();
+            },3000);
+
+        });
 
         //////////////////////////////////////////////
         //////////////////////////////////////////////
@@ -309,33 +318,7 @@
         //////////////////////////////////////////////
 
 
-        //////////////////////////////////////////////
-        //          Logging User Time Spent        //
-        //////////////////////////////////////////////
 
-
-        var startTime,timeSite;
-        setTimeout(function(){
-            startTime=new Date();
-        }, 1000);
-
-
-        $(window).on("onbeforeunload",function () {
-            timeSite= (new Date()-startTime ) / 1000;
-            datas.timeSite = timeSite;
-            datas.time = new Date();
-            datas.index = datas.id + "_" + datas.time.getTime();
-            //console.log(datas);
-            //console.log('%c TimeSite: %d', 'background: green; color: white; display: block;', timeSite);
-            //alert("Send datas to server!");
-            log();
-            addUp();
-            get_data();
-            return datas;
-        });
-
-        //////////////////////////////////////////////
-        //////////////////////////////////////////////
 
 
     </script>
@@ -726,41 +709,6 @@
             // The DOMContentLoaded is fired when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading. This means that all your initial DOM nodes have been parsed
 
 
-            // handle form submission
-            var myForm = document.getElementById('qtPlan');
-            myForm.addEventListener('submit', function(e){
-                e.preventDefault();
-                var quantGoals = {};
-                quantGoals.plannedVideos = Number($( "#vids").val());
-                quantGoals.plannedQuiz= Number($( "#quizs").val());
-                quantGoals.plannedTimes = Number($( "#times").val());
-                datas.quantGoals = quantGoals;
-                //check for positive
-                if (quantGoals.plannedVideos >= 0 && quantGoals.plannedQuiz >= 0 &&  quantGoals.plannedTimes >= 0) {
-                    if (quantGoals.plannedVideos % 1 == 0 && quantGoals.plannedQuiz % 1 == 0 && quantGoals.plannedTimes % 1 == 0) {
-                        if (quantGoals.plannedVideos <= corrVid && quantGoals.plannedQuiz <= corrQuiz ) {
-                            zLog();
-                            respSaved();
-                            get_data();
-                        } else {
-                            respError("Invalid Response: Video and quiz activity cannot be bigger than total");
-                        }
-                    } else {
-                        respError("Invalid Response: Must be a whole number");
-                    }
-                } else {
-                    respError("Invalid Response: Please enter numbers only.");
-                }
-            });
-
-
-            // handle reveal btn
-            var revealBtn = document.getElementById('revealBtn');
-            revealBtn.addEventListener('click', function(e){
-                reveal();
-                log(zgLog,qgLog,vgLog);
-            });
-
             function respSaved() {
                 $(".pHolder").css("display", "none");
                 $("#subConfirm").css({"visibility": "visible", "display": "block"});
@@ -802,7 +750,7 @@
             document.getElementById("weekTime").innerHTML=TIME_PER_WEEK;
         }
 
-        populate();
+
 
     </script>
 
@@ -948,24 +896,26 @@
         $.ajax(settings).done(function (response) {
             var aggd = response[0];
             //console.log(aggd);
-            responseDatas.rVid = aggd.vidGoal;
-            responseDatas.rQuiz = aggd.quizGoal;
-            responseDatas.rTime = aggd.timeGoal;
+            if(aggd.vidGoal != undefined) {
+                responseDatas.rVid = aggd.vidGoal;
+                responseDatas.rQuiz = aggd.quizGoal;
+                responseDatas.rTime = aggd.timeGoal;
 
-            if (aggd.vidGoal >= 1 && aggd.quizGoal >= 1 &&  aggd.timeGoal >= 1) {
-                vgLog();
-                $("#bars").css("display", "block");
-                $( ".noPlan" ).css("display", "none");
-                $( "#editGoals" ).removeClass("emerald-flat-button").addClass("emerald-flat-button-small");
-            }
-            else {
-                $("#bars").css("display", "none");
-                $("#editGoals").addClass("emerald-flat-button").removeClass("emerald-flat-button-small");
-                $( ".noPlan" ).text("You haven't set goals yet this week. Click the 'Edit Goals' button below to get started!");
-            }
+                if (aggd.vidGoal >= 1 && aggd.quizGoal >= 1 && aggd.timeGoal >= 1) {
+                    vgLog();
+                    $("#bars").css("display", "block");
+                    $(".noPlan").css("display", "none");
+                    $("#editGoals").removeClass("emerald-flat-button").addClass("emerald-flat-button-small");
+                }
+                else {
+                    $("#bars").css("display", "none");
+                    $("#editGoals").addClass("emerald-flat-button").removeClass("emerald-flat-button-small");
+                    $(".noPlan").text("You haven't set goals yet this week. Click the 'Edit Goals' button below to get started!");
+                }
 
-            if(callback != undefined) {
-                callback(arg1)
+                if (callback != undefined) {
+                    callback(arg1)
+                }
             }
         });
     }
@@ -1107,6 +1057,74 @@
     // Returns the Sum of an Array
     function add(a, b) {
         return a + b;
+    }
+
+    function quantSetup() {
+        //////////////////////////////////////////////
+        //          Logging User Time Spent        //
+        //////////////////////////////////////////////
+
+
+        var startTime,timeSite;
+        setTimeout(function(){
+            startTime=new Date();
+        }, 1000);
+
+
+        $(window).on("onbeforeunload",function () {
+            timeSite= (new Date()-startTime ) / 1000;
+            datas.timeSite = timeSite;
+            datas.time = new Date();
+            datas.index = datas.id + "_" + datas.time.getTime();
+            //console.log(datas);
+            //console.log('%c TimeSite: %d', 'background: green; color: white; display: block;', timeSite);
+            //alert("Send datas to server!");
+            log();
+            addUp();
+            get_data();
+            return datas;
+        });
+
+        //////////////////////////////////////////////
+        //////////////////////////////////////////////
+
+        // handle form submission
+        var myForm = document.getElementById('qtPlan');
+        myForm.addEventListener('submit', function(e){
+            e.preventDefault();
+            var quantGoals = {};
+            quantGoals.plannedVideos = Number($( "#vids").val());
+            quantGoals.plannedQuiz= Number($( "#quizs").val());
+            quantGoals.plannedTimes = Number($( "#times").val());
+            datas.quantGoals = quantGoals;
+            //check for positive
+            if (quantGoals.plannedVideos >= 0 && quantGoals.plannedQuiz >= 0 &&  quantGoals.plannedTimes >= 0) {
+                if (quantGoals.plannedVideos % 1 == 0 && quantGoals.plannedQuiz % 1 == 0 && quantGoals.plannedTimes % 1 == 0) {
+                    if (quantGoals.plannedVideos <= corrVid && quantGoals.plannedQuiz <= corrQuiz ) {
+                        zLog();
+                        respSaved();
+                        get_data();
+                    } else {
+                        respError("Invalid Response: Video and quiz activity cannot be bigger than total");
+                    }
+                } else {
+                    respError("Invalid Response: Must be a whole number");
+                }
+            } else {
+                respError("Invalid Response: Please enter numbers only.");
+            }
+        });
+
+
+        // handle reveal btn
+        var revealBtn = document.getElementById('revealBtn');
+        revealBtn.addEventListener('click', function(e){
+            reveal();
+            log(zgLog,qgLog,vgLog);
+        });
+
+        mapping();
+        populate();
     }
 
 
