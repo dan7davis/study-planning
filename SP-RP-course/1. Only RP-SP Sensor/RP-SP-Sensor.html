@@ -41,7 +41,7 @@
     var course;
     var time;
     var datas = {};
-    var returnData = {};
+    var responseDatas= {};
     var trackerArray;
 
     function get_data(callback) {
@@ -85,6 +85,7 @@
         if (trackerArray.length > 0){
             var tracker = trackerArray.pop();
             $.ajax(tracker.settings);
+            addUp();
         }
 
         get_data(logRP);
@@ -112,7 +113,7 @@
     }, 1000);
 
 
-    $(window).on("onbeforeunload",function () {
+    $(window).on("beforeunload",function () {
         tracker = trackerArray.pop();
         $.ajax(tracker.settings);
         timeSite= (new Date()-startTime ) / 1000;
@@ -122,7 +123,7 @@
         logSP();
         addUp();
         get_data();
-        return datas;
+        return "unloading";
     });
 
     //////////////////////////////////////////////
