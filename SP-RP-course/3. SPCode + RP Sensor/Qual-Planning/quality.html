@@ -283,7 +283,7 @@
     //////////////////////////////////////////////
 
     // Get the initial user data from edX
-    function get_data() {
+    function Qualget_data() {
         userData = {};
         userData.edited = 0;
         var username = analytics._user._getTraits().username;
@@ -324,13 +324,13 @@
         userData.edited = 1;
         userData.time = new Date();
         userData.index = userData.id + "_" + userData.time.getTime();
-        log();
+        Quallog();
         console.log(userData);
-        get_data();
+        Qualget_data();
     }
 
     // GENERAL LOGGING
-    function log(callback) {
+    function Quallog(callback) {
         var settings = {
             "async": true,
             "crossDomain": true,
@@ -395,9 +395,9 @@
 
     //this function is called by the API
     window.onload = function initDansListeners() {
-        get_data();
+        Qualget_data();
         userData.quantGoals = {};
-        log();
+        Quallog();
         pgLog();
     };
 
@@ -426,9 +426,9 @@
         console.log(userData);
         console.log('%c TimeSite: %d', 'background: green; color: white; display: block;', timeSite);
         alert("Send datas to server!");
-        log();
+        Quallog();
         addUp();
-        get_data();
+        Qualget_data();
         return userData;
     });
 
@@ -473,7 +473,7 @@
             userData.qualPlan = "No plan yet";
         }
         pLog();
-        get_data();
+        Qualget_data();
         respSaved();
     });
 
@@ -490,14 +490,14 @@
     function reveal() {
         $("#replace").toggle();
         $("#startPlan").toggle();
-        log();
-        get_data();
+        Quallog();
+        Qualget_data();
     }
 
     $(".sequence-nav").unbind('click').click(function () {
-        get_data();
+        Qualget_data();
         userData.quantGoals = {};
-        log();
+        Quallog();
         zgLog();
         qgLog();
         vgLog();
@@ -643,8 +643,8 @@
             } else if (vidlog.event_type === "problem_check") {
                 userData.quID = vidlog.event.split("_")[1];
                 //console.log("problem" + datas.quID + " caught");
-                log();
-                get_data();
+                Quallog();
+                Qualget_data();
             }
             origSend.call(this,data);
         };
@@ -667,8 +667,8 @@
 
         if (durVid >= 30 ) {
             userData.vidID = vidlog.event.split("%")[5];
-            log();
-            get_data();
+            Quallog();
+            Qualget_data();
             console.log(userData);
         } else if (durVid < 30) {
             console.log("not finished yet");
