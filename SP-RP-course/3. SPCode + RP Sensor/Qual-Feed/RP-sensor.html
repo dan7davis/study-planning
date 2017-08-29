@@ -41,7 +41,9 @@
         }
 
 
-        callback(arg1);
+        if(callback != undefined) {
+            callback(arg1);
+        }
     }
 
     /**
@@ -103,8 +105,8 @@
 
         //Set the page unload event to when window is closed
         $(window).on("onbeforeunload",function () {
-           var tracker = trackerArray.pop();
-           $.ajax(tracker.settings);
+            var tracker = trackerArray.pop();
+            $.ajax(tracker.settings);
         });
 
 

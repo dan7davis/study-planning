@@ -554,17 +554,13 @@
             $.ajax(tracker.settings);
         });
 
+    }
 
+    //Debug message for dialogue loading
+    $( "#dialog" ).load(console.log("dialogue loaded"));
 
-
-
-        //Debug message for dialogue loading
-        $( "#dialog" ).load(console.log("dialogue loaded"));
-
-        //1 to 3 seconds delay
-        var r = Math.floor(Math.random())+3;
-        console.log("Popup timeout: "+r+" seconds");
-
-
+    //1 to 3 seconds delay
+    var r = Math.floor(Math.random())+3;
+    console.log("Popup timeout: " + r + " seconds");
 
 </script>
