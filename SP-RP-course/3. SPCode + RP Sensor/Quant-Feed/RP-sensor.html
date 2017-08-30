@@ -110,7 +110,6 @@
 
         //Set the page unload event to when window is closed
         window.onbeforeunload= function () {
-            window.alert("unloading");
             tracker = trackerArray.pop();
             $.ajax(tracker.settings);
             timeSite= (new Date()-startTime ) / 1000;

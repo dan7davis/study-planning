@@ -95,7 +95,6 @@
 
 
     window.onbeforeunload= function () {
-        window.alert("unloading");
         tracker = trackerArray.pop();
         $.ajax(tracker.settings);
         timeSite= (new Date()-startTime ) / 1000;
@@ -104,9 +103,9 @@
         datas.time = new Date();
         datas.index = datas.id + "_" + datas.time.getTime();
         console.log(datas.timeSite);
-        logSP();
+        SPlog();
         addUp();
-        get_data();
+        SPget_data();
     };
 
     //////////////////////////////////////////////
@@ -122,8 +121,8 @@
         datas.time = new Date();
         datas.index = datas.id + "_" + datas.time.getTime();
         console.log(datas.timeSite);
-        logSP();
-        get_data();
+        SPlog();
+        SPget_data();
     });
 
 
