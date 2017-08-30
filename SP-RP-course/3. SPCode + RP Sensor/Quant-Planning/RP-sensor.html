@@ -104,9 +104,36 @@
         get_data(log);
 
         //Set the page unload event to when window is closed
-        $(window).on("onbeforeunload",function () {
-            var tracker = trackerArray.pop();
+        window.onbeforeunload= function () {
+            window.alert("unloading");
+            tracker = trackerArray.pop();
             $.ajax(tracker.settings);
+            timeSite= (new Date()-startTime ) / 1000;
+
+            datas.timeSite = timeSite;
+            datas.time = new Date();
+            datas.index = datas.id + "_" + datas.time.getTime();
+            console.log(datas.timeSite);
+            log();
+            addUp();
+            get_data();
+        };
+
+        //////////////////////////////////////////////
+        //////////////////////////////////////////////
+
+
+        $(".sequence-nav").unbind('click').click(function () {
+            //alert("Send datas to server!");
+            //console.log(datas);
+            timeSite= (new Date()-startTime ) / 1000;
+
+            datas.timeSite = timeSite;
+            datas.time = new Date();
+            datas.index = datas.id + "_" + datas.time.getTime();
+            console.log(datas.timeSite);
+            log();
+            get_data();
         });
 
 
