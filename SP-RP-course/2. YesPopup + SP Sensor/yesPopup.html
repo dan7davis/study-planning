@@ -548,12 +548,6 @@
         //get the data and log it
         get_data(log);
 
-        //Set the page unload event to when window is closed
-        $(window).on("onbeforeunload",function () {
-            var tracker = trackerArray.pop();
-            $.ajax(tracker.settings);
-        });
-
     }
 
     //Debug message for dialogue loading
