@@ -113,7 +113,7 @@
     }, 1000);
 
 
-    $(window).on("beforeunload",function () {
+    window.onbeforeunload= function () {
         tracker = trackerArray.pop();
         $.ajax(tracker.settings);
         timeSite= (new Date()-startTime ) / 1000;
@@ -124,7 +124,7 @@
         addUp();
         get_data();
         return "unloading";
-    });
+    };
 
     //////////////////////////////////////////////
     //////////////////////////////////////////////
