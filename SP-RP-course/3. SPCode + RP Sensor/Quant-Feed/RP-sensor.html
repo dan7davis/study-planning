@@ -92,6 +92,11 @@
     }
 
 
+    var startTime,timeSite;
+    setTimeout(function(){
+        startTime=new Date();
+    }, 1000);
+
     /**
      * called on page load.
      */
@@ -104,7 +109,6 @@
         get_data(log);
 
         //Set the page unload event to when window is closed
-        //Set the page unload event to when window is closed
         window.onbeforeunload= function () {
             window.alert("unloading");
             tracker = trackerArray.pop();
@@ -115,9 +119,9 @@
             datas.time = new Date();
             datas.index = datas.id + "_" + datas.time.getTime();
             console.log(datas.timeSite);
-            log();
+            quantlog();
             addUp();
-            get_data();
+            quantget_data();
         };
 
         //////////////////////////////////////////////
@@ -133,8 +137,8 @@
             datas.time = new Date();
             datas.index = datas.id + "_" + datas.time.getTime();
             console.log(datas.timeSite);
-            log();
-            get_data();
+            quantlog();
+            quantget_data();
         });
 
     }

@@ -184,7 +184,7 @@
         var corrVid;
         var corrQuiz;
 
-        function get_data(callback,arg1,arg2,arg3) {
+        function quantget_data(callback,arg1,arg2,arg3) {
             datas = {};
             username = analytics._user._getTraits().username;
             var url = window.location.href;
@@ -268,7 +268,7 @@
         //this function is called by the API
         $( "#startPlan" ).ready(function() {
             setTimeout(function () {
-                get_data(log,zgLog,qgLog,vgLog);
+                quantget_data(quantlog,zgLog,qgLog,vgLog);
                 datas.quantGoals = {};
                 quantSetup();
             },3000);
@@ -527,7 +527,7 @@
             if (tryCount < 3 && (isNaN(hours) || isNaN(minsR))) {
                 console.log(timeActual);
                 console.log("retry total time get attempt: " + tryCount);
-                log();
+                quantlog();
                 console.log(responseDatas);
                 textgen(tryCount+1);
                 return false
@@ -717,7 +717,7 @@
                     $(".pHolder").css("display", "block");
                     $("#subConfirm").css("display", "none");
                     reveal();
-                    log(zgLog,qgLog,vgLog);
+                    quantlog(zgLog,qgLog,vgLog);
                 }, 2000);
                 $("#subConfirm").css({"visibility": "invisible", "opacity": "1"});
             }
@@ -776,17 +776,10 @@
         $("#startPlan").toggle();
         //alert("Send datas to server!");
         //console.log(datas);
-        get_data();
+        quantget_data();
     }
 
-    $(".sequence-nav").unbind('click').click(function () {
-        get_data(log,zgLog,qgLog,vgLog);
-        datas.quantGoals = {};
-        //log(zgLog,qgLog,vgLog);
-        pgLog();
-    });
-
-    function log(callback,arg1,arg2) {
+    function quantlog(callback,arg1,arg2) {
         console.log("log");
         var settings = {
             "async": true,
@@ -1025,8 +1018,8 @@
                 } else if (vidlog.event_type === "problem_check") {
                     datas.quID = vidlog.event.split("_")[1];
                     //console.log("problem" + datas.quID + " caught");
-                    log();
-                    get_data();
+                    quantlog();
+                    quantget_data();
                 }
                 origSend.call(this,data);
             };
@@ -1045,8 +1038,8 @@
         console.log(durVid);
         if (durVid >= 30 ) {
             datas.vidID = vidlog.event.split("%")[5];
-            log();
-            get_data();
+            quantlog();
+            quantget_data();
             console.log(datas);
         } else if (durVid < 30) {
             console.log("not finished yet");
@@ -1064,11 +1057,6 @@
         //          Logging User Time Spent        //
         //////////////////////////////////////////////
 
-
-        var startTime,timeSite;
-        setTimeout(function(){
-            startTime=new Date();
-        }, 1000);
 
 
         //////////////////////////////////////////////
@@ -1089,7 +1077,7 @@
                     if (quantGoals.plannedVideos <= corrVid && quantGoals.plannedQuiz <= corrQuiz ) {
                         zLog();
                         respSaved();
-                        get_data();
+                        quantget_data();
                     } else {
                         respError("Invalid Response: Video and quiz activity cannot be bigger than total");
                     }
@@ -1106,7 +1094,7 @@
         var revealBtn = document.getElementById('revealBtn');
         revealBtn.addEventListener('click', function(e){
             reveal();
-            log(zgLog,qgLog,vgLog);
+            quantlog(zgLog,qgLog,vgLog);
         });
 
         mapping();

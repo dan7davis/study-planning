@@ -92,6 +92,11 @@
     }
 
 
+    var startTime,timeSite;
+    setTimeout(function(){
+        startTime=new Date();
+    }, 1000);
+
     /**
      * called on page load.
      */
@@ -114,9 +119,9 @@
             datas.time = new Date();
             datas.index = datas.id + "_" + datas.time.getTime();
             console.log(datas.timeSite);
-            log();
+            quantlog();
             addUp();
-            get_data();
+            quantget_data();
         };
 
         //////////////////////////////////////////////
@@ -132,8 +137,8 @@
             datas.time = new Date();
             datas.index = datas.id + "_" + datas.time.getTime();
             console.log(datas.timeSite);
-            log();
-            get_data();
+            quantlog();
+            quantget_data();
         });
 
 
