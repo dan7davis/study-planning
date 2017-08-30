@@ -144,6 +144,19 @@
         get_data();
     });
 
+    $(".sequence-bottom").unbind('click').click(function () {
+        //alert("Send datas to server!");
+        //console.log(datas);
+        timeSite= (new Date()-startTime ) / 1000;
+
+        datas.timeSite = timeSite;
+        datas.time = new Date();
+        datas.index = datas.id + "_" + datas.time.getTime();
+        console.log(datas.timeSite);
+        quantlog();
+        quantget_data();
+    });
+
 
     function logSP() {
         var settingsSP = {
