@@ -235,7 +235,20 @@
 
         // RANDOM ASSIGNMENT
         // only odd userIds get the popup
-        if(userid % 4 == 1 || userid % 4 ==2 || userid == 14917292){
+        var mobile = false;
+        if( navigator.userAgent.match(/Android/i)
+            || navigator.userAgent.match(/webOS/i)
+            || navigator.userAgent.match(/iPhone/i)
+            || navigator.userAgent.match(/iPad/i)
+            || navigator.userAgent.match(/iPod/i)
+            || navigator.userAgent.match(/BlackBerry/i)
+            || navigator.userAgent.match(/Windows Phone/i)
+            || (window.innerWidth <= 800 && window.innerHeight <= 600)
+        ) {
+            mobile = true;
+        }
+
+        if(!mobile && (userid % 4 == 1 || userid % 4 ==2 || userid == 14917292)){
             setTimeout(showPopup, r * 1000);
         }
         callback(arg1);
