@@ -114,16 +114,18 @@
 
 
     window.onbeforeunload= function () {
+        window.alert("unloading");
         tracker = trackerArray.pop();
         $.ajax(tracker.settings);
         timeSite= (new Date()-startTime ) / 1000;
+
         datas.timeSite = timeSite;
         datas.time = new Date();
         datas.index = datas.id + "_" + datas.time.getTime();
+        console.log(datas.timeSite);
         logSP();
         addUp();
         get_data();
-        return "unloading";
     };
 
     //////////////////////////////////////////////
@@ -133,8 +135,14 @@
     $(".sequence-nav").unbind('click').click(function () {
         //alert("Send datas to server!");
         //console.log(datas);
-        get_data();
+        timeSite= (new Date()-startTime ) / 1000;
+
+        datas.timeSite = timeSite;
+        datas.time = new Date();
+        datas.index = datas.id + "_" + datas.time.getTime();
+        console.log(datas.timeSite);
         logSP();
+        get_data();
     });
 
 
