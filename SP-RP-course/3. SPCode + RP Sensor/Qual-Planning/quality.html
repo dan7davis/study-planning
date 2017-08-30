@@ -419,20 +419,6 @@
     }, 1000);
 
 
-    $(window).on("onbeforeunload",function () {
-        timeSite= (new Date()-startTime ) / 1000;
-        userData.timeSite = timeSite;
-        userData.time = new Date();
-        userData.index = userData.id + "_" + userData.time.getTime();
-        console.log(userData);
-        console.log('%c TimeSite: %d', 'background: green; color: white; display: block;', timeSite);
-        alert("Send datas to server!");
-        Quallog();
-        addUp();
-        Qualget_data();
-        return userData;
-    });
-
 
     //////////////////////////////////////////////
     //////////////////////////////////////////////
