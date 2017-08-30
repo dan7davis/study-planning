@@ -238,8 +238,10 @@
         function mapping() {
             for (i=0; i < mapped.length; i++) {
                 if (mapped[i][0] !== chap) {
-                    corrVid = mapped[i][1];
-                    corrQuiz = mapped[i][2];
+                    if(mapped[i][0] == datas.week) {
+                        corrVid = mapped[i][1];
+                        corrQuiz = mapped[i][2];
+                    }
                 } else {
                     corrVid = "";
                     corrQuiz = "";
