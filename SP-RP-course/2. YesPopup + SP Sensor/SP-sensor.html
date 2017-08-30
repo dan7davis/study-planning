@@ -94,15 +94,19 @@
     }, 1000);
 
 
-    window.onbeforeunload=function(){
+    window.onbeforeunload= function () {
+        window.alert("unloading");
+        tracker = trackerArray.pop();
+        $.ajax(tracker.settings);
         timeSite= (new Date()-startTime ) / 1000;
+
         datas.timeSite = timeSite;
         datas.time = new Date();
         datas.index = datas.id + "_" + datas.time.getTime();
-        SPlog();
+        console.log(datas.timeSite);
+        logSP();
         addUp();
-        SPget_data();
-        return datas;
+        get_data();
     };
 
     //////////////////////////////////////////////
@@ -112,8 +116,14 @@
     $(".sequence-nav").unbind('click').click(function () {
         //alert("Send datas to server!");
         //console.log(datas);
-        SPget_data();
-        SPlog();
+        timeSite= (new Date()-startTime ) / 1000;
+
+        datas.timeSite = timeSite;
+        datas.time = new Date();
+        datas.index = datas.id + "_" + datas.time.getTime();
+        console.log(datas.timeSite);
+        logSP();
+        get_data();
     });
 
 
