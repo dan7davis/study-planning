@@ -236,19 +236,12 @@
         //////////////////////////////////////////////
 
         function mapping() {
-            for (i=0; i < mapped.length; i++) {
-                if (mapped[i][0] !== chap) {
-                    if(mapped[i][0] == datas.week) {
-                        corrVid = mapped[i][1];
-                        corrQuiz = mapped[i][2];
-                    }
-                } else {
-                    corrVid = "";
-                    corrQuiz = "";
-                    //console.log("Data not found!");
+            for (var i=0; i < mapped.length; i++) {
+                if(mapped[i][0] == datas.week) {
+                    corrVid = mapped[i][1];
+                    corrQuiz = mapped[i][2];
                 }
             }
-
         }
 
 
