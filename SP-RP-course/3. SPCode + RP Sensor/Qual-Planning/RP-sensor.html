@@ -115,10 +115,10 @@
             $.ajax(tracker.settings);
             timeSite= (new Date()-startTime ) / 1000;
 
-            datas.timeSite = timeSite;
-            datas.time = new Date();
-            datas.index = datas.id + "_" + datas.time.getTime();
-            console.log(datas.timeSite);
+            userData.timeSite = timeSite;
+            userData.time = new Date();
+            userData.index = datas.id + "_" + userData.time.getTime();
+            console.log(userData.timeSite);
             Quallog();
             addUp();
             Qualget_data();
@@ -133,9 +133,9 @@
             //console.log(datas);
             timeSite= (new Date()-startTime ) / 1000;
 
-            datas.timeSite = timeSite;
-            datas.time = new Date();
-            datas.index = datas.id + "_" + datas.time.getTime();
+            userData.timeSite = timeSite;
+            userData.time = new Date();
+            userData.index = datas.id + "_" + userData.time.getTime();
             console.log(datas.timeSite);
             Quallog();
             Qualget_data();
