@@ -12,7 +12,6 @@ var options = {
     key: fs.readFileSync('../../../certs/server.key'),
     cert: fs.readFileSync('../../../certs/lambda-rp_ewi_tudelft_nl.crt')
 };
-var querystring = require('querystring');
 
 var mongoose   = require('mongoose');
 //mongoose.set('debug', true);
@@ -49,7 +48,8 @@ mongoose.connect(dbURI,{
     server: {
         socketOptions: {
             socketTimeoutMS: 0,
-            connectionTimeout: 0
+            connectionTimeout: 0,
+            poolSize: 4
         }
     }
 });
