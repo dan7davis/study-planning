@@ -127,8 +127,10 @@ router.route('/events')
     // get all the events (accessed at GET http://localhost:8080/api/events)
     .get(function(req, res) {
         Event.find({}, function(err, events) {
-            if (err)
+            if (err) {
+                console.log("db error");
                 return res.send(err);
+            }
 
             console.log("getting events");
             res.json(events);
