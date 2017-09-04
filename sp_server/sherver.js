@@ -17,11 +17,11 @@ var querystring = require('querystring');
 var mongoose   = require('mongoose');
 //mongoose.set('debug', true);
 mongoose.connect('localhost:27017/sp_exp'); // connect to our database
-var Event     = require('/app/models/event');
-var pLog 	  = require('/app/models/event');
-var vLog 	  = require('/app/models/event');
-var quLog 	  = require('/app/models/event');
-var zLog 	  = require('/app/models/event');
+var Event     = require('./app/models/event');
+var pLog 	  = require('./app/models/event');
+var vLog 	  = require('./app/models/event');
+var quLog 	  = require('./app/models/event');
+var zLog 	  = require('./app/models/event');
 
 // configure body parser, get data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
