@@ -17,13 +17,26 @@ var querystring = require('querystring');
 var mongoose   = require('mongoose');
 //mongoose.set('debug', true);
 
-console.log(mongoose.connection.readyState);
-mongoose.connect('localhost:27017/sp_exp', function (error) {
-    console.log(error);
-}); // connect to our database
-console.log(mongoose.connection.readyState);
+// Build the connection string
+var dbURI = 'mongodb://localhost/sp_exp';
+
+// Create the database connection
+mongoose.connect(dbURI);
+
+// CONNECTION EVENTS
+// When successfully connected
 mongoose.connection.on('connected', function () {
-    console.log("Connection was made")
+    console.log('Mongoose default connection open to ' + dbURI);
+});
+
+// If the connection throws an error
+mongoose.connection.on('error',function (err) {
+    console.log('Mongoose default connection error: ' + err);
+});
+
+// When the connection is disconnected
+mongoose.connection.on('disconnected', function () {
+    console.log('Mongoose default connection disconnected');
 });
 var Event     = require('./app/models/event');
 var pLog 	  = require('./app/models/event');
