@@ -150,7 +150,7 @@ router.route('/events/pLog')
 
 // create an event (accessed at POST https://server:port/api/events)
     .post(function(req, res) {
-        console.log(req.body);
+        //console.log(req.body);
         var event = new pLog();		// create a new instance of the event model
         event.week 				= req.body.week;  // set the events week (comes from the request)
         event.id 				= req.body.id;
@@ -163,8 +163,10 @@ router.route('/events/pLog')
 
 
         event.save(function(err) {
-            if (err)
+            if (err) {
+                console.log(err);
                 return res.send(err);
+            }
         });
 
         // SUM OF ALL QUANT VARIABLES GROUPED BY LEARNER COURSE WEEK
@@ -185,6 +187,7 @@ router.route('/events/pLog')
                         }
                 }
             ], function(err,result) {
+                console.log("found somthing:");
                 console.log(result);
                 res.json(result);
             }
