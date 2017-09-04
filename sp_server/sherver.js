@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // set our port
-var port     = process.env.PORT || 8181; // set our port
+var port     = process.env.PORT || 8080; // set our port
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
