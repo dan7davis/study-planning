@@ -16,6 +16,30 @@ var querystring = require('querystring');
 
 var mongoose   = require('mongoose');
 //mongoose.set('debug', true);
+var Schema 				= mongoose.Schema;
+
+var EventSchema 		= new Schema({
+    week: 			String,
+    id: 			String,
+    course: 		String,
+    time: 			Date,
+    index: 			String,
+    vert: 			String,
+    edited: 		Number,
+    vidID: 			String,
+    quID: 			String,
+    vidDuration: 	Number,
+    watched: 		Number,
+    submits: 		String,
+    uniqueSubmits: 	Number,
+    timeSite: 		Number,
+    qualPlan: 		String,
+    vidGoal: 		Number,
+    quizGoal: 		Number,
+    timeGoal: 		Number
+});
+
+
 
 // Build the connection string
 var dbURI = 'localhost:27017/SP';
@@ -38,11 +62,11 @@ mongoose.connection.on('error',function (err) {
 mongoose.connection.on('disconnected', function () {
     console.log('Mongoose default connection disconnected');
 });
-var Event     = require('./app/models/event');
-var pLog 	  = require('./app/models/event');
-var vLog 	  = require('./app/models/event');
-var quLog 	  = require('./app/models/event');
-var zLog 	  = require('./app/models/event');
+var Event     = mongoose.model('Event', EventSchema);
+var pLog 	  = mongoose.model('Event', EventSchema);
+var vLog 	  = mongoose.model('Event', EventSchema);
+var quLog 	  = mongoose.model('Event', EventSchema);
+var zLog 	  = mongoose.model('Event', EventSchema);
 
 // configure body parser, get data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
