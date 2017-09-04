@@ -15,13 +15,13 @@ var options = {
 var querystring = require('querystring');
 
 var mongoose   = require('mongoose');
-mongoose.set('debug', true);
+//mongoose.set('debug', true);
 mongoose.connect('localhost:27017/sp_exp'); // connect to our database
-var Event     = require('./app/models/event');
-var pLog 	  = require('./app/models/event');
-var vLog 	  = require('./app/models/event');
-var quLog 	  = require('./app/models/event');
-var zLog 	  = require('./app/models/event');
+var Event     = require('/app/models/event');
+var pLog 	  = require('/app/models/event');
+var vLog 	  = require('/app/models/event');
+var quLog 	  = require('/app/models/event');
+var zLog 	  = require('/app/models/event');
 
 // configure body parser, get data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -78,42 +78,42 @@ router.route('/events')
         event.timeSite 			= req.body.timeSite;
 
         // SUM OF ALL QUANT VARIABLES GROUPED BY LEARNER COURSE WEEK
-        Event.aggregate(
-            [
-                {
-                    $match: {
-                        id: req.body.id,
-                        course: req.body.course,
-                        week: req.body.week
-                    }
-                },
-                {
-                    $group:
+        event.save(function(err) {
+                if (err)
+                    return res.send(err);
+
+                Event.aggregate(
+                    [
                         {
-                            _id: { id: req.body.id, course: req.body.course, week: req.body.week },
-                            totalSubmits: { $sum: "$uniqueSubmits" },
-                            totalVidDuration: { $sum: "$vidDuration" },
-                            totalVidWatched: { $sum: "$watched" },
-                            totalTimeSite: { $sum: "$timeSite" },
-                            totalEvents: { $sum: 1 },
-                            edited: { $sum: "$edited" }
+                            $match: {
+                                id: req.body.id,
+                                course: req.body.course,
+                                week: req.body.week
+                            }
+                        },
+                        {
+                            $group:
+                                {
+                                    _id: { id: req.body.id, course: req.body.course, week: req.body.week },
+                                    totalSubmits: { $sum: "$uniqueSubmits" },
+                                    totalVidDuration: { $sum: "$vidDuration" },
+                                    totalVidWatched: { $sum: "$watched" },
+                                    totalTimeSite: { $sum: "$timeSite" },
+                                    totalEvents: { $sum: 1 },
+                                    edited: { $sum: "$edited" }
+                                }
                         }
-                }
-            ], function(err,result) {
-                console.log(result);
-                //res.json(result);
-                response.result = result;
-                event.save(function(err) {
-                    if (err)
-                        return res.send(err);
+                    ], function(err,result) {
+                        console.log(result);
+                        //res.json(result);
+                        response.result = result;
 
-
-                    response.message = 'event created';
-                    console.log("<-------------Here is an response------------------>");
-                    console.log(response);
-                    console.log("<-------------------------------------------------->");
-                    res.json(response);
-                });
+                        response.message = 'event created';
+                        console.log("<-------------Here is an response------------------>");
+                        console.log(response);
+                        console.log("<-------------------------------------------------->");
+                        res.json(response);
+                    });
 
             }
         );
@@ -157,6 +157,11 @@ router.route('/events/pLog')
         event.qualPlan 			= req.body.qualPlan;
 
 
+        event.save(function(err) {
+            if (err)
+                return res.send(err);
+        });
+
         // SUM OF ALL QUANT VARIABLES GROUPED BY LEARNER COURSE WEEK
         pLog.aggregate(
             [
@@ -181,10 +186,7 @@ router.route('/events/pLog')
         );
 
 
-        event.save(function(err) {
-            if (err)
-                return res.send(err);
-        });
+
 
 
     })
@@ -259,6 +261,12 @@ router.route('/events/zLog')
         event.quizGoal 			= req.body.quizGoal;
         event.timeGoal 			= req.body.timeGoal;
 
+
+        event.save(function(err) {
+            if (err)
+                return res.send(err);
+        });
+
         // SUM OF ALL QUANT VARIABLES GROUPED BY LEARNER COURSE WEEK
         zLog.aggregate(
             [
@@ -285,12 +293,7 @@ router.route('/events/zLog')
         );
 
 
-        event.save(function(err) {
-            if (err)
-                return res.send(err);
 
-            res.json({ message: 'zLog event created!' });
-        });
 
 
     })
