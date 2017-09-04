@@ -130,6 +130,7 @@ router.route('/events')
             if (err)
                 return res.send(err);
 
+            console.log("getting events");
             res.json(events);
         });
     });
