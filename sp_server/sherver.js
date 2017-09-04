@@ -79,8 +79,13 @@ router.route('/events')
 
         // SUM OF ALL QUANT VARIABLES GROUPED BY LEARNER COURSE WEEK
         event.save(function(err) {
-                if (err)
+                if (err) {
+                    console.log("save error");
+                    console.log(err);
                     return res.send(err);
+
+                }
+                console.log("saved!!");
 
                 Event.aggregate(
                     [
