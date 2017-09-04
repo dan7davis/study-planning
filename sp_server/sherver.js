@@ -18,7 +18,7 @@ var mongoose   = require('mongoose');
 //mongoose.set('debug', true);
 
 // Build the connection string
-var dbURI = 'mongodb://localhost/sp_exp';
+var dbURI = 'localhost:27017/SP';
 
 // Create the database connection
 mongoose.connect(dbURI);
