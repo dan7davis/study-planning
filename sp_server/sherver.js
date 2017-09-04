@@ -22,6 +22,9 @@ mongoose.connect('localhost:27017/sp_exp', function (error) {
     console.log(error);
 }); // connect to our database
 console.log(mongoose.connection.readyState);
+mongoose.connection.on('connected', function () {
+    console.log("Connection was made")
+});
 var Event     = require('./app/models/event');
 var pLog 	  = require('./app/models/event');
 var vLog 	  = require('./app/models/event');
