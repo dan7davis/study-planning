@@ -134,6 +134,9 @@ router.route('/events')
             }
 
             console.log("getting events");
+            if (events.length == 0){
+                res.end("no elements")
+            }
             res.json(events);
         });
     });
