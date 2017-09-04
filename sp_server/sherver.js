@@ -16,7 +16,7 @@ var querystring = require('querystring');
 
 var mongoose   = require('mongoose');
 mongoose.set('debug', true);
-mongoose.connect('mongodb://localhost/sp_exp'); // connect to our database
+mongoose.connect('localhost:27017/sp_exp'); // connect to our database
 var Event     = require('./app/models/event');
 var pLog 	  = require('./app/models/event');
 var vLog 	  = require('./app/models/event');
