@@ -45,7 +45,14 @@ var EventSchema 		= new Schema({
 var dbURI = 'localhost:27017/SP';
 
 // Create the database connection
-mongoose.connect(dbURI);
+mongoose.connect(dbURI,{
+    server: {
+        socketOptions: {
+            socketTimeoutMS: 0,
+            connectionTimeout: 0
+        }
+    }
+});
 
 // CONNECTION EVENTS
 // When successfully connected
