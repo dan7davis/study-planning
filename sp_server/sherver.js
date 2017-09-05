@@ -9,35 +9,17 @@ var https = require('https');
 var http = require('http');
 var fs = require('fs');
 var options = {
-    key: fs.readFileSync('../../../../../etc/letsencrypt/live/lambda-sp.ewi.tudelft.nl/privkey.pem'),
-    cert: fs.readFileSync('../../../../../etc/letsencrypt/live/lambda-sp.ewi.tudelft.nl/fullchain.pem')
+    key: fs.readFileSync('../../../certs/server.key'),
+    cert: fs.readFileSync('../../../certs/lambda-rp_ewi_tudelft_nl.crt')
 };
 
 var mongoose   = require('mongoose');
 //mongoose.set('debug', true);
-var Schema 				= mongoose.Schema;
-
-var EventSchema 		= new Schema({
-    week: 			String,
-    id: 			String,
-    course: 		String,
-    time: 			Date,
-    index: 			String,
-    vert: 			String,
-    edited: 		Number,
-    vidID: 			String,
-    quID: 			String,
-    vidDuration: 	Number,
-    watched: 		Number,
-    submits: 		String,
-    uniqueSubmits: 	Number,
-    timeSite: 		Number,
-    qualPlan: 		String,
-    vidGoal: 		Number,
-    quizGoal: 		Number,
-    timeGoal: 		Number
-});
-
+var Event     = require('./app/models/event');
+var pLog 	  = require('./app/models/event');
+var vLog 	  = require('./app/models/event');
+var quLog 	  = require('./app/models/event');
+var zLog 	  = require('./app/models/event');
 
 
 // Build the connection string
@@ -99,7 +81,6 @@ var router = express.Router();
 // middleware to use for all requests
 router.use(function(req, res, next) {
     console.log('Something is happening.');
-    console.log(mongoose.connection.readyState);
     next();
 });
 
@@ -131,47 +112,42 @@ router.route('/events')
         event.timeSite 			= req.body.timeSite;
 
         // SUM OF ALL QUANT VARIABLES GROUPED BY LEARNER COURSE WEEK
-        event.save(function(err) {
-                if (err) {
-                    console.log("save error");
-                    console.log(err);
-                    return res.send(err);
-
-                }
-                console.log("saved!!");
-
-                Event.aggregate(
-                    [
+        Event.aggregate(
+            [
+                {
+                    $match: {
+                        id: req.body.id,
+                        course: req.body.course,
+                        week: req.body.week
+                    }
+                },
+                {
+                    $group:
                         {
-                            $match: {
-                                id: req.body.id,
-                                course: req.body.course,
-                                week: req.body.week
-                            }
-                        },
-                        {
-                            $group:
-                                {
-                                    _id: { id: req.body.id, course: req.body.course, week: req.body.week },
-                                    totalSubmits: { $sum: "$uniqueSubmits" },
-                                    totalVidDuration: { $sum: "$vidDuration" },
-                                    totalVidWatched: { $sum: "$watched" },
-                                    totalTimeSite: { $sum: "$timeSite" },
-                                    totalEvents: { $sum: 1 },
-                                    edited: { $sum: "$edited" }
-                                }
+                            _id: { id: req.body.id, course: req.body.course, week: req.body.week },
+                            totalSubmits: { $sum: "$uniqueSubmits" },
+                            totalVidDuration: { $sum: "$vidDuration" },
+                            totalVidWatched: { $sum: "$watched" },
+                            totalTimeSite: { $sum: "$timeSite" },
+                            totalEvents: { $sum: 1 },
+                            edited: { $sum: "$edited" }
                         }
-                    ], function(err,result) {
-                        console.log(result);
-                        //res.json(result);
-                        response.result = result;
+                }
+            ], function(err,result) {
+                console.log(result);
+                //res.json(result);
+                response.result = result;
+                event.save(function(err) {
+                    if (err)
+                        return res.send(err);
 
-                        response.message = 'event created';
-                        console.log("<-------------Here is an response------------------>");
-                        console.log(response);
-                        console.log("<-------------------------------------------------->");
-                        res.json(response);
-                    });
+
+                    response.message = 'event created';
+                    console.log("<-------------Here is an response------------------>");
+                    console.log(response);
+                    console.log("<-------------------------------------------------->");
+                    res.json(response);
+                });
 
             }
         );
@@ -184,7 +160,6 @@ router.route('/events')
 
     // get all the events (accessed at GET http://localhost:8080/api/events)
     .get(function(req, res) {
-        console.log("event function");
         Event.find({}, function(err, events) {
             if (err) {
                 console.log("db error");
@@ -192,9 +167,6 @@ router.route('/events')
             }
 
             console.log("getting events");
-            if (events.length == 0){
-                res.end("no elements")
-            }
             res.json(events);
         });
     });
