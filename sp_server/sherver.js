@@ -51,11 +51,6 @@ mongoose.connection.on('error',function (err) {
 mongoose.connection.on('disconnected', function () {
     console.log('Mongoose default connection disconnected');
 });
-var Event     = mongoose.model('Event', EventSchema);
-var pLog 	  = mongoose.model('Event', EventSchema);
-var vLog 	  = mongoose.model('Event', EventSchema);
-var quLog 	  = mongoose.model('Event', EventSchema);
-var zLog 	  = mongoose.model('Event', EventSchema);
 
 // configure body parser, get data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
