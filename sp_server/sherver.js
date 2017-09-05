@@ -9,8 +9,8 @@ var https = require('https');
 var http = require('http');
 var fs = require('fs');
 var options = {
-    key: fs.readFileSync('../../../certs/server.key'),
-    cert: fs.readFileSync('../../../certs/lambda-rp_ewi_tudelft_nl.crt')
+    key: fs.readFileSync('../../../../../etc/letsencrypt/live/lambda-sp.ewi.tudelft.nl/privkey.pem'),
+    cert: fs.readFileSync('../../../../../etc/letsencrypt/live/lambda-sp.ewi.tudelft.nl/fullchain.pem')
 };
 
 var mongoose   = require('mongoose');
