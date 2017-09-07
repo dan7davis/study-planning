@@ -1,165 +1,3 @@
-<!-- NO -->
-
-<script type="text/javascript">
-    var sectionId;
-    var seq;
-    var vert;
-    var origin;
-    var username;
-    var userid;
-    var course;
-    var trackerArray;
-
-
-    /**
-     * Gets the user data and course-location.
-     * @param {object} callback - The function that is called after the server
-     * @param {*} arg1 - Argument for the callback function
-     */
-    function get_data(callback,arg1) {
-        username = analytics._user._getTraits().username;
-        userid = analytics.user()._getId();
-        var url = window.location.href;
-        var split = url.split("/");
-        sectionId = split[6];
-        seq = split[7];
-        var block = $('#sequence-list .nav-item.active').data('id');
-        vert = block.split("@").pop();
-        course = split[4].split(":")[1].split("+")[1];
-        origin = sectionId+"/"+seq+"/"+vert;
-        console.log("user: " + userid);
-        console.log("course: " + course);
-        console.log("origin: " + origin);
-        console.log("section: " + sectionId);
-        console.log("vertical: " + vert);
-
-        //Check for old verticals
-        //And handles old page close data
-        if (trackerArray.length > 0){
-            var tracker = trackerArray.pop();
-            $.ajax(tracker.settings);
-        }
-
-
-        if(callback != undefined) {
-            callback(arg1);
-        }
-    }
-
-    /**
-     * The function to send he log to the server
-     */
-    function log() {
-        //settings for the ajax request
-        var settings = {
-            "async": true,
-            "crossDomain": true,
-            "url": "https://lambda-rp.ewi.tudelft.nl/api/loguser",
-            "method": "POST",
-            "data":
-                {
-                    "user": userid,
-                    "courseId": course,
-                    "section": sectionId,
-                    "verticalId": vert,
-                    "eventState": true
-                },
-
-            success: function(response) {
-                console.log(response);
-            }
-        };
-
-        //saving data for page close
-        var tracker = {
-            'vertical': vert,
-            'settings': settings
-        };
-
-        //setting the closing indicator boolean to false
-        tracker.settings.data.eventState = false;
-
-        //Remove exes closing data
-        if (trackerArray.length > 1){
-            trackerArray = [];
-        }
-
-        //saves an set of log data for the page close function
-        trackerArray.push(tracker);
-
-        //Sending data to sever
-        $.ajax(settings);
-    }
-
-
-    var startTime,timeSite;
-    setTimeout(function(){
-        startTime=new Date();
-    }, 1000);
-
-    /**
-     * called on page load.
-     */
-    function myMain() {
-        //If there is no page close data array make one
-        if(!trackerArray){
-            trackerArray = [];
-        }
-        //get the data and log it
-        get_data(log);
-
-        //Set the page unload event to when window is closed
-        window.onbeforeunload= function () {
-            tracker = trackerArray.pop();
-            $.ajax(tracker.settings);
-            timeSite= (new Date()-startTime ) / 1000;
-
-            datas.timeSite = timeSite;
-            datas.time = new Date();
-            datas.index = datas.id + "_" + datas.time.getTime();
-            console.log(datas.timeSite);
-            quantlog();
-            addUp();
-            quantget_data();
-        };
-
-        //////////////////////////////////////////////
-        //////////////////////////////////////////////
-
-
-        $(".sequence-nav").unbind('click').click(function () {
-            //alert("Send datas to server!");
-            //console.log(datas);
-            timeSite= (new Date()-startTime ) / 1000;
-
-            datas.timeSite = timeSite;
-            datas.time = new Date();
-            datas.index = datas.id + "_" + datas.time.getTime();
-            console.log(datas.timeSite);
-            quantlog();
-            quantget_data();
-        });
-
-        $(".sequence-bottom").unbind('click').click(function () {
-            //alert("Send datas to server!");
-            //console.log(datas);
-            timeSite= (new Date()-startTime ) / 1000;
-
-            datas.timeSite = timeSite;
-            datas.time = new Date();
-            datas.index = datas.id + "_" + datas.time.getTime();
-            console.log(datas.timeSite);
-            quantlog();
-            quantget_data();
-        });
-
-    }
-
-</script>
-
-<img id="contactUs" src="https://placekitten.com/g/2/2" onload="myMain()" style="filter: brightness(0) invert(1)"/>
-
-
 <head>
     <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
     <script src="/static/mapped.js" onloadeddata=""></script>
@@ -1169,33 +1007,42 @@
     var url = document.URL;
 
     // This will break studio if it runs inside of it, so this IF statement make it so the XHR intercept only fires if not in studio
-    if ( url.includes('studio') === false) {
-        (function() {
-            var origSend = XMLHttpRequest.prototype.send;
-            XMLHttpRequest.prototype.send = function(data) {
-                //console.log("[AJAX SEND CAUGHT]");
-                //console.log("[CAUGHT DATA]"+data);
-                vidlog = splitParamString(data);
-                vidlog.time = new Date();
-                //console.log(vidlog);
-                if (vidlog.event_type === "play_video") {
-                    plays.push(vidlog.time);
-                    addUp();
-                    //console.log('%c TimeSite: %d', 'background: green; color: white; display: block;', timeSite);
-                } else if (vidlog.event_type === "pause_video") {
-                    pauses.push(vidlog.time);
-                    addUp();
-                } else if (vidlog.event_type === "problem_check") {
-                    datas.quID = vidlog.event.split("_")[1];
-                    //console.log("problem" + datas.quID + " caught");
-                    quantlog();
-                    quantget_data();
-                }
-                origSend.call(this,data);
-            };
-        })();
+    if (url.includes('studio') === false) {
+        var origSend = XMLHttpRequest.prototype.send;
+        XMLHttpRequest.prototype.send = function(data) {
+
+            vidlog = splitParamString(data);
+            vidlog.time = new Date();
+
+            var listening = true;
+
+            if (listening && vidlog.event_type === "play_video") {
+                listening = false;
+                setTimeout(function () {
+                    listening = true
+                }, 2000);
+                plays.push(vidlog.time);
+                addUp();
+                //console.log('%c TimeSite: %d', 'background: green; color: white; display: block;', timeSite);
+            } else if (listening && vidlog.event_type === "pause_video") {
+                listening = false;
+                setTimeout(function () {
+                    listening = true
+                }, 2000);
+                pauses.push(vidlog.time);
+                addUp();
+            } else if (vidlog.event_type === "problem_check") {
+                userData.quID = vidlog.event.split("_")[1];
+                //console.log("problem" + datas.quID + " caught");
+                Quallog();
+                Qualget_data();
+            }
+            origSend.call(this,data);
+        };
     } else {
-        console.log("You're in studio.")
+        if (dev) {
+            console.log("You're in studio.")
+        }
     }
 
 
