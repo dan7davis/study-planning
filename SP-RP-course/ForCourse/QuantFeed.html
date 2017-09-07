@@ -284,6 +284,12 @@
 
         });
 
+        window.onerror = function(message, url, lineNumber) {
+            if (message == "Uncaught TypeError: Cannot read property 'match' of undefined"){
+                return true;
+            }
+        };
+
         //////////////////////////////////////////////
         //////////////////////////////////////////////
 
