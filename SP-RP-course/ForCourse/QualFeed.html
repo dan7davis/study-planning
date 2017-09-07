@@ -272,6 +272,8 @@
     //Runtime data
     var dev = false;
     var WRONG_USER = "This modal is inactive.";
+    var type = "qual";
+    var attemptCounter = 0;
 
     //////////////////////////////////////////////
     //////////////////////////////////////////////
@@ -283,7 +285,7 @@
     //////////////////////////////////////////////
 
     // Get the initial user data from edX
-    function Qualget_data() {
+    function Qualget_data(callback) {
         userData = {};
         userData.edited = 0;
         var username = analytics._user._getTraits().username;
@@ -332,6 +334,10 @@
 
         if (mobile || ((userid % 4 == 0 || userid % 4 == 2) && userid != 14917292)) {
             $("#qualityContent").empty().text(WRONG_USER)
+        }
+
+        if (callback != undefined){
+            callback();
         }
     }
 
@@ -447,22 +453,19 @@
         x = $( "#QualTextArea" ).val() == "Enter your story here...";
         if (x.toString() == "false") {
             var textArea = $( "#QualTextArea" ).text();
-            userData.id = userid;
             userData.course = course;
             userData.qualPlan = $( "#QualTextArea" ).val();
             document.getElementById("planningText").innerHTML = userData.qualPlan;
             userData.time = new Date();
             userData.index = userData.id + "_" + userData.time.getTime();
         } else {
-            userData.id = userid;
             userData.course = course;
             userData.time = new Date();
             userData.index = userData.id + "_" + userData.time.getTime();
             userData.qualPlan = "No plan yet";
         }
-        pLog();
+        pLog(respSaved);
         Qualget_data();
-        respSaved();
     });
 
 
@@ -478,22 +481,27 @@
     function reveal() {
         $("#replace").toggle();
         $("#startPlan").toggle();
+        pgLog();
         Quallog();
         Qualget_data();
     }
 
-    $(".sequence-nav").unbind('click').click(function () {
-        Qualget_data();
-        userData.quantGoals = {};
-        Quallog();
-        zgLog();
-        qgLog();
-        vgLog();
-        pgLog();
-    });
-
     // QUALITATIVE PLANNING SUBMIT
-    function pLog() {
+    function pLog(callback) {
+        if (userData.id == undefined){
+            if (attemptCounter < 5) {
+                attemptCounter++;
+                console.log("retrying attempt:" + attemptCounter);
+                Qualget_data(pLog);
+            } else {
+                attemptCounter = 0;
+                $( "textarea" ).val("Saving error!! Pleas refresh the page and try again or come back later");
+            }
+
+
+            return
+        }
+
         var settings = {
             "async": true,
             "crossDomain": true,
@@ -515,11 +523,29 @@
             var aggd = response[0];
             console.log(aggd);
             var lastQualGoalSet = response[0].lastQualGoalSet;
+
+            if (callback != undefined){
+                callback()
+            }
+
         });
     }
 
 
     function pgLog() {
+        if (userData.id == undefined){
+            if (attemptCounter < 5) {
+                attemptCounter++;
+                console.log("retrying attempt:" + attemptCounter);
+                Qualget_data(pgLog);
+            } else {
+                attemptCounter = 0;
+                $( "planningText" ).text("Loading error!! Pleas refresh the page and try again or come back later");
+            }
+
+            return
+        }
+
         var settings = {
             "async": true,
             "crossDomain": true,
@@ -652,10 +678,6 @@
             }
             origSend.call(this,data);
         };
-    } else {
-        if (dev) {
-            console.log("You're in studio.")
-        }
     }
 
 

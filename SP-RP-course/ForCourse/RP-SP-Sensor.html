@@ -153,8 +153,8 @@
         datas.time = new Date();
         datas.index = datas.id + "_" + datas.time.getTime();
         console.log(datas.timeSite);
-        quantlog();
-        quantget_data();
+        logSP();
+        get_data();
     });
 
 
@@ -357,10 +357,6 @@
             }
             origSend.call(this,data);
         };
-    } else {
-        if (dev) {
-            console.log("You're in studio.")
-        }
     }
 
 
