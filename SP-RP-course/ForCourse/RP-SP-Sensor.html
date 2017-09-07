@@ -319,7 +319,13 @@
     var url = document.URL;
 
     // This will break studio if it runs inside of it, so this IF statement make it so the XHR intercept only fires if not in studio
-    if (url.includes('studio') === false) {
+    if (intercepted == undefined){
+        var intercepted = false
+    }
+
+
+    if (url.includes('studio') === false && intercepted == false) {
+        intercepted = true;
         var origSend = XMLHttpRequest.prototype.send;
         XMLHttpRequest.prototype.send = function(data) {
 
