@@ -1008,33 +1008,42 @@
     var url = document.URL;
 
     // This will break studio if it runs inside of it, so this IF statement make it so the XHR intercept only fires if not in studio
-    if ( url.includes('studio') === false) {
-        (function() {
-            var origSend = XMLHttpRequest.prototype.send;
-            XMLHttpRequest.prototype.send = function(data) {
-                //console.log("[AJAX SEND CAUGHT]");
-                //console.log("[CAUGHT DATA]"+data);
-                vidlog = splitParamString(data);
-                vidlog.time = new Date();
-                //console.log(vidlog);
-                if (vidlog.event_type === "play_video") {
-                    plays.push(vidlog.time);
-                    addUp();
-                    //console.log('%c TimeSite: %d', 'background: green; color: white; display: block;', timeSite);
-                } else if (vidlog.event_type === "pause_video") {
-                    pauses.push(vidlog.time);
-                    addUp();
-                } else if (vidlog.event_type === "problem_check") {
-                    datas.quID = vidlog.event.split("_")[1];
-                    //console.log("problem" + datas.quID + " caught");
-                    quantlog();
-                    quantget_data();
-                }
-                origSend.call(this,data);
-            };
-        })();
+    if (url.includes('studio') === false) {
+        var origSend = XMLHttpRequest.prototype.send;
+        XMLHttpRequest.prototype.send = function(data) {
+
+            vidlog = splitParamString(data);
+            vidlog.time = new Date();
+
+            var listening = true;
+
+            if (listening && vidlog.event_type === "play_video") {
+                listening = false;
+                setTimeout(function () {
+                    listening = true
+                }, 2000);
+                plays.push(vidlog.time);
+                addUp();
+                //console.log('%c TimeSite: %d', 'background: green; color: white; display: block;', timeSite);
+            } else if (listening && vidlog.event_type === "pause_video") {
+                listening = false;
+                setTimeout(function () {
+                    listening = true
+                }, 2000);
+                pauses.push(vidlog.time);
+                addUp();
+            } else if (vidlog.event_type === "problem_check") {
+                userData.quID = vidlog.event.split("_")[1];
+                //console.log("problem" + datas.quID + " caught");
+                Quallog();
+                Qualget_data();
+            }
+            origSend.call(this,data);
+        };
     } else {
-        console.log("You're in studio.")
+        if (dev) {
+            console.log("You're in studio.")
+        }
     }
 
 

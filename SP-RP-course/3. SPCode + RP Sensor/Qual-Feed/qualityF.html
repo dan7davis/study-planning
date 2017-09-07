@@ -621,11 +621,21 @@
             vidlog = splitParamString(data);
             vidlog.time = new Date();
 
-            if (vidlog.event_type === "play_video") {
+            var listening = true;
+
+            if (listening && vidlog.event_type === "play_video") {
+                listening = false;
+                setTimeout(function () {
+                   listening = true
+                }, 2000);
                 plays.push(vidlog.time);
                 addUp();
                 //console.log('%c TimeSite: %d', 'background: green; color: white; display: block;', timeSite);
-            } else if (vidlog.event_type === "pause_video") {
+            } else if (listening && vidlog.event_type === "pause_video") {
+                listening = false;
+                setTimeout(function () {
+                   listening = true
+                }, 2000);
                 pauses.push(vidlog.time);
                 addUp();
             } else if (vidlog.event_type === "problem_check") {
