@@ -415,16 +415,14 @@
     //////////////////////////////////////////////
 
 
-    //this function is called by the API
-    window.onload = function initDansListeners() {
+
+    $( "#startPlan" ).ready(function() {
         Qualget_data();
         userData.quantGoals = {};
         Quallog();
         pgLog();
-    };
-
-
-
+        console.log("loading data");
+    });
 
     //////////////////////////////////////////////
     //////////////////////////////////////////////
@@ -718,7 +716,7 @@
         <main class="main">
             <p id="header">WHAT DRIVES YOU:</p>
             <p class="left" id="quote">&ldquo;</p>
-            <p class="midd lastQualGoalSet" id="planningText">You haven't set a goal yet. Click "Edit" below to create one.</p>
+            <p class="midd lastQualGoalSet" id="planningText" onload="QualSetup()">You haven't set a goal yet. Click "Edit" below to create one.</p>
             <p class="rite" id="quote-close">&rdquo;</p>
             <p class="left"></p>
             <p class="attr"> - <span id="dx-username"></span></p>

@@ -114,16 +114,21 @@
             $.ajax(tracker.settings);
             timeSite= (new Date()-startTime ) / 1000;
 
-            userData.timeSite = timeSite;
-            userData.time = new Date();
-            userData.index = userData.id + "_" + userData.time.getTime();
-            console.log(userData.timeSite);
             if (type != undefined){
                 if (type == "qual"){
                     console.log("qual is a go");
+                    userData.timeSite = timeSite;
+                    userData.time = new Date();
+                    userData.index = userData.id + "_" + userData.time.getTime();
+
                     Quallog();
                 } else {
                     console.log("quant is a go");
+                    datas.timeSite = timeSite;
+                    datas.time = new Date();
+                    datas.index = datas.id + "_" + datas.time.getTime();
+                    console.log(datas.timeSite);
+
                     quantlog();
                 }
             }
@@ -140,18 +145,22 @@
             //console.log(datas);
             timeSite= (new Date()-startTime ) / 1000;
 
-            userData.timeSite = timeSite;
-            userData.time = new Date();
-            userData.index = userData.id + "_" + userData.time.getTime();
-            console.log(datas.timeSite);
-
             if (type != undefined){
                 if (type == "qual"){
                     console.log("qual is a go");
+                    userData.timeSite = timeSite;
+                    userData.time = new Date();
+                    userData.index = userData.id + "_" + userData.time.getTime();
+
                     Quallog();
                     Qualget_data();
                 } else {
                     console.log("quant is a go");
+                    datas.timeSite = timeSite;
+                    datas.time = new Date();
+                    datas.index = datas.id + "_" + datas.time.getTime();
+
+
                     quantlog();
                     quantget_data();
                 }
@@ -164,18 +173,22 @@
             //console.log(datas);
             timeSite= (new Date()-startTime ) / 1000;
 
-            datas.timeSite = timeSite;
-            datas.time = new Date();
-            datas.index = datas.id + "_" + datas.time.getTime();
-            console.log(datas.timeSite);
-
             if (type != undefined){
                 if (type == "qual"){
                     console.log("qual is a go");
+                    userData.timeSite = timeSite;
+                    userData.time = new Date();
+                    userData.index = userData.id + "_" + userData.time.getTime();
+
                     Quallog();
                     Qualget_data();
                 } else {
                     console.log("quant is a go");
+                    datas.timeSite = timeSite;
+                    datas.time = new Date();
+                    datas.index = datas.id + "_" + datas.time.getTime();
+
+
                     quantlog();
                     quantget_data();
                 }
