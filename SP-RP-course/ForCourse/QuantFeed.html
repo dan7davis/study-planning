@@ -186,7 +186,7 @@
         var corrQuiz;
 
         function quantget_data(callback,arg1,arg2,arg3) {
-            datas = {};
+            //datas = {};
             username = analytics._user._getTraits().username;
             var url = window.location.href;
             var split = url.split("/");
@@ -276,10 +276,13 @@
 
         //this function is called by the API
         $( "#startPlan" ).ready(function() {
+            console.log("loading data");
             setTimeout(function () {
+                console.log("running setup");
                 quantget_data(quantlog,zgLog,qgLog,vgLog);
                 datas.quantGoals = {};
                 quantSetup();
+                setup = true;
             },3000);
 
         });
@@ -301,8 +304,9 @@
         var uniqueSubs =[];
 
         setTimeout(function(){
-            for (i=0; i<100; i++) {
-                document.getElementsByClassName("submit btn-brand")[i].addEventListener("click", myFunction);
+            var buttons = document.getElementsByClassName("submit btn-brand");
+            for (i=0; i<buttons.length; i++) {
+                buttons[i].addEventListener("click", myFunction);
             }
         }, 3000);
 
@@ -342,18 +346,18 @@
     <p id="header">Progress towards your goals this week:</p>
     <br>
     <div id="three">
-        <div id="col1">
+        <div id="col1" class="feedBackColl">
             <div class="vidFeedback titel">Videos</div>
             <div id="videobar" class="bar"></div>
             <div id="vidIntended" class="text"></div>
         </div>
-        <div id="col2">
+        <div id="col2" class="feedBackColl">
             <div class="quizFeedback titel">Questions</div>
             <div id="questionbar" class="bar"></div>
             <div id="questionIntended" class="text"></div>
 
         </div>
-        <div id="col3">
+        <div id="col3" class="feedBackColl">
             <div class="timeFeedback titel">Time (Hours)</div>
             <div id="timebar" class="bar"></div>
             <div id="timeIntended" class="text"></div>
@@ -394,6 +398,8 @@
             var secs    = timeActual;
             var hours   = (secs / 60) / 60;
             var hoursR  = Math.floor(hours);
+            var mins    = hours - hoursR;
+            var minsR   = Math.floor(mins * 60);
             timeActual = hours;
             var timeIntended = Number(responseDatas.rTime);
             var timeScaled = timeActual/timeIntended;
@@ -401,6 +407,7 @@
                 timeScaled = 1;
             }
 
+            console.log("render text");
             textgen(0);
 
 
@@ -408,33 +415,34 @@
 //            Video Viz                                   //
 ///////////////////////////////////////////////////////////
 
+            console.log("render bars");
             var bar = new ProgressBar.SemiCircle(videobar, {
-                    strokeWidth: 8,
-                    color: '#FFEA82',
-                    trailColor: '#eee',
-                    trailWidth: 8,
-                    easing: 'easeInOut',
-                    duration: 1400,
-                    svgStyle: null,
-                    text: {
-                        value: '1',
-                        alignToBottom: false
-                    },
-                    from: {color: '#ffb366'},
-                    to: {color: '#00e600'},
-                    // Set default step function for all animate calls
-                    step: (state, bar) => {
+                strokeWidth: 8,
+                color: '#FFEA82',
+                trailColor: '#eee',
+                trailWidth: 8,
+                easing: 'easeInOut',
+                duration: 1400,
+                svgStyle: null,
+                text: {
+                    value: '1',
+                    alignToBottom: false
+                },
+                from: {color: '#ffb366'},
+                to: {color: '#00e600'},
+                // Set default step function for all animate calls
+                step: function(state, bar) {
                     bar.path.setAttribute('stroke', state.color);
-            var value = Math.round(bar.value() * vidIntended);
-            if (value === 0) {
-                bar.setText('');
-            } else {
-                bar.setText(vidActual);
-            }
+                    var value = Math.round(bar.value() * vidIntended);
+                    if (value === 0) {
+                        bar.setText('');
+                    } else {
+                        bar.setText(vidActual);
+                    }
 
-            bar.text.style.color = state.color;
-        }
-        });
+                    bar.text.style.color = state.color;
+                }
+            });
             bar.text.style.fontFamily = '"Abel", Helvetica, sans-serif';
             bar.text.style.fontSize = '2rem';
 
@@ -445,32 +453,33 @@
 ///////////////////////////////////////////////////////////
 
             var bar2 = new ProgressBar.SemiCircle(questionbar, {
-                    strokeWidth: 8,
-                    color: '#FFEA82',
-                    trailColor: '#eee',
-                    trailWidth: 8,
-                    easing: 'easeInOut',
-                    duration: 1400,
-                    svgStyle: null,
-                    text: {
-                        value: '1',
-                        alignToBottom: false
-                    },
-                    from: {color: '#ffb366'},
-                    to: {color: '#00e600'},
-                    // Set default step function for all animate calls
-                    step: (state, bar2) => {
+                strokeWidth: 8,
+                color: '#FFEA82',
+                trailColor: '#eee',
+                trailWidth: 8,
+                easing: 'easeInOut',
+                duration: 1400,
+                svgStyle: null,
+                text: {
+                    value: '1',
+                    alignToBottom: false
+                },
+                from: {color: '#ffb366'},
+                to: {color: '#00e600'},
+                // Set default step function for all animate calls
+                step: function(state, bar2) {
                     bar2.path.setAttribute('stroke', state.color);
-            var value = Math.round(bar2.value() * questionIntended);
-            if (value === 0) {
-                bar2.setText('');
-            } else {
-                bar2.setText(questionActual);
-            }
+                    var value = Math.round(bar2.value() * questionIntended);
+                    if (value === 0) {
+                        bar2.setText('');
+                    } else {
+                        bar2.setText(questionActual);
+                    }
 
-            bar2.text.style.color = state.color;
-        }
-        });
+                    bar2.text.style.color = state.color;
+                }
+            });
+
             bar2.text.style.fontFamily = '"Abel", Helvetica, sans-serif';
             bar2.text.style.fontSize = '2rem';
 
@@ -482,37 +491,39 @@
 ///////////////////////////////////////////////////////////
 
             var bar3 = new ProgressBar.SemiCircle(timebar, {
-                    strokeWidth: 8,
-                    color: '#FFEA82',
-                    trailColor: '#eee',
-                    trailWidth: 8,
-                    easing: 'easeInOut',
-                    duration: 1400,
-                    svgStyle: null,
-                    text: {
-                        value: '1',
-                        alignToBottom: false
-                    },
-                    from: {color: '#ffb366'},
-                    to: {color: '#00e600'},
-                    // Set default step function for all animate calls
-                    step: (state, bar3) => {
+                strokeWidth: 8,
+                color: '#FFEA82',
+                trailColor: '#eee',
+                trailWidth: 8,
+                easing: 'easeInOut',
+                duration: 1400,
+                svgStyle: null,
+                text: {
+                    value: '1',
+                    alignToBottom: false
+                },
+                from: {color: '#ffb366'},
+                to: {color: '#00e600'},
+                // Set default step function for all animate calls
+                step: function(state, bar3) {
                     bar3.path.setAttribute('stroke', state.color);
-            var value = Math.round(bar3.value() * timeIntended);
-            if (value === 0) {
-                bar3.setText('');
-            } else {
-                bar3.setText(hoursR + ":" + minsR);
-            }
+                    var value = Math.round(bar3.value() * timeIntended);
+                    if (value === 0) {
+                        bar3.setText('');
+                    } else {
+                        if (minsR != undefined) {
+                            bar3.setText(hoursR + ":" + minsR);
+                        }
+                    }
 
-            bar3.text.style.color = state.color;
-        }
-        });
+                    bar3.text.style.color = state.color;
+                }
+            });
             bar3.text.style.fontFamily = '"Abel", Helvetica, sans-serif';
             bar3.text.style.fontSize = '2rem';
 
             bar3.animate(timeScaled);  // Number from 0.0 to 1.0
-        };
+        }
 
     </script>
 
@@ -678,6 +689,11 @@
             font-size: 240%;
             margin-bottom: 0;
         }
+
+        .feedBackColl {
+            width: 250px;
+        }
+
     </style>
 
 
@@ -795,7 +811,7 @@
     }
 
     function quantlog(callback,arg1,arg2) {
-        //console.log("log");
+        console.log("log");
         var settings = {
             "async": true,
             "crossDomain": true,
@@ -819,7 +835,7 @@
         };
 
         $.ajax(settings).done(function (res) {
-            //console.log(res);
+            console.log(settings);
 
             var result = res.result[0];
 
@@ -884,7 +900,7 @@
 
     //QUANTITATIVE REQUEST
     function zgLog(callback,arg1) {
-        //console.log("zgLog");
+        console.log("zgLog");
         var settings = {
             "async": true,
             "crossDomain": true,
@@ -910,7 +926,6 @@
                 responseDatas.rTime = aggd.timeGoal;
 
                 if (aggd.vidGoal >= 1 && aggd.quizGoal >= 1 && aggd.timeGoal >= 1) {
-                    vgLog();
                     $("#bars").css("display", "block");
                     $(".noPlan").css("display", "none");
                     $("#editGoals").removeClass("emerald-flat-button").addClass("emerald-flat-button-small");
@@ -931,7 +946,7 @@
 
     //Video REQUEST
     function vgLog(callback) {
-        //console.log("vgLog");
+        console.log("vgLog");
         var settings = {
             "async": true,
             "crossDomain": true,
@@ -959,7 +974,7 @@
 
 
     function qgLog(callback) {
-        //console.log("qgLog");
+        console.log("qgLog");
         var settings = {
             "async": true,
             "crossDomain": true,
