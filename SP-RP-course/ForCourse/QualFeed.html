@@ -347,7 +347,7 @@
         userData.time = new Date();
         userData.index = userData.id + "_" + userData.time.getTime();
         Quallog();
-        console.log(userData);
+        //console.log(userData);
         Qualget_data();
     }
 
@@ -375,7 +375,7 @@
         };
 
         $.ajax(settings).done(function (res) {
-            console.log(res);
+            //console.log(res);
 
             var result = res.result[0];
 
@@ -421,7 +421,7 @@
         userData.quantGoals = {};
         Quallog();
         pgLog();
-        console.log("loading data");
+        //console.log("loading data");
     });
 
     //////////////////////////////////////////////
@@ -435,7 +435,7 @@
 
     // handle reveal btn
     var revealBtn = document.getElementById('revealBtn');
-    console.log("buttclick3");
+    //console.log("buttclick3");
     revealBtn.addEventListener('click', function(e){
         reveal();
     });
@@ -468,7 +468,7 @@
 
 
     function respSaved() {
-        console.log("saved?");
+        //console.log("saved?");
         var origTxt = $( "textarea" ).text();
         $( "textarea" ).val("Response saved!");
         setTimeout( function() {
@@ -519,7 +519,7 @@
 
         $.ajax(settings).done(function (response) {
             var aggd = response[0];
-            console.log(aggd);
+            //console.log(aggd);
             var lastQualGoalSet = response[0].lastQualGoalSet;
 
             if (callback != undefined){
@@ -592,7 +592,7 @@
         };
 
         var aggd = response[0];
-        //console.log(aggd);
+        ////console.log(aggd);
         var id = response[0]._id.id;
         responseDatas.week = response[0]._id.week;
         responseDatas.id = response[0]._id.id;
@@ -687,13 +687,13 @@
         }
 
         durVid = vidSum.reduce(add, 0) / 1000;
-        console.log(durVid);
+        //console.log(durVid);
 
         if (durVid >= 30 ) {
             userData.vidID = vidlog.event.split("%")[5];
             Quallog();
             Qualget_data();
-            console.log(userData);
+            //console.log(userData);
         } else if (durVid < 30) {
             console.log("not finished yet");
         }

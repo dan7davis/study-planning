@@ -429,7 +429,7 @@
             if (value === 0) {
                 bar.setText('');
             } else {
-                bar.setText(value);
+                bar.setText(vidActual);
             }
 
             bar.text.style.color = state.color;
@@ -465,7 +465,7 @@
             if (value === 0) {
                 bar2.setText('');
             } else {
-                bar2.setText(value);
+                bar2.setText(questionActual);
             }
 
             bar2.text.style.color = state.color;
@@ -502,7 +502,7 @@
             if (value === 0) {
                 bar3.setText('');
             } else {
-                bar3.setText(value);
+                bar3.setText(hoursR + ":" + minsR);
             }
 
             bar3.text.style.color = state.color;
@@ -526,7 +526,7 @@
 
 
         function textgen(tryCount) {
-            console.log("textgen");
+            //console.log("textgen");
 
             var vidActual = Number(responseDatas.totalVidWatched);
             var vidIntended = Number(responseDatas.rVid);
@@ -540,7 +540,7 @@
             var minsR   = Math.floor(mins * 60);
 
             if (tryCount < 3 && (isNaN(hours) || isNaN(minsR))) {
-                console.log(timeActual);
+                //console.log(timeActual);
                 console.log("retry total time get attempt: " + tryCount);
                 quantlog();
                 console.log(responseDatas);
@@ -795,7 +795,7 @@
     }
 
     function quantlog(callback,arg1,arg2) {
-        console.log("log");
+        //console.log("log");
         var settings = {
             "async": true,
             "crossDomain": true,
@@ -819,7 +819,7 @@
         };
 
         $.ajax(settings).done(function (res) {
-            console.log(res);
+            //console.log(res);
 
             var result = res.result[0];
 
@@ -840,7 +840,7 @@
 
     //QUANTITATIVE SPLANNING SUBMIT
     function zLog(callback,arg1,arg2) {
-        console.log("zLog");
+        //console.log("zLog");
         var settings = {
             "async": true,
             "crossDomain": true,
@@ -884,7 +884,7 @@
 
     //QUANTITATIVE REQUEST
     function zgLog(callback,arg1) {
-        console.log("zgLog");
+        //console.log("zgLog");
         var settings = {
             "async": true,
             "crossDomain": true,
@@ -931,7 +931,7 @@
 
     //Video REQUEST
     function vgLog(callback) {
-        console.log("vgLog");
+        //console.log("vgLog");
         var settings = {
             "async": true,
             "crossDomain": true,
@@ -959,7 +959,7 @@
 
 
     function qgLog(callback) {
-        console.log("qgLog");
+        //console.log("qgLog");
         var settings = {
             "async": true,
             "crossDomain": true,
@@ -1061,7 +1061,7 @@
             vidSum[i] = pauses[i] - plays[i];
         }
         durVid = vidSum.reduce(add, 0) / 1000;
-        console.log(durVid);
+        //console.log(durVid);
         if (durVid >= 30 ) {
             datas.vidID = vidlog.event.split("%")[5];
             quantlog();
