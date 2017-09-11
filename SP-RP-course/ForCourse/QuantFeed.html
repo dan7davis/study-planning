@@ -1063,8 +1063,7 @@
             } else if (vidlog.event_type === "problem_check") {
                 userData.quID = vidlog.event.split("_")[1];
                 //console.log("problem" + datas.quID + " caught");
-                Quallog();
-                Qualget_data();
+                quantlog();
             }
             origSend.call(this,data);
         };
