@@ -177,7 +177,7 @@
 
 <!-- <a href="#" class="p-holder" id="contactUs">Show new retrieval question!</a> -->
 <button class="emerald-flat-button" id="contactUs" onclick="revealPop()">Show new retrieval question!</button>
-<img src="https://placekitten.com/g/2/2" onload="main()" style="filter: brightness(0) invert(1)"/>
+<img src="https://placekitten.com/g/2/2" style="filter: brightness(0) invert(1)"/>
 <div id="dialog" title="Improve your memory!">
     <input autofocus type="text" style="display: none">
     <h3 id="name-pop" class="hd hd-2 problem-header"></h3>
@@ -553,15 +553,16 @@
     /**
      * Called on page load
      */
-    function main() {
-        //If there is no page close data array make one
-        if(!trackerArray){
-            trackerArray = [];
-        }
-        //get the data and log it
-        get_data(log);
-
-    }
+    $("#contactUs").ready(function () {
+        setTimeout(function () {
+            //If there is no page close data array make one
+            if(!trackerArray){
+                trackerArray = [];
+            }
+            //get the data and log it
+            get_data(log);
+        },2000);
+    });
 
     //Debug message for dialogue loading
     $( "#dialog" ).load(console.log("dialogue loaded"));
