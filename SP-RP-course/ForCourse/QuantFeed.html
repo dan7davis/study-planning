@@ -1061,7 +1061,7 @@
                 pauses.push(vidlog.time);
                 addUp();
             } else if (vidlog.event_type === "problem_check") {
-                userData.quID = vidlog.event.split("_")[1];
+                datas.quID = vidlog.event.split("_")[1];
                 //console.log("problem" + datas.quID + " caught");
                 quantlog();
             }
