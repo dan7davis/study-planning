@@ -249,6 +249,9 @@
         }
 
         if(!mobile && (userid % 4 == 1 || userid % 4 ==2 || userid == 14917292)){
+            //1 to 3 seconds delay
+            var r = Math.floor(Math.random())+3;
+            console.log("Popup timeout: " + r + " seconds");
             setTimeout(showPopup, r * 1000);
         }
         callback(arg1);
@@ -313,7 +316,7 @@
         $( "#contactUs").css('display', 'unset');
         //Request settings
         var settings = {
-            "async": false,
+            "async": true,
             "crossDomain": true,
             "url": "https://lambda-rp.ewi.tudelft.nl/api/popupRequest",
             "method": "POST",
@@ -326,6 +329,7 @@
                     "button": button
                 },
             success: function(response) {
+                console.log("building popup");
                 buildDialog(response);
             }
         };
@@ -370,7 +374,7 @@
     function sendAnswer() {
         console.log("dialog closed with: answered as " + dialogAnswered + " " + "and correct as " + correctness);
         var settings = {
-            "async": false,
+            "async": true,
             "crossDomain": true,
             "url": "https://lambda-rp.ewi.tudelft.nl/api/popupResponse",
             "method": "POST",
@@ -553,7 +557,7 @@
     /**
      * Called on page load
      */
-    $("#contactUs").ready(function () {
+    $(window).ready(function () {
         setTimeout(function () {
             //If there is no page close data array make one
             if(!trackerArray){
@@ -561,15 +565,13 @@
             }
             //get the data and log it
             get_data(log);
-        },2000);
+        },3000);
     });
 
     //Debug message for dialogue loading
     $( "#dialog" ).load(console.log("dialogue loaded"));
 
-    //1 to 3 seconds delay
-    var r = Math.floor(Math.random())+3;
-    console.log("Popup timeout: " + r + " seconds");
+
 
 </script>
 
@@ -614,7 +616,6 @@
     var username;
     var userid;
     var myId;
-    var course;
     var time;
     var datas = {};
     var responseDatas = {};
@@ -631,11 +632,11 @@
         var block = $('#sequence-list .nav-item.active').data('id');
 
         vert = block.split("@").pop();
-        course = split[4].split(":")[1];
+        var SPcourse = split[4].split(":")[1];
         origin = chap+"/"+seq+"/"+vert;
         userid = analytics.user()._getId();
         datas.id = userid;
-        datas.course = course;
+        datas.course = SPcourse;
         datas.time = new Date();
         datas.index = datas.id + "_" + datas.time.getTime();
         datas.vert = vert;
