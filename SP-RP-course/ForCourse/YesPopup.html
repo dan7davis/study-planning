@@ -403,7 +403,7 @@
         $('#feedback-icon').addClass("correct");
         console.log("this was correct");
         $(".tip").hide();
-        $('.wrapper-problem-response').html( '<div class="wrapper-problem-response"><p style="text-align: center">Correct! Keep up the great work!</p><br><p style="text-align: center"><img width="80px" src="/static/corr.png" alt="correct"></p></div>' ).css({ 'color': '#009b00', 'font-size': '150%', 'text-align': 'center' });
+        $('#text').html( '<div class="wrapper-problem-response"><p style="text-align: center">Correct! Keep up the great work!</p><br><p style="text-align: center"><img width="80px" src="/static/corr.png" alt="correct"></p></div>' ).css({ 'color': '#009b00', 'font-size': '150%', 'text-align': 'center' });
         dialogAnswered = true;
         correctness = true;
         var n = 3;
@@ -423,7 +423,7 @@
                 $('#dialog').dialog('close');
                 document.getElementById("closingin").innerHTML = "";
                 $(".tip").show();
-                $('.wrapper-problem-response').css({ 'color': 'black', 'font-size': '100%' });
+                $('#text').css({ 'color': 'black', 'font-size': '100%' });
             }
         }
     }
@@ -437,9 +437,9 @@
         $('#feedback-icon').addClass("incorrect");
         console.log("this was incorrect");
         dialogAnswered = true;
-        var origText = $('.wrapper-problem-response').html();
+        var origText = $('#text').html();
         $(".tip").hide();
-        $('.wrapper-problem-response')
+        $('#text')
             .html( '<div class="wrapper-problem-response"><p style="text-align: center">Incorrect, please try again!</p><br><p style="text-align: center"><img width="80px" src="/static/inc.png" alt="incorrect"></p></div>' )
             .css({ 'color': '#C84B4B', 'font-size': '150%', 'text-align': 'center' });
         dialogAnswered = true;
@@ -461,7 +461,7 @@
             else if (n == 0) {
                 document.getElementById("closingin").innerHTML = "";
                 $(".tip").show();
-                $('.wrapper-problem-response').html(origText).css({ 'color': 'black', 'font-size': '100%' });
+                $('#text').html(origText).css({ 'color': 'black', 'font-size': '100%' });
             }
         }
 
