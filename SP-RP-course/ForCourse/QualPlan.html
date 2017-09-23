@@ -274,6 +274,7 @@
     var WRONG_USER = "This modal is inactive.";
     var type = "qual";
     var attemptCounter = 0;
+    var loadTimeout = false;
 
     //////////////////////////////////////////////
     //////////////////////////////////////////////
@@ -462,7 +463,9 @@
             userData.index = userData.id + "_" + userData.time.getTime();
             userData.qualPlan = "No plan yet";
         }
+        loadTimeout = true;
         pLog(respSaved);
+
         Qualget_data();
     });
 
@@ -473,13 +476,16 @@
         $( "textarea" ).val("Response saved!");
         setTimeout( function() {
             $( "textarea" ).val(origTxt);
+            loadTimeout = false;
         }, 3000);
     }
 
     function reveal() {
         $("#replace").toggle();
         $("#startPlan").toggle();
-        pgLog();
+        if(!loadTimeout) {
+            pgLog();
+        }
         Quallog();
         Qualget_data();
     }
