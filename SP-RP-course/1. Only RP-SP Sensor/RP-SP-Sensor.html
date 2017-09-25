@@ -1,4 +1,4 @@
-
+<!-- RP-SP sensor -->
 <style type="text/css">
 
 
@@ -45,7 +45,6 @@
     var trackerArray;
 
     function get_data(callback) {
-        datas = {};
         username = analytics._user._getTraits().username;
         var url = window.location.href;
         var split = url.split("/");
@@ -78,6 +77,7 @@
 
     window.onload = function initDansListeners() {
         //If there is no page close data array make one
+        datas = {};
         if(!trackerArray){
             trackerArray = [];
         }
@@ -87,6 +87,13 @@
             $.ajax(tracker.settings);
             addUp();
         }
+
+        setTimeout(function(){
+            var buttons = document.getElementsByClassName("submit btn-brand");
+            for (i=0; i<buttons.length; i++) {
+                buttons[i].addEventListener("click", myFunction);
+            }
+        }, 3000);
 
         get_data(logRP);
 
@@ -99,6 +106,23 @@
     var subs = [];
     var uniqueSubs =[];
 
+
+
+
+    function myFunction() {
+        subs.push(this.parentNode.parentNode.parentNode.parentNode.id);
+        //console.log(subs);
+        datas.submits = subs;
+        $.each(subs, function(i, el){
+            if($.inArray(el, uniqueSubs) === -1) uniqueSubs.push(el);
+        });
+        //console.log(uniqueSubs.length);
+        datas.uniqueSubmits = uniqueSubs.length;
+        datas.time = new Date();
+        datas.index = datas.id + "_" + datas.time.getTime();
+        console.log("question submitted");
+        console.log(datas);
+    }
 
 
 
@@ -153,8 +177,8 @@
         datas.time = new Date();
         datas.index = datas.id + "_" + datas.time.getTime();
         console.log(datas.timeSite);
-        quantlog();
-        quantget_data();
+        logSP();
+        get_data();
     });
 
 
@@ -172,6 +196,7 @@
                 "edited": datas.edited,
                 "vidID": datas.vidID,
                 "quID": datas.quID,
+                "submits": datas.submits,
                 "uniqueSubmits": datas.uniqueSubmits,
                 "vidDuration": datas.vidDuration,
                 "timeSite": datas.timeSite,
@@ -319,10 +344,16 @@
     var url = document.URL;
 
     // This will break studio if it runs inside of it, so this IF statement make it so the XHR intercept only fires if not in studio
-    if (url.includes('studio') === false) {
+    if (intercepted == undefined){
+        var intercepted = false
+    }
+
+
+    if (url.includes('studio') === false && intercepted == false) {
+        intercepted = true;
         var origSend = XMLHttpRequest.prototype.send;
         XMLHttpRequest.prototype.send = function(data) {
-
+            console.log("event occurred");
             vidlog = splitParamString(data);
             vidlog.time = new Date();
 
@@ -344,17 +375,12 @@
                 pauses.push(vidlog.time);
                 addUp();
             } else if (vidlog.event_type === "problem_check") {
-                userData.quID = vidlog.event.split("_")[1];
-                //console.log("problem" + datas.quID + " caught");
-                Quallog();
-                Qualget_data();
+                datas.quID = vidlog.event.split("_")[1];
+                console.log("problem " + datas.quID + " caught");
+                logSP();
             }
             origSend.call(this,data);
         };
-    } else {
-        if (dev) {
-            console.log("You're in studio.")
-        }
     }
 
 

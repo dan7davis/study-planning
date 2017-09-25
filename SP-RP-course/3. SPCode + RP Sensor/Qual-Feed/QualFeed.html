@@ -1,4 +1,4 @@
-
+<!-- Quality planning -->
 <!-- Styles for the quality applet -->
 <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
 <style type="text/css">
@@ -272,6 +272,9 @@
     //Runtime data
     var dev = false;
     var WRONG_USER = "This modal is inactive.";
+    var type = "qual";
+    var attemptCounter = 0;
+    var loadTimeout = false;
 
     //////////////////////////////////////////////
     //////////////////////////////////////////////
@@ -283,7 +286,7 @@
     //////////////////////////////////////////////
 
     // Get the initial user data from edX
-    function Qualget_data() {
+    function Qualget_data(callback) {
         userData = {};
         userData.edited = 0;
         var username = analytics._user._getTraits().username;
@@ -333,6 +336,10 @@
         if (mobile || ((userid % 4 == 0 || userid % 4 == 2) && userid != 14917292)) {
             $("#qualityContent").empty().text(WRONG_USER)
         }
+
+        if (callback != undefined){
+            callback();
+        }
     }
 
     // Mark that data is edited
@@ -341,7 +348,7 @@
         userData.time = new Date();
         userData.index = userData.id + "_" + userData.time.getTime();
         Quallog();
-        console.log(userData);
+        //console.log(userData);
         Qualget_data();
     }
 
@@ -369,7 +376,7 @@
         };
 
         $.ajax(settings).done(function (res) {
-            console.log(res);
+            //console.log(res);
 
             var result = res.result[0];
 
@@ -409,16 +416,14 @@
     //////////////////////////////////////////////
 
 
-    //this function is called by the API
-    window.onload = function initDansListeners() {
+
+    $( "#startPlan" ).ready(function() {
         Qualget_data();
         userData.quantGoals = {};
         Quallog();
         pgLog();
-    };
-
-
-
+        //console.log("loading data");
+    });
 
     //////////////////////////////////////////////
     //////////////////////////////////////////////
@@ -431,7 +436,7 @@
 
     // handle reveal btn
     var revealBtn = document.getElementById('revealBtn');
-    console.log("buttclick3");
+    //console.log("buttclick3");
     revealBtn.addEventListener('click', function(e){
         reveal();
     });
@@ -447,53 +452,60 @@
         x = $( "#QualTextArea" ).val() == "Enter your story here...";
         if (x.toString() == "false") {
             var textArea = $( "#QualTextArea" ).text();
-            userData.id = userid;
             userData.course = course;
             userData.qualPlan = $( "#QualTextArea" ).val();
             document.getElementById("planningText").innerHTML = userData.qualPlan;
             userData.time = new Date();
             userData.index = userData.id + "_" + userData.time.getTime();
         } else {
-            userData.id = userid;
             userData.course = course;
             userData.time = new Date();
             userData.index = userData.id + "_" + userData.time.getTime();
             userData.qualPlan = "No plan yet";
         }
-        pLog();
+        loadTimeout = true;
+        pLog(respSaved);
+
         Qualget_data();
-        respSaved();
     });
 
 
     function respSaved() {
-        console.log("saved?");
+        //console.log("saved?");
         var origTxt = $( "textarea" ).text();
         $( "textarea" ).val("Response saved!");
         setTimeout( function() {
             $( "textarea" ).val(origTxt);
+            loadTimeout = false;
         }, 3000);
     }
 
     function reveal() {
         $("#replace").toggle();
         $("#startPlan").toggle();
+        if(!loadTimeout) {
+            pgLog();
+        }
         Quallog();
         Qualget_data();
     }
 
-    $(".sequence-nav").unbind('click').click(function () {
-        Qualget_data();
-        userData.quantGoals = {};
-        Quallog();
-        zgLog();
-        qgLog();
-        vgLog();
-        pgLog();
-    });
-
     // QUALITATIVE PLANNING SUBMIT
-    function pLog() {
+    function pLog(callback) {
+        if (userData.id == undefined){
+            if (attemptCounter < 5) {
+                attemptCounter++;
+                console.log("retrying attempt:" + attemptCounter);
+                Qualget_data(pLog);
+            } else {
+                attemptCounter = 0;
+                $( "textarea" ).val("Saving error!! Pleas refresh the page and try again or come back later");
+            }
+
+
+            return
+        }
+
         var settings = {
             "async": true,
             "crossDomain": true,
@@ -513,13 +525,31 @@
 
         $.ajax(settings).done(function (response) {
             var aggd = response[0];
-            console.log(aggd);
+            //console.log(aggd);
             var lastQualGoalSet = response[0].lastQualGoalSet;
+
+            if (callback != undefined){
+                callback()
+            }
+
         });
     }
 
 
     function pgLog() {
+        if (userData.id == undefined){
+            if (attemptCounter < 5) {
+                attemptCounter++;
+                console.log("retrying attempt:" + attemptCounter);
+                Qualget_data(pgLog);
+            } else {
+                attemptCounter = 0;
+                $( "planningText" ).text("Loading error!! Pleas refresh the page and try again or come back later");
+            }
+
+            return
+        }
+
         var settings = {
             "async": true,
             "crossDomain": true,
@@ -568,7 +598,7 @@
         };
 
         var aggd = response[0];
-        //console.log(aggd);
+        ////console.log(aggd);
         var id = response[0]._id.id;
         responseDatas.week = response[0]._id.week;
         responseDatas.id = response[0]._id.id;
@@ -614,7 +644,13 @@
     var url = document.URL;
 
     // This will break studio if it runs inside of it, so this IF statement make it so the XHR intercept only fires if not in studio
-    if (url.includes('studio') === false) {
+    if (intercepted == undefined){
+        var intercepted = false
+    }
+
+
+    if (url.includes('studio') === false && intercepted == false) {
+        intercepted = true;
         var origSend = XMLHttpRequest.prototype.send;
         XMLHttpRequest.prototype.send = function(data) {
 
@@ -626,7 +662,7 @@
             if (listening && vidlog.event_type === "play_video") {
                 listening = false;
                 setTimeout(function () {
-                   listening = true
+                    listening = true
                 }, 2000);
                 plays.push(vidlog.time);
                 addUp();
@@ -634,7 +670,7 @@
             } else if (listening && vidlog.event_type === "pause_video") {
                 listening = false;
                 setTimeout(function () {
-                   listening = true
+                    listening = true
                 }, 2000);
                 pauses.push(vidlog.time);
                 addUp();
@@ -646,10 +682,6 @@
             }
             origSend.call(this,data);
         };
-    } else {
-        if (dev) {
-            console.log("You're in studio.")
-        }
     }
 
 
@@ -661,13 +693,13 @@
         }
 
         durVid = vidSum.reduce(add, 0) / 1000;
-        console.log(durVid);
+        //console.log(durVid);
 
         if (durVid >= 30 ) {
             userData.vidID = vidlog.event.split("%")[5];
             Quallog();
             Qualget_data();
-            console.log(userData);
+            //console.log(userData);
         } else if (durVid < 30) {
             console.log("not finished yet");
         }
@@ -690,7 +722,7 @@
         <main class="main">
             <p id="header">WHAT DRIVES YOU:</p>
             <p class="left" id="quote">&ldquo;</p>
-            <p class="midd lastQualGoalSet" id="planningText">You haven't set a goal yet. Click "Edit" below to create one.</p>
+            <p class="midd lastQualGoalSet" id="planningText" onload="QualSetup()">You haven't set a goal yet. Click "Edit" below to create one.</p>
             <p class="rite" id="quote-close">&rdquo;</p>
             <p class="left"></p>
             <p class="attr"> - <span id="dx-username"></span></p>
@@ -721,3 +753,149 @@
 
 </div>
 
+<!-- RP sensor -->
+
+<script type="text/javascript">
+    var sectionId;
+    var seq;
+    var vert;
+    var origin;
+    var username;
+    var userid;
+    var course;
+    var trackerArray;
+
+
+    /**
+     * Gets the user data and course-location.
+     * @param {object} callback - The function that is called after the server
+     * @param {*} arg1 - Argument for the callback function
+     */
+    function get_data(callback,arg1) {
+        username = analytics._user._getTraits().username;
+        userid = analytics.user()._getId();
+        var url = window.location.href;
+        var split = url.split("/");
+        sectionId = split[6];
+        seq = split[7];
+        var block = $('#sequence-list .nav-item.active').data('id');
+        vert = block.split("@").pop();
+        course = split[4].split(":")[1].split("+")[1];
+        origin = sectionId+"/"+seq+"/"+vert;
+        console.log("user: " + userid);
+        console.log("course: " + course);
+        console.log("origin: " + origin);
+        console.log("section: " + sectionId);
+        console.log("vertical: " + vert);
+
+        //Check for old verticals
+        //And handles old page close data
+        if (trackerArray.length > 0){
+            var tracker = trackerArray.pop();
+            $.ajax(tracker.settings);
+        }
+
+
+        if(callback != undefined) {
+            callback(arg1);
+        }
+    }
+
+    /**
+     * The function to send he log to the server
+     */
+    function log() {
+        //settings for the ajax request
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://lambda-rp.ewi.tudelft.nl/api/loguser",
+            "method": "POST",
+            "data":
+                {
+                    "user": userid,
+                    "courseId": course,
+                    "section": sectionId,
+                    "verticalId": vert,
+                    "eventState": true
+                },
+
+            success: function(response) {
+                console.log(response);
+            }
+        };
+
+        //saving data for page close
+        var tracker = {
+            'vertical': vert,
+            'settings': settings
+        };
+
+        //setting the closing indicator boolean to false
+        tracker.settings.data.eventState = false;
+
+        //Remove exes closing data
+        if (trackerArray.length > 1){
+            trackerArray = [];
+        }
+
+        //saves an set of log data for the page close function
+        trackerArray.push(tracker);
+
+        //Sending data to sever
+        $.ajax(settings);
+    }
+
+
+    var startTime,timeSite;
+    setTimeout(function(){
+        startTime=new Date();
+    }, 1000);
+
+    /**
+     * called on page load.
+     */
+    function myMain() {
+        //If there is no page close data array make one
+        if(!trackerArray){
+            trackerArray = [];
+        }
+        //get the data and log it
+        get_data(log);
+
+        //Set the page unload event to when window is closed
+        window.onbeforeunload= function () {
+            tracker = trackerArray.pop();
+            $.ajax(tracker.settings);
+            timeSite= (new Date()-startTime ) / 1000;
+
+            if (type != undefined){
+                if (type == "qual"){
+                    console.log("qual is a go");
+                    userData.timeSite = timeSite;
+                    userData.time = new Date();
+                    userData.index = userData.id + "_" + userData.time.getTime();
+
+                    Quallog();
+                } else {
+                    console.log("quant is a go");
+                    datas.timeSite = timeSite;
+                    datas.time = new Date();
+                    datas.index = datas.id + "_" + datas.time.getTime();
+                    console.log(datas.timeSite);
+
+                    quantlog();
+                }
+            }
+            addUp();
+            Qualget_data();
+        };
+
+        //////////////////////////////////////////////
+        //////////////////////////////////////////////
+
+
+
+</script>
+
+<img id="contactUs" src="https://placekitten.com/g/2/2" onload="myMain()" style="filter: brightness(0) invert(1)"/>

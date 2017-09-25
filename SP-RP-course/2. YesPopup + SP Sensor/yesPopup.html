@@ -1,4 +1,4 @@
-<!-- YES -->
+<!-- YES Popup -->
 <style>
     .ui-dialog {
         top: 0;
@@ -177,7 +177,7 @@
 
 <!-- <a href="#" class="p-holder" id="contactUs">Show new retrieval question!</a> -->
 <button class="emerald-flat-button" id="contactUs" onclick="revealPop()">Show new retrieval question!</button>
-<img src="https://placekitten.com/g/2/2" onload="main()" style="filter: brightness(0) invert(1)"/>
+<img src="https://placekitten.com/g/2/2" style="filter: brightness(0) invert(1)"/>
 <div id="dialog" title="Improve your memory!">
     <input autofocus type="text" style="display: none">
     <h3 id="name-pop" class="hd hd-2 problem-header"></h3>
@@ -249,6 +249,9 @@
         }
 
         if(!mobile && (userid % 4 == 1 || userid % 4 ==2 || userid == 14917292)){
+            //1 to 3 seconds delay
+            var r = Math.floor(Math.random())+3;
+            console.log("Popup timeout: " + r + " seconds");
             setTimeout(showPopup, r * 1000);
         }
         callback(arg1);
@@ -313,7 +316,7 @@
         $( "#contactUs").css('display', 'unset');
         //Request settings
         var settings = {
-            "async": false,
+            "async": true,
             "crossDomain": true,
             "url": "https://lambda-rp.ewi.tudelft.nl/api/popupRequest",
             "method": "POST",
@@ -326,6 +329,7 @@
                     "button": button
                 },
             success: function(response) {
+                console.log("building popup");
                 buildDialog(response);
             }
         };
@@ -370,7 +374,7 @@
     function sendAnswer() {
         console.log("dialog closed with: answered as " + dialogAnswered + " " + "and correct as " + correctness);
         var settings = {
-            "async": false,
+            "async": true,
             "crossDomain": true,
             "url": "https://lambda-rp.ewi.tudelft.nl/api/popupResponse",
             "method": "POST",
@@ -399,7 +403,7 @@
         $('#feedback-icon').addClass("correct");
         console.log("this was correct");
         $(".tip").hide();
-        $('.wrapper-problem-response').html( '<div class="wrapper-problem-response"><p style="text-align: center">Correct! Keep up the great work!</p><br><p style="text-align: center"><img width="80px" src="/static/corr.png" alt="correct"></p></div>' ).css({ 'color': '#009b00', 'font-size': '150%', 'text-align': 'center' });
+        $('#text').html( '<div class="wrapper-problem-response"><p style="text-align: center">Correct! Keep up the great work!</p><br><p style="text-align: center"><img width="80px" src="/static/corr.png" alt="correct"></p></div>' ).css({ 'color': '#009b00', 'font-size': '150%', 'text-align': 'center' });
         dialogAnswered = true;
         correctness = true;
         var n = 3;
@@ -419,7 +423,7 @@
                 $('#dialog').dialog('close');
                 document.getElementById("closingin").innerHTML = "";
                 $(".tip").show();
-                $('.wrapper-problem-response').css({ 'color': 'black', 'font-size': '100%' });
+                $('#text').css({ 'color': 'black', 'font-size': '100%' });
             }
         }
     }
@@ -433,9 +437,9 @@
         $('#feedback-icon').addClass("incorrect");
         console.log("this was incorrect");
         dialogAnswered = true;
-        var origText = $('.wrapper-problem-response').html();
+        var origText = $('#text').html();
         $(".tip").hide();
-        $('.wrapper-problem-response')
+        $('#text')
             .html( '<div class="wrapper-problem-response"><p style="text-align: center">Incorrect, please try again!</p><br><p style="text-align: center"><img width="80px" src="/static/inc.png" alt="incorrect"></p></div>' )
             .css({ 'color': '#C84B4B', 'font-size': '150%', 'text-align': 'center' });
         dialogAnswered = true;
@@ -457,7 +461,7 @@
             else if (n == 0) {
                 document.getElementById("closingin").innerHTML = "";
                 $(".tip").show();
-                $('.wrapper-problem-response').html(origText).css({ 'color': 'black', 'font-size': '100%' });
+                $('#text').html(origText).css({ 'color': 'black', 'font-size': '100%' });
             }
         }
 
@@ -553,21 +557,345 @@
     /**
      * Called on page load
      */
-    function main() {
-        //If there is no page close data array make one
-        if(!trackerArray){
-            trackerArray = [];
-        }
-        //get the data and log it
-        get_data(log);
-
-    }
+    $(window).ready(function () {
+        setTimeout(function () {
+            //If there is no page close data array make one
+            if(!trackerArray){
+                trackerArray = [];
+            }
+            //get the data and log it
+            get_data(log);
+        },3000);
+    });
 
     //Debug message for dialogue loading
     $( "#dialog" ).load(console.log("dialogue loaded"));
 
-    //1 to 3 seconds delay
-    var r = Math.floor(Math.random())+3;
-    console.log("Popup timeout: " + r + " seconds");
+
 
 </script>
+
+
+
+<style type="text/css">
+
+
+    #rVid {
+        display: none;
+    }
+    #rQuiz {
+        display: none;
+    }
+    #rTime {
+        display: none;
+    }
+    .totalSubmits {
+        display: none;
+    }
+    .totalVidWatched {
+        display: none;
+    }
+    .totalTimeSite {
+        display: none;
+    }
+
+</style>
+
+
+
+<script>
+
+    //////////////////////////////////////////////
+    //               Logging User Data           //
+    //////////////////////////////////////////////
+
+    var chap;
+    var seq;
+    var vert;
+    var origin;
+    var username;
+    var userid;
+    var myId;
+    var time;
+    var datas = {};
+    var responseDatas = {};
+
+    function SPget_data() {
+        datas = {};
+        username = analytics._user._getTraits().username;
+        var url = window.location.href;
+        var split = url.split("/");
+
+        chap = split[6];
+        datas.week = chap;
+        seq = split[7];
+        var block = $('#sequence-list .nav-item.active').data('id');
+
+        vert = block.split("@").pop();
+        var SPcourse = split[4].split(":")[1];
+        origin = chap+"/"+seq+"/"+vert;
+        userid = analytics.user()._getId();
+        datas.id = userid;
+        datas.course = SPcourse;
+        datas.time = new Date();
+        datas.index = datas.id + "_" + datas.time.getTime();
+        datas.vert = vert;
+
+        $('#dx-username').text(username);
+
+
+    }
+
+    window.onload = function initDansListeners() {
+        SPget_data();
+        datas.quantGoals = {};
+    };
+
+    //////////////////////////////////////////////
+    //          Logging User Quiz Activity       //
+    //////////////////////////////////////////////
+    var subs = [];
+    var uniqueSubs =[];
+
+
+
+
+    //////////////////////////////////////////////
+    //          Logging User Time Spent        //
+    //////////////////////////////////////////////
+
+
+    var startTime,timeSite;
+    setTimeout(function(){
+        startTime=new Date();
+    }, 1000);
+
+
+    window.onbeforeunload= function () {
+        tracker = trackerArray.pop();
+        $.ajax(tracker.settings);
+        timeSite= (new Date()-startTime ) / 1000;
+
+        datas.timeSite = timeSite;
+        datas.time = new Date();
+        datas.index = datas.id + "_" + datas.time.getTime();
+        console.log(datas.timeSite);
+        SPlog();
+        addUp();
+        SPget_data();
+    };
+
+    //////////////////////////////////////////////
+    //////////////////////////////////////////////
+
+
+    $(".sequence-nav").unbind('click').click(function () {
+        //alert("Send datas to server!");
+        //console.log(datas);
+        timeSite= (new Date()-startTime ) / 1000;
+
+        datas.timeSite = timeSite;
+        datas.time = new Date();
+        datas.index = datas.id + "_" + datas.time.getTime();
+        console.log(datas.timeSite);
+        SPlog();
+        SPget_data();
+    });
+
+    $(".sequence-bottom").unbind('click').click(function () {
+        //alert("Send datas to server!");
+        //console.log(datas);
+        timeSite= (new Date()-startTime ) / 1000;
+
+        datas.timeSite = timeSite;
+        datas.time = new Date();
+        datas.index = datas.id + "_" + datas.time.getTime();
+        console.log(datas.timeSite);
+        quantlog();
+        quantget_data();
+    });
+
+
+    function SPlog() {
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://lambda-rp.ewi.tudelft.nl:8080/api/events",
+            "method": "POST",
+            "data": {
+                "week": datas.week,
+                "id": datas.id,
+                "course": datas.course,
+                "vert": datas.vert,
+                "edited": datas.edited,
+                "vidID": datas.vidID,
+                "quID": datas.quID,
+                "uniqueSubmits": datas.uniqueSubmits,
+                "vidDuration": datas.vidDuration,
+                "timeSite": datas.timeSite,
+                "watched": datas.watched,
+                "time": datas.time,
+                "index": datas.index
+            }
+        };
+
+        $.ajax(settings).done(function (response) {
+            console.log("log");
+            var result = response.result[0];
+
+            responseDatas.week =  result._id.week;
+            responseDatas.id = result._id.id;
+            responseDatas.course = result._id.course;
+
+            responseDatas.totalEvents = result.totalEvents;
+            responseDatas.totalTimeSite = result.totalTimeSite;
+            responseDatas.totalVidDuration = result.totalVidDuration;
+            responseDatas.edited = result.edited;
+        });
+    }
+
+    //QUANTITATIVE SPLANNING SUBMIT
+    function zLog() {
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://lambda-rp.ewi.tudelft.nl:8080/api/events/zLog",
+            "method": "POST",
+            "data": {
+                "week": datas.week,
+                "id": datas.id,
+                "course": datas.course,
+                "vert": datas.vert,
+                "edited": datas.edited,
+                "time": datas.time,
+                "vidGoal": datas.quantGoals.plannedVideos,
+                "quizGoal": datas.quantGoals.plannedQuiz,
+                "timeGoal": datas.quantGoals.plannedTimes,
+                "index": datas.index
+            }
+        };
+
+        $.ajax(settings).done(function (response) {
+            console.log("Zlog");
+            var aggd = response[0];
+            //console.log(aggd);
+            var id = response[0]._id.id;
+            responseDatas.week = response[0]._id.week;
+            responseDatas.id = response[0]._id.id;
+            responseDatas.course = response[0]._id.course;
+            responseDatas.lastQuizGoalSet = "Last Quiz Goal" + response[0].lastQuizGoalSet;
+            //$(".lastQuizGoalSet").text(responseDatas.lastQuizGoalSet);
+            responseDatas.lastTimeGoalSet = "Last Time Goal" + response[0].lastTimeGoalSet;
+            //$(".lastTimeGoalSet").text(responseDatas.lastTimeGoalSet);
+            responseDatas.lastVidGoalSet = "Last Vid Goal" + response[0].lastVidGoalSet;
+            //$(".lastVidGoalSet").text(responseDatas.lastVidGoalSet);
+            responseDatas.edited = response[0].edited;
+
+            if(callback != undefined) {
+                callback(arg1,arg2)
+            }
+        });
+    }
+
+
+
+</script>
+<div id="rVid"></div>
+<div id="rQuiz"></div>
+<div id="rTime"></div>
+<div class="totalSubmits"></div>
+<div class="totalVidWatched"></div>
+<div class="totalTimeSite"></div>
+
+<script>
+    //function takes a string to be sent via xhr and turns it back into an object to make it easier
+    //to read on the console
+    function splitParamString(input) {
+        if(input == null){
+            return {};
+        }
+        var params = input.split("&");
+        var paramObject = {};
+        params.forEach(function(element) {
+            var keyValue = element.split("=");
+            paramObject[keyValue[0]]=keyValue[1];
+        });
+        return paramObject;
+    }
+
+    //Goal: log all data that is sent in xhr post requests to console before they are sent
+    //Code snippet inspired by: http://stackoverflow.com/questions/25335648/how-to-intercept-all-ajax-requests-made-by-different-js-libraries
+    var vidlog;
+    var plays = [];
+    var pauses = [];
+    var durVid;
+    var vidSum = [];
+    var url = document.URL;
+
+    // This will break studio if it runs inside of it, so this IF statement make it so the XHR intercept only fires if not in studio
+    if (intercepted == undefined){
+        var intercepted = false
+    }
+
+
+    if (url.includes('studio') === false && intercepted == false) {
+        intercepted = true;
+        var origSend = XMLHttpRequest.prototype.send;
+        XMLHttpRequest.prototype.send = function(data) {
+
+            vidlog = splitParamString(data);
+            vidlog.time = new Date();
+
+            var listening = true;
+
+            if (listening && vidlog.event_type === "play_video") {
+                listening = false;
+                setTimeout(function () {
+                    listening = true
+                }, 2000);
+                plays.push(vidlog.time);
+                addUp();
+                //console.log('%c TimeSite: %d', 'background: green; color: white; display: block;', timeSite);
+            } else if (listening && vidlog.event_type === "pause_video") {
+                listening = false;
+                setTimeout(function () {
+                    listening = true
+                }, 2000);
+                pauses.push(vidlog.time);
+                addUp();
+            } else if (vidlog.event_type === "problem_check") {
+                datas.quID = vidlog.event.split("_")[1];
+                //console.log("problem" + datas.quID + " caught");
+                SPlog();
+            }
+            origSend.call(this,data);
+        };
+    }
+
+
+    // Takes the Pauses and Plays arrays and finds total duration between play and pause events
+    function addUp() {
+        for (i=0; i<= pauses.length-1; i++) {
+            vidSum[i] = pauses[i] - plays[i];
+        }
+        durVid = vidSum.reduce(add, 0) / 1000;
+        //console.log(durVid);
+        if (durVid >= 30 ) {
+            datas.vidID = vidlog.event.split("%")[5];
+            SPlog();
+            SPget_data();
+            //console.log(datas);
+        } else if (durVid < 30) {
+            //console.log("not finished yet");
+        }
+    }
+
+
+    // Returns the Sum of an Array
+    function add(a, b) {
+        return a + b;
+    }
+
+
+</script>
+
