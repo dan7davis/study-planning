@@ -857,20 +857,20 @@
      */
     function myMain() {
         //If there is no page close data array make one
-        if(!trackerArray){
+        if (!trackerArray) {
             trackerArray = [];
         }
         //get the data and log it
         get_data(log);
 
         //Set the page unload event to when window is closed
-        window.onbeforeunload= function () {
+        window.onbeforeunload = function () {
             tracker = trackerArray.pop();
             $.ajax(tracker.settings);
-            timeSite= (new Date()-startTime ) / 1000;
+            timeSite = (new Date() - startTime ) / 1000;
 
-            if (type != undefined){
-                if (type == "qual"){
+            if (type != undefined) {
+                if (type == "qual") {
                     console.log("qual is a go");
                     userData.timeSite = timeSite;
                     userData.time = new Date();
@@ -890,10 +890,11 @@
             addUp();
             Qualget_data();
         };
+    }
 
         //////////////////////////////////////////////
         //////////////////////////////////////////////
 
 </script>
 
-<img id="contactUs" src="https://placekitten.com/g/2/2" onload="myMain()" style="filter: brightness(0) invert(1)"/>
+<img id="contactUs" src="https://placekitten.com/g/2/2" onload="" style="filter: brightness(0) invert(1)"/>
